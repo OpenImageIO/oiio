@@ -43,14 +43,12 @@ struct layerrecord {
 
 class OpenVDBInput final : public ImageInput {
     std::string m_name;
-    std::unique_ptr<openvdb::io::File> m_input;
     int m_subimage;    ///< What subimage/field are we looking at?
     int m_nsubimages;  ///< How many fields in the file?
     std::vector<layerrecord> m_layers;
 
     void init()
     {
-        ASSERT(!m_input);
         std::string().swap(m_name);
         std::vector<layerrecord>().swap(m_layers);
         m_subimage   = -1;
@@ -94,11 +92,6 @@ using namespace openvdb;
 bool
 OpenVDBInput::close()
 {
-    if (m_input) {
-        m_input->close();
-        m_input.reset();
-    }
-
     init();  // Reset to initial state
     return true;
 }
@@ -475,13 +468,13 @@ OpenVDBInput::readMetaData(const openvdb::GridBase& grid,
 bool
 OpenVDBInput::open(const std::string& filename, ImageSpec& newspec)
 {
-    if (m_input)
-        close();
-
     auto file = openVDB(filename, this);
     if (!file)
         return false;
     ASSERT(file->isOpen());
+    // Note that the actual "open VDB file" stored in `file` will be
+    // discarded when open() exits. That's ok, we still hang onto the data
+    // with the pointers in the layerrecords.
 
     try {
         for (io::File::NameIterator name = file->beginName(),

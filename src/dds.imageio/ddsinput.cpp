@@ -142,8 +142,10 @@ DDSInput::open(const std::string& name, ImageSpec& newspec)
 // struct from file; to adress that, read every member individually
 // save some typing
 #define RH(memb)                                                               \
-    if (!fread(&m_dds.memb, sizeof(m_dds.memb), 1))                            \
-    return false
+    if (!fread(&m_dds.memb, sizeof(m_dds.memb), 1)) {                          \
+        close();                                                               \
+        return false;                                                          \
+    }
 
     RH(fourCC);
     RH(size);
@@ -224,6 +226,7 @@ DDSInput::open(const std::string& name, ImageSpec& newspec)
         || (m_dds.caps.flags2 & DDS_CAPS2_CUBEMAP
             && !(m_dds.caps.flags1 & DDS_CAPS1_COMPLEX))) {
         errorf("Invalid DDS header, possibly corrupt file");
+        close();
         return false;
     }
 
@@ -237,6 +240,7 @@ DDSInput::open(const std::string& name, ImageSpec& newspec)
                  | (m_dds.fmt.flags & DDS_PF_LUMINANCE)
                  | (m_dds.fmt.flags & DDS_PF_ALPHA)))) {
         errorf("Image with no data");
+        close();
         return false;
     }
 
@@ -247,6 +251,7 @@ DDSInput::open(const std::string& name, ImageSpec& newspec)
         && m_dds.fmt.fourCC != DDS_4CC_DXT4
         && m_dds.fmt.fourCC != DDS_4CC_DXT5) {
         errorf("Unsupported compression type");
+        close();
         return false;
     }
 

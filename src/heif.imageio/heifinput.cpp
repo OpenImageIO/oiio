@@ -184,10 +184,12 @@ HeifInput::seek_subimage(int subimage, int miplevel)
     } catch (const heif::Error& err) {
         std::string e = err.get_message();
         errorf("%s", e.empty() ? "unknown exception" : e.c_str());
+        close();
         return false;
     } catch (const std::exception& err) {
         std::string e = err.what();
         errorf("%s", e.empty() ? "unknown exception" : e.c_str());
+        close();
         return false;
     }
 

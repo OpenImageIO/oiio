@@ -107,10 +107,11 @@ receive_frame(AVCodecContext* avctx, AVFrame* picture, AVPacket* avpkt)
 #    define CODEC_CAP_DELAY AV_CODEC_CAP_DELAY
 #endif
 
-
-#include <OpenImageIO/imageio.h>
 #include <iostream>
 #include <mutex>
+
+#include <OpenImageIO/filesystem.h>
+#include <OpenImageIO/imageio.h>
 
 OIIO_PLUGIN_NAMESPACE_BEGIN
 
@@ -234,7 +235,10 @@ bool
 FFmpegInput::valid_file(const std::string& name) const
 {
     // Quick/naive test -- just make sure the extension is valid for one of
-    // the supported file types supported by this reader.
+    // the supported file types supported by this reader and that it exists
+    // and is not just a tiny fragment.
+    if (!Filesystem::is_regular(name) || Filesystem::file_size(name) < 64)
+        return false;
     for (int i = 0; ffmpeg_input_extensions[i]; ++i)
         if (Strutil::ends_with(name, ffmpeg_input_extensions[i]))
             return true;
@@ -276,6 +280,7 @@ FFmpegInput::open(const std::string& name, ImageSpec& spec)
     }
     if (avformat_find_stream_info(m_format_context, NULL) < 0) {
         errorf("\"%s\" could not find stream info", file_name);
+        close();
         return false;
     }
     m_video_stream = -1;
@@ -290,6 +295,7 @@ FFmpegInput::open(const std::string& name, ImageSpec& spec)
     }
     if (m_video_stream == -1) {
         errorf("\"%s\" could not find a valid videostream", file_name);
+        close();
         return false;
     }
 
@@ -300,12 +306,14 @@ FFmpegInput::open(const std::string& name, ImageSpec& spec)
     m_codec = avcodec_find_decoder(par->codec_id);
     if (!m_codec) {
         errorf("\"%s\" can't find decoder", file_name);
+        close();
         return false;
     }
 
     m_codec_context = avcodec_alloc_context3(m_codec);
     if (!m_codec_context) {
         errorf("\"%s\" can't allocate decoder context", file_name);
+        close();
         return false;
     }
 
@@ -314,6 +322,7 @@ FFmpegInput::open(const std::string& name, ImageSpec& spec)
     ret = avcodec_parameters_to_context(m_codec_context, par);
     if (ret < 0) {
         errorf("\"%s\" unsupported codec", file_name);
+        close();
         return false;
     }
 #else
@@ -322,12 +331,14 @@ FFmpegInput::open(const std::string& name, ImageSpec& spec)
     m_codec = avcodec_find_decoder(m_codec_context->codec_id);
     if (!m_codec) {
         errorf("\"%s\" unsupported codec", file_name);
+        close();
         return false;
     }
 #endif
 
     if (avcodec_open2(m_codec_context, m_codec, NULL) < 0) {
         errorf("\"%s\" could not open codec", file_name);
+        close();
         return false;
     }
     if (!strcmp(m_codec_context->codec->name, "mjpeg")

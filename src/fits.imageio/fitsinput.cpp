@@ -68,6 +68,7 @@ FitsInput::open(const std::string& name, ImageSpec& spec)
     char magic[6] = { 0 };
     if (fread(magic, 1, 6, m_fd) != 6) {
         errorf("%s isn't a FITS file", m_filename);
+        close();
         return false;  // Read failed
     }
 
@@ -81,8 +82,10 @@ FitsInput::open(const std::string& name, ImageSpec& spec)
 
     subimage_search();
 
-    if (!set_spec_info())
+    if (!set_spec_info()) {
+        close();
         return false;
+    }
 
     spec = m_spec;
     return true;

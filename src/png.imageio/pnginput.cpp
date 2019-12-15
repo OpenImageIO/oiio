@@ -148,13 +148,14 @@ PNGInput::open(const std::string& name, ImageSpec& newspec)
     if (m_io->pread(sig, sizeof(sig), 0) != sizeof(sig)
         || png_sig_cmp(sig, 0, 7)) {
         errorf("Not a PNG file");
+        close();
         return false;  // Read failed
     }
 
     std::string s = PNG_pvt::create_read_struct(m_png, m_info, this);
     if (s.length()) {
-        close();
         errorf("%s", s);
+        close();
         return false;
     }
 
@@ -211,7 +212,8 @@ PNGInput::readimg()
 bool
 PNGInput::close()
 {
-    PNG_pvt::destroy_read_struct(m_png, m_info);
+    if (m_png && m_info)
+        PNG_pvt::destroy_read_struct(m_png, m_info);
     if (m_io_local) {
         // If we allocated our own ioproxy, close it.
         m_io_local.reset();

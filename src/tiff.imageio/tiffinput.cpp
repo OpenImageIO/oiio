@@ -569,7 +569,10 @@ TIFFInput::open(const std::string& name, ImageSpec& newspec)
     m_subimage = -1;
 
     bool ok = seek_subimage(0, 0);
-    newspec = spec();
+    if (ok)
+        newspec = spec();
+    else
+        close();
     return ok;
 }
 

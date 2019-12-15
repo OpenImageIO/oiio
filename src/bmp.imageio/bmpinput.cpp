@@ -95,20 +95,26 @@ BmpInput::open(const std::string& name, ImageSpec& spec)
         break;
     case 8:
         m_padded_scanline_size = (m_spec.width + 3) & ~3;
-        if (!read_color_table())
+        if (!read_color_table()) {
+            close();
             return false;
+        }
         break;
     case 4:
         swidth                 = (m_spec.width + 1) / 2;
         m_padded_scanline_size = (swidth + 3) & ~3;
-        if (!read_color_table())
+        if (!read_color_table()) {
+            close();
             return false;
+        }
         break;
     case 1:
         swidth                 = (m_spec.width + 7) / 8;
         m_padded_scanline_size = (swidth + 3) & ~3;
-        if (!read_color_table())
+        if (!read_color_table()) {
+            close();
             return false;
+        }
         break;
     }
 

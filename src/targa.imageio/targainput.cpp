@@ -113,8 +113,10 @@ TGAInput::open(const std::string& name, ImageSpec& newspec)
     // struct from file; to adress that, read every member individually
     // save some typing
 #define RH(memb)                                                               \
-    if (!fread(&m_tga.memb, sizeof(m_tga.memb), 1))                            \
-    return false
+    if (!fread(&m_tga.memb, sizeof(m_tga.memb), 1)) {                          \
+        close();                                                               \
+        return false;                                                          \
+    }
 
     RH(idlen);
     RH(cmap_type);
@@ -148,17 +150,20 @@ TGAInput::open(const std::string& name, ImageSpec& newspec)
     if (m_tga.bpp != 8 && m_tga.bpp != 15 && m_tga.bpp != 16 && m_tga.bpp != 24
         && m_tga.bpp != 32) {
         errorf("Illegal pixel size: %d bits per pixel", m_tga.bpp);
+        close();
         return false;
     }
 
     if (m_tga.type == TYPE_NODATA) {
         errorf("Image with no data");
+        close();
         return false;
     }
     if (m_tga.type != TYPE_PALETTED && m_tga.type != TYPE_RGB
         && m_tga.type != TYPE_GRAY && m_tga.type != TYPE_PALETTED_RLE
         && m_tga.type != TYPE_RGB_RLE && m_tga.type != TYPE_GRAY_RLE) {
         errorf("Illegal image type: %d", m_tga.type);
+        close();
         return false;
     }
 
@@ -167,6 +172,7 @@ TGAInput::open(const std::string& name, ImageSpec& newspec)
         // it should be an error for TYPE_RGB* as well, but apparently some
         // *very* old TGAs can be this way, so we'll hack around it
         errorf("Palette defined for grayscale image");
+        close();
         return false;
     }
 
@@ -174,6 +180,7 @@ TGAInput::open(const std::string& name, ImageSpec& newspec)
         && (m_tga.cmap_size != 15 && m_tga.cmap_size != 16
             && m_tga.cmap_size != 24 && m_tga.cmap_size != 32)) {
         errorf("Illegal palette entry size: %d bits", m_tga.cmap_size);
+        close();
         return false;
     }
 
@@ -218,8 +225,10 @@ TGAInput::open(const std::string& name, ImageSpec& newspec)
         // in case the comment lacks null termination
         char id[256];
         memset(id, 0, sizeof(id));
-        if (!fread(id, m_tga.idlen, 1))
+        if (!fread(id, m_tga.idlen, 1)) {
+            close();
             return false;
+        }
         m_spec.attribute("targa:ImageID", id);
     }
 
@@ -245,8 +254,10 @@ TGAInput::open(const std::string& name, ImageSpec& newspec)
         // for < 495, we ignore this section of the file altogether
         // for > 495, we only read what we know
         uint16_t s;
-        if (!fread(&s, 2, 1))
+        if (!fread(&s, 2, 1)) {
+            close();
             return false;
+        }
         if (bigendian())
             swap_endian(&s);
         //std::cerr << "[tga] extension area size: " << s << "\n";
@@ -258,14 +269,18 @@ TGAInput::open(const std::string& name, ImageSpec& newspec)
             } buf;
 
             // load image author
-            if (!fread(buf.c, 41, 1))
+            if (!fread(buf.c, 41, 1)) {
+                close();
                 return false;
+            }
             if (buf.c[0])
                 m_spec.attribute("Artist", (char*)buf.c);
 
             // load image comments
-            if (!fread(buf.c, 324, 1))
+            if (!fread(buf.c, 324, 1)) {
+                close();
                 return false;
+            }
 
             // concatenate the lines into a single string
             std::string tmpstr((const char*)buf.c);
@@ -285,8 +300,10 @@ TGAInput::open(const std::string& name, ImageSpec& newspec)
                 m_spec.attribute("ImageDescription", tmpstr);
 
             // timestamp
-            if (!fread(buf.s, 2, 6))
+            if (!fread(buf.s, 2, 6)) {
+                close();
                 return false;
+            }
             if (buf.s[0] || buf.s[1] || buf.s[2] || buf.s[3] || buf.s[4]
                 || buf.s[5]) {
                 if (bigendian())
@@ -298,14 +315,18 @@ TGAInput::open(const std::string& name, ImageSpec& newspec)
             }
 
             // job name/ID
-            if (!fread(buf.c, 41, 1))
+            if (!fread(buf.c, 41, 1)) {
+                close();
                 return false;
+            }
             if (buf.c[0])
                 m_spec.attribute("DocumentName", (char*)buf.c);
 
             // job time
-            if (!fread(buf.s, 2, 3))
+            if (!fread(buf.s, 2, 3)) {
+                close();
                 return false;
+            }
             if (buf.s[0] || buf.s[1] || buf.s[2]) {
                 if (bigendian())
                     swap_endian(&buf.s[0], 3);
@@ -315,27 +336,35 @@ TGAInput::open(const std::string& name, ImageSpec& newspec)
             }
 
             // software
-            if (!fread(buf.c, 41, 1))
+            if (!fread(buf.c, 41, 1)) {
+                close();
                 return false;
+            }
             if (buf.c[0]) {
                 // tack on the version number and letter
                 uint16_t n;
                 char l;
-                if (!fread(&n, 2, 1) || !fread(&l, 1, 1))
+                if (!fread(&n, 2, 1) || !fread(&l, 1, 1)) {
+                    close();
                     return false;
+                }
                 sprintf((char*)&buf.c[strlen((char*)buf.c)], " %u.%u%c",
                         n / 100, n % 100, l != ' ' ? l : 0);
                 m_spec.attribute("Software", (char*)buf.c);
             }
 
             // background (key) colour
-            if (!fread(buf.c, 4, 1))
+            if (!fread(buf.c, 4, 1)) {
+                close();
                 return false;
+            }
             // FIXME: what do we do with it?
 
             // aspect ratio
-            if (!fread(buf.s, 2, 2))
+            if (!fread(buf.s, 2, 2)) {
+                close();
                 return false;
+            }
             // if the denominator is zero, it's unused
             if (buf.s[1]) {
                 if (bigendian())
@@ -345,8 +374,10 @@ TGAInput::open(const std::string& name, ImageSpec& newspec)
             }
 
             // gamma
-            if (!fread(buf.s, 2, 2))
+            if (!fread(buf.s, 2, 2)) {
+                close();
                 return false;
+            }
             // if the denominator is zero, it's unused
             if (buf.s[1]) {
                 if (bigendian())
@@ -368,8 +399,10 @@ TGAInput::open(const std::string& name, ImageSpec& newspec)
             }
 
             // offset to colour correction table
-            if (!fread(&buf.l, 4, 1))
+            if (!fread(&buf.l, 4, 1)) {
+                close();
                 return false;
+            }
             if (bigendian())
                 swap_endian(&buf.l);
             m_ofs_colcorr_tbl = buf.l;
@@ -377,22 +410,28 @@ TGAInput::open(const std::string& name, ImageSpec& newspec)
                       << (int)m_ofs_colcorr_tbl << "\n";*/
 
             // offset to thumbnail
-            if (!fread(&buf.l, 4, 1))
+            if (!fread(&buf.l, 4, 1)) {
+                close();
                 return false;
+            }
             if (bigendian())
                 swap_endian(&buf.l);
             int64_t ofs_thumb = buf.l;
 
             // offset to scan-line table
-            if (!fread(&buf.l, 4, 1))
+            if (!fread(&buf.l, 4, 1)) {
+                close();
                 return false;
+            }
             // TODO: can we find any use for this? we can't advertise random
             // access anyway, because not all RLE-compressed files will have
             // this table
 
             // alpha type
-            if (!fread(buf.c, 1, 1))
+            if (!fread(buf.c, 1, 1)) {
+                close();
                 return false;
+            }
             m_alpha = (tga_alpha_type)buf.c[0];
 
             // now load the thumbnail
@@ -404,8 +443,10 @@ TGAInput::open(const std::string& name, ImageSpec& newspec)
                 // but uncompressed
 
                 // thumbnail dimensions
-                if (!fread(&buf.c, 2, 1))
+                if (!fread(&buf.c, 2, 1)) {
+                    close();
                     return false;
+                }
                 m_spec.attribute("thumbnail_width", (int)buf.c[0]);
                 m_spec.attribute("thumbnail_height", (int)buf.c[1]);
                 m_spec.attribute("thumbnail_nchannels", m_spec.nchannels);
@@ -426,16 +467,20 @@ TGAInput::open(const std::string& name, ImageSpec& newspec)
                     fseek(m_file, ofs, SEEK_SET);
                     palette.reset(
                         new unsigned char[palbytespp * m_tga.cmap_length]);
-                    if (!fread(palette.get(), palbytespp, m_tga.cmap_length))
+                    if (!fread(palette.get(), palbytespp, m_tga.cmap_length)) {
+                        close();
                         return false;
+                    }
                     fseek(m_file, ofs_thumb + 2, SEEK_SET);
                 }
                 unsigned char pixel[4];
                 unsigned char in[4];
                 for (int64_t y = buf.c[1] - 1; y >= 0; y--) {
                     for (int64_t x = 0; x < buf.c[0]; x++) {
-                        if (!fread(in, bytespp, 1))
+                        if (!fread(in, bytespp, 1)) {
+                            close();
                             return false;
+                        }
                         decode_pixel(in, pixel, palette.get(), bytespp,
                                      palbytespp, alphabits);
                         memcpy(&m_buf[y * buf.c[0] * m_spec.nchannels

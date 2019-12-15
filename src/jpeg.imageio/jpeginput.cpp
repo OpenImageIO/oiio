@@ -207,10 +207,10 @@ JpgInput::open(const std::string& name, ImageSpec& newspec)
     }
 
     if (magic[0] != JPEG_MAGIC1 || magic[1] != JPEG_MAGIC2) {
-        close_file();
         errorf(
             "\"%s\" is not a JPEG file, magic number doesn't match (was 0x%x%x)",
             name, int(magic[0]), int(magic[1]));
+        close_file();
         return false;
     }
 
@@ -248,6 +248,7 @@ JpgInput::open(const std::string& name, ImageSpec& newspec)
     // read the file parameters
     if (jpeg_read_header(&m_cinfo, FALSE) != JPEG_HEADER_OK || m_fatalerr) {
         errorf("Bad JPEG header for \"%s\"", filename());
+        close();
         return false;
     }
 
@@ -265,8 +266,10 @@ JpgInput::open(const std::string& name, ImageSpec& newspec)
         m_coeffs = jpeg_read_coefficients(&m_cinfo);
     else
         jpeg_start_decompress(&m_cinfo);  // start working
-    if (m_fatalerr)
+    if (m_fatalerr) {
+        close();
         return false;
+    }
     m_next_scanline = 0;  // next scanline we'll read
 
     m_spec = ImageSpec(m_cinfo.output_width, m_cinfo.output_height, nchannels,

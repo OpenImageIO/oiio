@@ -422,8 +422,10 @@ PNMInput::open(const std::string& name, ImageSpec& newspec)
     m_current_line = "";
     m_pos          = m_current_line.c_str();
 
-    if (!read_file_header())
+    if (!read_file_header()) {
+        close();
         return false;
+    }
 
     newspec = m_spec;
     return true;

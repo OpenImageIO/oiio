@@ -37,8 +37,10 @@ SgiInput::valid_file(const std::string& filename) const
     if (!fd)
         return false;
     int16_t magic;
-    bool ok = (::fread(&magic, sizeof(magic), 1, fd) == 1)
-              && (magic == sgi_pvt::SGI_MAGIC);
+    bool ok = (::fread(&magic, sizeof(magic), 1, fd) == 1);
+    if (littleendian())
+        swap_endian(&magic);
+    ok &= (magic == sgi_pvt::SGI_MAGIC);
     fclose(fd);
     return ok;
 }
@@ -57,8 +59,10 @@ SgiInput::open(const std::string& name, ImageSpec& spec)
         return false;
     }
 
-    if (!read_header())
+    if (!read_header()) {
+        close();
         return false;
+    }
 
     if (m_sgi_header.magic != sgi_pvt::SGI_MAGIC) {
         errorf("\"%s\" is not a SGI file, magic number doesn't match",
@@ -103,8 +107,10 @@ SgiInput::open(const std::string& name, ImageSpec& spec)
 
     if (m_sgi_header.storage == sgi_pvt::RLE) {
         m_spec.attribute("compression", "rle");
-        if (!read_offset_tables())
+        if (!read_offset_tables()) {
+            close();
             return false;
+        }
     }
 
     spec = m_spec;

@@ -102,11 +102,8 @@ PtexInput::open(const std::string& name, ImageSpec& newspec)
     Ptex::String perr;
     m_ptex = PtexTexture::open(name.c_str(), perr, true /*premultiply*/);
     if (!perr.empty()) {
-        if (m_ptex) {
-            m_ptex->release();
-            m_ptex = NULL;
-        }
         errorf("%s", perr);
+        close();
         return false;
     }
 
@@ -114,7 +111,10 @@ PtexInput::open(const std::string& name, ImageSpec& newspec)
     m_hasMipMaps = m_ptex->hasMipMaps();
 
     bool ok = seek_subimage(0, 0);
-    newspec = spec();
+    if (ok)
+        newspec = spec();
+    else
+        close();
     return ok;
 }
 

@@ -102,6 +102,66 @@ checked_read(ImageInput* in, string_view filename,
 
 
 
+// Test whether an existing, but bogus file, is correctly recognized as not
+// being a valid file of the given type.
+static bool
+test_valid_file_invalid(string_view formatname, string_view extension)
+{
+    bool ok = true;
+    Sysutil::Term term(stdout);
+
+    auto in = ImageInput::create(formatname);
+    if (in->supports("procedural"))
+        return ok;  // Procedural inputs are always valid, skip this test
+
+    std::string filename = Strutil::sprintf("bad.%s", extension);
+    if (FILE* file = Filesystem::fopen(filename, "w")) {
+        fprintf(file, "bogus\n");
+        fclose(file);
+    }
+
+    if (in) {
+        std::cout << "    Bogus file " << filename
+                  << " should be detected by valid_file()... ";
+        ok = (in->valid_file(filename) == false);
+        if (ok)
+            std::cout << term.ansi("green", "OK\n");
+        OIIO_CHECK_ASSERT(ok
+                          && "Bogus file did not properly fail valid_file()");
+    }
+
+    Filesystem::remove(filename);
+    return ok;
+}
+
+
+
+// Test whether an existing valid file of the given type is correctly
+// recognized as such by ImageInput::valid_file().
+static bool
+test_valid_file_valid(string_view formatname, string_view filename)
+{
+    bool ok = true;
+    Sysutil::Term term(stdout);
+
+    auto in = ImageInput::create(formatname);
+    if (in->supports("procedural"))
+        return ok;  // Procedural inputs are always valid, skip this test
+
+    if (in) {
+        std::cout << "    Valid file " << filename
+                  << " detected by valid_file()... ";
+        ok = (in->valid_file(filename) == true);
+        if (ok)
+            std::cout << term.ansi("green", "OK\n");
+        OIIO_CHECK_ASSERT(ok && "Valid file not detected by valid_file()");
+    }
+
+    return ok;
+}
+
+
+
 // Helper for test_all_formats: write the pixels in buf to an in-memrory
 // IOProxy, make sure it matches byte for byte the file named by disk_filename.
 static bool
@@ -110,6 +170,8 @@ test_write_proxy(string_view formatname, string_view extension,
 {
     bool ok = true;
     Sysutil::Term term(stdout);
+    std::cout << "    Writing Proxy " << formatname << " ... ";
+    std::cout.flush();
     Filesystem::IOVecOutput outproxy;
     ImageSpec proxyspec(buf.spec());
     void* ptr = &outproxy;
@@ -222,6 +284,12 @@ test_all_formats()
         auto extensions = Strutil::splitsv(fmtexts[1], ",");
         bool ok         = true;
 
+        std::cout << "  " << formatname << " ("
+                  << Strutil::join(extensions, ", ") << "):\n";
+
+        // Test that ImageInput::valid_file() is false for a bogus file.
+        test_valid_file_invalid(formatname, extensions[0]);
+
         //
         // Try writing the file
         //
@@ -229,13 +297,11 @@ test_all_formats()
                                                 formatname, extensions[0]);
         auto out             = ImageOutput::create(filename);
         if (!out) {
-            std::cout << "  [skipping " << formatname << " -- no writer]\n";
+            std::cout << "    [skipping " << formatname << " -- no writer]\n";
             (void)OIIO::geterror();  // discard error
             continue;
         }
         bool ioproxy_write_supported = out->supports("ioproxy");
-        std::cout << "  " << formatname << " ("
-                  << Strutil::join(extensions, ", ") << "):\n";
 
         ImageBuf buf             = make_test_image(formatname);
         const float* orig_pixels = (const float*)buf.localpixels();
@@ -245,6 +311,9 @@ test_all_formats()
                            orig_pixels);
         if (ok)
             std::cout << term.ansi("green", "OK\n");
+
+        // Test that ImageInput::valid_file() is true for a valid file.
+        test_valid_file_valid(formatname, filename);
 
         //
         // Try reading the file, and make sure it matches what we wrote

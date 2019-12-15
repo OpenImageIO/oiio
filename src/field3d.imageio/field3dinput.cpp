@@ -410,7 +410,10 @@ Field3DInput::open(const std::string& name, ImageSpec& newspec)
     m_nsubimages = (int)m_layers.size();
 
     bool ok = seek_subimage(0, 0);
-    newspec = spec();
+    if (ok)
+        newspec = spec();
+    else
+        close();
     return ok;
 }
 

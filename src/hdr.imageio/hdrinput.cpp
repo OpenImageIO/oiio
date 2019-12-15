@@ -35,6 +35,7 @@ public:
     HdrInput() { init(); }
     virtual ~HdrInput() { close(); }
     virtual const char* format_name(void) const override { return "hdr"; }
+    virtual bool valid_file(const std::string& filename) const override;
     virtual bool open(const std::string& name, ImageSpec& spec) override;
     virtual bool read_native_scanline(int subimage, int miplevel, int y, int z,
                                       void* data) override;
@@ -84,12 +85,33 @@ OIIO_PLUGIN_EXPORTS_END
 
 
 bool
+HdrInput::valid_file(const std::string& filename) const
+{
+    // Check that file exists and can be opened
+    FILE* fd = Filesystem::fopen(filename, "rb");
+    if (fd == nullptr)
+        return false;
+
+    rgbe_header_info h;
+    int width, height;
+    std::string err;
+    int r = RGBE_ReadHeader(fd, &width, &height, &h, err);
+    fclose(fd);
+    return (r == RGBE_RETURN_SUCCESS);
+}
+
+
+
+bool
 HdrInput::open(const std::string& name, ImageSpec& newspec)
 {
     m_filename = name;
 
     bool ok = seek_subimage(0, 0);
-    newspec = spec();
+    if (ok)
+        newspec = spec();
+    else
+        close();
     return ok;
 }
 

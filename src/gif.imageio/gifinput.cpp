@@ -138,7 +138,10 @@ GIFInput::open(const std::string& name, ImageSpec& newspec)
     m_canvas.clear();
 
     bool ok = seek_subimage(0, 0);
-    newspec = spec();
+    if (ok)
+        newspec = spec();
+    else
+        close();
     return ok;
 }
 

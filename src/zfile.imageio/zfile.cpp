@@ -176,6 +176,7 @@ ZfileInput::open(const std::string& name, ImageSpec& newspec)
 
     if (header.magic != zfile_magic && header.magic != zfile_magic_endian) {
         errorf("Not a valid Zfile");
+        close();
         return false;
     }
 

@@ -443,10 +443,12 @@ OpenEXRInput::open(const std::string& name, ImageSpec& newspec,
     } catch (const std::exception& e) {
         m_input_stream = NULL;
         errorf("OpenEXR exception: %s", e.what());
+        close();
         return false;
     } catch (...) {  // catch-all for edge cases or compiler bugs
         m_input_stream = NULL;
         errorf("OpenEXR exception: unknown");
+        close();
         return false;
     }
 
@@ -456,10 +458,12 @@ OpenEXRInput::open(const std::string& name, ImageSpec& newspec,
         delete m_input_stream;
         m_input_stream = NULL;
         errorf("OpenEXR exception: %s", e.what());
+        close();
         return false;
     } catch (...) {  // catch-all for edge cases or compiler bugs
         m_input_stream = NULL;
         errorf("OpenEXR exception: unknown");
+        close();
         return false;
     }
 

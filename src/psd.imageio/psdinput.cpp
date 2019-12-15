@@ -534,42 +534,49 @@ PSDInput::open(const std::string& name, ImageSpec& newspec)
     // File Header
     if (!load_header()) {
         errorf("failed to open \"%s\": failed load_header", name);
+        close();
         return false;
     }
 
     // Color Mode Data
     if (!load_color_data()) {
         errorf("failed to open \"%s\": failed load_color_data", name);
+        close();
         return false;
     }
 
     // Image Resources
     if (!load_resources()) {
         errorf("failed to open \"%s\": failed load_resources", name);
+        close();
         return false;
     }
 
     // Layers
     if (!load_layers()) {
         errorf("failed to open \"%s\": failed load_layers", name);
+        close();
         return false;
     }
 
     // Global Mask Info
     if (!load_global_mask_info()) {
         errorf("failed to open \"%s\": failed load_global_mask_info", name);
+        close();
         return false;
     }
 
     // Global Additional Layer Info
     if (!load_global_additional()) {
         errorf("failed to open \"%s\": failed load_global_additional", name);
+        close();
         return false;
     }
 
     // Image Data
     if (!load_image_data()) {
         errorf("failed to open \"%s\": failed load_image_data", name);
+        close();
         return false;
     }
 

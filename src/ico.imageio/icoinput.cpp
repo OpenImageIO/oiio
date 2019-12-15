@@ -116,8 +116,11 @@ ICOInput::open(const std::string& name, ImageSpec& newspec)
         return false;
     }
 
-    if (!fread(&m_ico, 1, sizeof(m_ico)))
+    if (!fread(&m_ico, 1, sizeof(m_ico))) {
+        error("Could not read from file");
+        close();
         return false;
+    }
 
     if (bigendian()) {
         // ICOs are little endian
@@ -127,6 +130,7 @@ ICOInput::open(const std::string& name, ImageSpec& newspec)
     }
     if (m_ico.reserved != 0 || m_ico.type != 1) {
         errorf("File failed ICO header check");
+        close();
         return false;
     }
 
@@ -405,8 +409,11 @@ ICOInput::readimg()
 bool
 ICOInput::close()
 {
-    if (m_png && m_info)
+    if (m_png && m_info) {
         PNG_pvt::destroy_read_struct(m_png, m_info);
+        m_png  = nullptr;
+        m_info = nullptr;
+    }
     if (m_file) {
         fclose(m_file);
         m_file = NULL;

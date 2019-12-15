@@ -332,6 +332,8 @@ RawInput::open(const std::string& name, ImageSpec& newspec,
     bool ok = open_raw(false, m_filename, m_config);
     if (ok)
         newspec = m_spec;
+    else
+        close();
     return ok;
 }
 
