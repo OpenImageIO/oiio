@@ -12,7 +12,6 @@ extern "C" {  // ffmpeg is a C api
 #endif
 }
 
-
 #if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(55, 28, 1)
 #    define av_frame_alloc avcodec_alloc_frame
 //Ancient versions used av_freep
@@ -192,9 +191,7 @@ private:
     }
 };
 
-
-
-// Obligatory material to make this a recognizeable imageio plugin
+// Obligatory material to make this a recognizable imageio plugin
 OIIO_PLUGIN_EXPORTS_BEGIN
 
 OIIO_EXPORT int ffmpeg_imageio_version = OIIO_PLUGIN_VERSION;
@@ -220,15 +217,9 @@ OIIO_EXPORT const char* ffmpeg_input_extensions[] = {
 
 OIIO_PLUGIN_EXPORTS_END
 
-
-
 FFmpegInput::FFmpegInput() { init(); }
 
-
-
 FFmpegInput::~FFmpegInput() { close(); }
-
-
 
 bool
 FFmpegInput::valid_file(const std::string& name) const
@@ -240,8 +231,6 @@ FFmpegInput::valid_file(const std::string& name) const
             return true;
     return false;
 }
-
-
 
 bool
 FFmpegInput::open(const std::string& name, ImageSpec& spec)
@@ -550,8 +539,6 @@ FFmpegInput::open(const std::string& name, ImageSpec& spec)
     return true;
 }
 
-
-
 bool
 FFmpegInput::seek_subimage(int subimage, int miplevel)
 {
@@ -565,8 +552,6 @@ FFmpegInput::seek_subimage(int subimage, int miplevel)
     m_read_frame = false;
     return true;
 }
-
-
 
 bool
 FFmpegInput::read_native_scanline(int subimage, int miplevel, int y, int /*z*/,
@@ -588,8 +573,6 @@ FFmpegInput::read_native_scanline(int subimage, int miplevel, int y, int /*z*/,
     }
 }
 
-
-
 bool
 FFmpegInput::close(void)
 {
@@ -604,8 +587,6 @@ FFmpegInput::close(void)
     init();
     return true;
 }
-
-
 
 void
 FFmpegInput::read_frame(int frame)
@@ -659,28 +640,6 @@ FFmpegInput::read_frame(int frame)
     m_read_frame = true;
 }
 
-
-
-#if 0
-const char *
-FFmpegInput::metadata (const char * key)
-{
-    AVDictionaryEntry * entry = av_dict_get (m_format_context->metadata, key, NULL, 0);
-    return entry ? av_strdup(entry->value) : NULL;
-    // FIXME -- that looks suspiciously like a memory leak
-}
-
-
-
-bool
-FFmpegInput::has_metadata (const char * key)
-{
-    return av_dict_get (m_format_context->metadata, key, NULL, 0); // is there a better to check exists?
-}
-#endif
-
-
-
 bool
 FFmpegInput::seek(int frame)
 {
@@ -690,8 +649,6 @@ FFmpegInput::seek(int frame)
     av_seek_frame(m_format_context, -1, offset, flags);
     return true;
 }
-
-
 
 int64_t
 FFmpegInput::time_stamp(int frame) const
@@ -708,8 +665,6 @@ FFmpegInput::time_stamp(int frame) const
     }
     return timestamp;
 }
-
-
 
 double
 FFmpegInput::fps() const
