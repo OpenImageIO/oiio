@@ -282,8 +282,9 @@ FFmpegInput::open(const std::string& name, ImageSpec& spec)
         return false;
     }
 
+    // FIXME need av_packet_alloc()
+
     // codec context for videostream
-#if USE_FFMPEG_3_1
     AVCodecParameters* par = stream_codec(m_video_stream);
 
     m_codec = avcodec_find_decoder(par->codec_id);
@@ -305,15 +306,6 @@ FFmpegInput::open(const std::string& name, ImageSpec& spec)
         errorf("\"%s\" unsupported codec", file_name);
         return false;
     }
-#else
-    m_codec_context = stream_codec(m_video_stream);
-
-    m_codec = avcodec_find_decoder(m_codec_context->codec_id);
-    if (!m_codec) {
-        errorf("\"%s\" unsupported codec", file_name);
-        return false;
-    }
-#endif
 
     if (avcodec_open2(m_codec_context, m_codec, NULL) < 0) {
         errorf("\"%s\" could not open codec", file_name);
