@@ -146,14 +146,17 @@ private:
     std::string m_filename;
     int m_subimage;
     int64_t m_nsubimages;
+    int m_packet_outstanding;
     AVFormatContext* m_format_context;
     AVCodecContext* m_codec_context;
-    AVCodec* m_codec;
     AVFrame* m_frame;
     AVFrame* m_rgb_frame;
+    AVCodec* m_codec;
+    AVCodecParameters* m_cparams;
+    AVPacket* m_packet;
+    SwsContext* m_sws_rgb_context;
     size_t m_stride;  // scanline width in bytes, a.k.a. scanline stride
     AVPixelFormat m_dst_pix_format;
-    SwsContext* m_sws_rgb_context;
     AVRational m_frame_rate;
     std::vector<uint8_t> m_rgb_buffer;
     std::vector<int> m_video_indexes;
