@@ -7,6 +7,7 @@ extern "C" {  // ffmpeg is a C api
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <libswscale/swscale.h>
+#include <libavutil/error.h>
 #if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(57, 24, 0)
 #    include <libavutil/imgutils.h>
 #endif
@@ -154,6 +155,7 @@ private:
     int m_stream_id;
     AVCodecParameters* m_cparams;
     AVPacket* m_packet;
+    int m_packet_outstanding;
     SwsContext* m_sws_rgb_context;
     size_t m_stride;  // scanline width in bytes, a.k.a. scanline stride
     AVPixelFormat m_dst_pix_format;
@@ -161,6 +163,7 @@ private:
     std::vector<uint8_t> m_rgb_buffer;
     std::vector<int> m_video_indexes;
     int64_t m_frames;
+    struct AVFrame* m_oframe;
     bool m_offset_time;
     bool m_codec_cap_delay;
     bool m_read_frame;
@@ -178,10 +181,12 @@ private:
         m_rgb_frame       = 0;
         m_sws_rgb_context = 0;
         m_packet          = nullptr;
+        m_packet_outstanding = 0;
         m_stride          = 0;
         m_rgb_buffer.clear();
         m_video_indexes.clear();
         m_frames           = 0;
+        m_oframe           = nullptr,
         m_offset_time      = true;
         m_read_frame       = false;
         m_codec_cap_delay  = false;
@@ -245,13 +250,7 @@ fprintf(stderr, "WE WANT %s\n", name.c_str());
     // this reader to handle. At some point, we will institute that superior
     // approach, but in the mean time, this is a quick solution that 90%
     // does the job.
-    bool valid_extension = false;
-    for (int i = 0; ffmpeg_input_extensions[i]; ++i)
-        if (Strutil::ends_with(name, ffmpeg_input_extensions[i])) {
-            valid_extension = true;
-            break;
-        }
-    if (!valid_extension) {
+    if (!valid_file(name)) {
         errorf("\"%s\" could not open input", name);
         return false;
     }
@@ -275,6 +274,11 @@ fprintf(stderr, "HERE COMES %s\n", name.c_str());
 
     if (!(m_packet = av_packet_alloc())) {
         errorf("\"%s\" couldn't get an avpacket", file_name);
+        return false;
+    }
+
+    if (!(m_frame = av_frame_alloc())) {
+        errorf("\"%s\" couldn't get an avframe", file_name);
         return false;
     }
 
@@ -474,6 +478,7 @@ fprintf(stderr, "PIX_FMT: %d w: %d h: %d\n", m_codec_context->pix_fmt, m_codec_c
     m_nsubimages = m_frames;
     spec         = m_spec;
     m_filename   = name;
+    read_frame(0);
     return true;
 }
 
@@ -521,6 +526,7 @@ FFmpegInput::close(void)
     av_free(m_format_context);  // will free m_codec and m_codec_context
     av_frame_free(&m_frame);    // free after close input
     av_frame_free(&m_rgb_frame);
+    av_freep(&m_oframe);
     av_packet_free(&m_packet);
     sws_freeContext(m_sws_rgb_context);
     init();
@@ -530,6 +536,48 @@ FFmpegInput::close(void)
 void
 FFmpegInput::read_frame(int frame)
 {
+    bool have_frame = false;
+    bool unref = false;
+    if (m_oframe) {
+        av_freep(&m_oframe);
+    }
+    do{
+        // get a video packet
+        do{
+            if (m_packet_outstanding) {
+                break;
+            }
+            if (unref) {
+                av_packet_unref(m_packet);
+            }
+            int averr = av_read_frame(m_format_context, m_packet);
+            if (averr < 0) {
+                errorf("Error reading frame (%s)", m_filename);
+                return;
+            }
+            unref = true;
+        }while(m_packet->stream_index != m_stream_id);
+        ++m_packet_outstanding;
+        int averr = avcodec_send_packet(m_codec_context, m_packet);
+        if (averr < 0) {
+            errorf("Error processing frame (%s)", m_filename);
+            return;
+        }
+        --m_packet_outstanding;
+        av_packet_unref(m_packet);
+        averr = avcodec_receive_frame(m_codec_context, m_frame);
+        if (averr >= 0) {
+            have_frame = true;
+        }else if (averr == AVERROR(EAGAIN) || averr == AVERROR_EOF) {
+            have_frame = false;
+        }else if (averr < 0) {
+            errorf("Error decoding frame (%s)", m_filename);
+            return;
+        }
+    }while(!have_frame);
+    // FIXME
+    m_stride = m_frame->linesize[0];
+fprintf(stderr, "FRAME W: %d H: %d\n", m_frame->width, m_frame->height);
 }
 
 bool
