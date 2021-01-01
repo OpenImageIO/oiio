@@ -146,12 +146,12 @@ private:
     std::string m_filename;
     int m_subimage;
     int64_t m_nsubimages;
-    int m_packet_outstanding;
     AVFormatContext* m_format_context;
     AVCodecContext* m_codec_context;
     AVFrame* m_frame;
     AVFrame* m_rgb_frame;
     AVCodec* m_codec;
+    int m_stream_id;
     AVCodecParameters* m_cparams;
     AVPacket* m_packet;
     SwsContext* m_sws_rgb_context;
@@ -160,10 +160,7 @@ private:
     AVRational m_frame_rate;
     std::vector<uint8_t> m_rgb_buffer;
     std::vector<int> m_video_indexes;
-    int m_video_stream;
     int64_t m_frames;
-    int m_last_search_pos;
-    int m_last_decoded_pos;
     bool m_offset_time;
     bool m_codec_cap_delay;
     bool m_read_frame;
@@ -176,16 +173,15 @@ private:
         m_format_context  = 0;
         m_codec_context   = 0;
         m_codec           = 0;
+        m_stream_id       = -1;
         m_frame           = 0;
         m_rgb_frame       = 0;
         m_sws_rgb_context = 0;
+        m_packet          = nullptr;
         m_stride          = 0;
         m_rgb_buffer.clear();
         m_video_indexes.clear();
-        m_video_stream     = -1;
         m_frames           = 0;
-        m_last_search_pos  = 0;
-        m_last_decoded_pos = 0;
         m_offset_time      = true;
         m_read_frame       = false;
         m_codec_cap_delay  = false;
@@ -238,6 +234,9 @@ FFmpegInput::valid_file(const std::string& name) const
 bool
 FFmpegInput::open(const std::string& name, ImageSpec& spec)
 {
+    static std::once_flag init_flag;
+    std::call_once(init_flag, av_register_all);
+fprintf(stderr, "WE WANT %s\n", name.c_str());
     // Temporary workaround: refuse to open a file whose name does not
     // indicate that it's a movie file. This avoids the problem that ffmpeg
     // is willing to open tiff and other files better handled by other
@@ -257,8 +256,7 @@ FFmpegInput::open(const std::string& name, ImageSpec& spec)
         return false;
     }
 
-    static std::once_flag init_flag;
-    std::call_once(init_flag, av_register_all);
+fprintf(stderr, "HERE COMES %s\n", name.c_str());
     const char* file_name = name.c_str();
     av_log_set_level(AV_LOG_FATAL);
     if (avformat_open_input(&m_format_context, file_name, NULL, NULL) != 0) {
@@ -270,29 +268,13 @@ FFmpegInput::open(const std::string& name, ImageSpec& spec)
         errorf("\"%s\" could not find stream info", file_name);
         return false;
     }
-    m_video_stream = -1;
-    for (unsigned int i = 0; i < m_format_context->nb_streams; i++) {
-        if (stream_codec(i)->codec_type == AVMEDIA_TYPE_VIDEO) {
-            if (m_video_stream < 0) {
-                m_video_stream = i;
-            }
-            m_video_indexes.push_back(i);  // needed for later use
-            break;
-        }
-    }
-    if (m_video_stream == -1) {
-        errorf("\"%s\" could not find a valid videostream", file_name);
+    if ((m_stream_id = av_find_best_stream(m_format_context, AVMEDIA_TYPE_VIDEO, -1, -1, &m_codec, 0)) < 0) {
+        errorf("\"%s\" couldn't find video stream", file_name);
         return false;
     }
 
-    // FIXME need av_packet_alloc()
-
-    // codec context for videostream
-    AVCodecParameters* par = stream_codec(m_video_stream);
-
-    m_codec = avcodec_find_decoder(par->codec_id);
-    if (!m_codec) {
-        errorf("\"%s\" can't find decoder", file_name);
+    if (!(m_packet = av_packet_alloc())) {
+        errorf("\"%s\" couldn't get an avpacket", file_name);
         return false;
     }
 
@@ -301,56 +283,14 @@ FFmpegInput::open(const std::string& name, ImageSpec& spec)
         errorf("\"%s\" can't allocate decoder context", file_name);
         return false;
     }
-
-    int ret;
-
-    ret = avcodec_parameters_to_context(m_codec_context, par);
-    if (ret < 0) {
-        errorf("\"%s\" unsupported codec", file_name);
+    if (avcodec_parameters_to_context(m_codec_context, m_format_context->streams[m_stream_id]->codecpar) < 0) {
+        errorf("\"%s\" can't copy parameters", file_name);
         return false;
     }
-
-    if (avcodec_open2(m_codec_context, m_codec, NULL) < 0) {
-        errorf("\"%s\" could not open codec", file_name);
+    if (avcodec_open2(m_codec_context, m_codec, nullptr) < 0) {
+        errorf("\"%s\" can't allocate codec", file_name);
         return false;
     }
-    if (!strcmp(m_codec_context->codec->name, "mjpeg")
-        || !strcmp(m_codec_context->codec->name, "dvvideo")) {
-        m_offset_time = false;
-    }
-    m_codec_cap_delay = (bool)(m_codec_context->codec->capabilities
-                               & CODEC_CAP_DELAY);
-
-    AVStream* stream = m_format_context->streams[m_video_stream];
-    if (stream->r_frame_rate.num != 0 && stream->r_frame_rate.den != 0) {
-        m_frame_rate = stream->r_frame_rate;
-    }
-
-    m_frames     = stream->nb_frames;
-    m_start_time = stream->start_time;
-    if (!m_frames) {
-        seek(0);
-        AVPacket pkt;
-        av_init_packet(&pkt);
-        av_read_frame(m_format_context, &pkt);
-        int64_t first_pts = pkt.pts;
-        int64_t max_pts   = 0;
-        av_free_packet(&pkt);  //because seek(int) uses m_format_context
-        seek(1 << 29);
-        av_init_packet(&pkt);  //Is this needed?
-        while (stream && av_read_frame(m_format_context, &pkt) >= 0) {
-            int64_t current_pts = static_cast<int64_t>(
-                av_q2d(stream->time_base) * (pkt.pts - first_pts) * fps());
-            if (current_pts > max_pts) {
-                max_pts = current_pts + 1;
-            }
-            av_free_packet(&pkt);  //Always free before format_context usage
-        }
-        m_frames = max_pts;
-    }
-    m_frame     = av_frame_alloc();
-    m_rgb_frame = av_frame_alloc();
-
     AVPixelFormat src_pix_format;
     switch (m_codec_context->pix_fmt) {  // deprecation warning for YUV formats
     case AV_PIX_FMT_YUVJ420P: src_pix_format = AV_PIX_FMT_YUV420P; break;
@@ -503,6 +443,9 @@ FFmpegInput::open(const std::string& name, ImageSpec& spec)
 
     m_spec   = ImageSpec(m_codec_context->width, m_codec_context->height,
                        nchannels, datatype);
+
+fprintf(stderr, "PIX_FMT: %d w: %d h: %d\n", m_codec_context->pix_fmt, m_codec_context->width, m_codec_context->height);
+
     m_stride = (size_t)(m_spec.scanline_bytes());
 
     m_rgb_buffer.resize(avpicture_get_size(m_dst_pix_format,
@@ -578,6 +521,7 @@ FFmpegInput::close(void)
     av_free(m_format_context);  // will free m_codec and m_codec_context
     av_frame_free(&m_frame);    // free after close input
     av_frame_free(&m_rgb_frame);
+    av_packet_free(&m_packet);
     sws_freeContext(m_sws_rgb_context);
     init();
     return true;
@@ -586,53 +530,6 @@ FFmpegInput::close(void)
 void
 FFmpegInput::read_frame(int frame)
 {
-    if (m_last_decoded_pos + 1 != frame) {
-        seek(frame);
-    }
-    AVPacket pkt;
-    int finished = 0;
-    int ret      = 0;
-    while ((ret = av_read_frame(m_format_context, &pkt)) == 0
-           || m_codec_cap_delay) {
-        if (ret == AVERROR_EOF) {
-            break;
-        }
-        if (pkt.stream_index == m_video_stream) {
-            if (ret < 0 && m_codec_cap_delay) {
-                pkt.data = NULL;
-                pkt.size = 0;
-            }
-
-            finished = receive_frame(m_codec_context, m_frame, &pkt);
-
-            double pts = 0;
-            if (static_cast<int64_t>(m_frame->pkt_pts)
-                != int64_t(AV_NOPTS_VALUE)) {
-                pts = av_q2d(
-                          m_format_context->streams[m_video_stream]->time_base)
-                      * m_frame->pkt_pts;
-            }
-
-            int current_frame = int((pts - m_start_time) * fps() + 0.5f);  //???
-            //current_frame =   m_frame->display_picture_number;
-            m_last_search_pos = current_frame;
-
-            if (current_frame == frame && finished) {
-                avpicture_fill(reinterpret_cast<AVPicture*>(m_rgb_frame),
-                               &m_rgb_buffer[0], m_dst_pix_format,
-                               m_codec_context->width, m_codec_context->height);
-                sws_scale(m_sws_rgb_context,
-                          static_cast<uint8_t const* const*>(m_frame->data),
-                          m_frame->linesize, 0, m_codec_context->height,
-                          m_rgb_frame->data, m_rgb_frame->linesize);
-                m_last_decoded_pos = current_frame;
-                av_free_packet(&pkt);
-                break;
-            }
-        }
-        av_free_packet(&pkt);
-    }
-    m_read_frame = true;
 }
 
 bool
@@ -648,17 +545,7 @@ FFmpegInput::seek(int frame)
 int64_t
 FFmpegInput::time_stamp(int frame) const
 {
-    int64_t timestamp = static_cast<int64_t>(
-        (static_cast<double>(frame)
-         / (fps()
-            * av_q2d(m_format_context->streams[m_video_stream]->time_base))));
-    if (static_cast<int64_t>(m_format_context->start_time)
-        != int64_t(AV_NOPTS_VALUE)) {
-        timestamp += static_cast<int64_t>(
-            static_cast<double>(m_format_context->start_time) * AV_TIME_BASE
-            / av_q2d(m_format_context->streams[m_video_stream]->time_base));
-    }
-    return timestamp;
+    return -1; // FIXME
 }
 
 double
