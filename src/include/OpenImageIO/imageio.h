@@ -2430,6 +2430,11 @@ OIIO_API std::string geterror(bool clear = true);
 ///    Colon-separated list of directories to search for dynamically-loaded
 ///    format plugins.
 ///
+/// - `int plugins_override`
+///
+///    If nonzero, plugins will have higher priority and override built-in
+///    format readers/writers for a given format.
+///
 /// - `int read_chunk`
 ///
 ///    When performing a `read_image()`, this is the number of scanlines it

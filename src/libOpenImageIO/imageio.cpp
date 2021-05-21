@@ -53,6 +53,7 @@ int oiio_print_debug(oiio_debug_env ? Strutil::stoi(oiio_debug_env) : 1);
 int oiio_log_times = Strutil::from_string<int>(
     Sysutil::getenv("OPENIMAGEIO_LOG_TIMES"));
 std::vector<float> oiio_missingcolor;
+bool plugins_override = false;  // plugins override builtins
 }  // namespace pvt
 
 using namespace pvt;
@@ -343,6 +344,10 @@ attribute(string_view name, TypeDesc type, const void* val)
             *(const char**)val);
         return true;
     }
+    if (name == "plugins_override" && type == TypeDesc::TypeInt) {
+        plugins_override = *(const int*)val;
+        return true;
+    }
 
     return false;
 }
@@ -363,6 +368,10 @@ getattribute(string_view name, TypeDesc type, void* val)
     }
     if (name == "plugin_searchpath" && type == TypeString) {
         *(ustring*)val = plugin_searchpath;
+        return true;
+    }
+    if (name == "plugins_override" && type == TypeInt) {
+        *(int*)val = plugins_override;
         return true;
     }
     if (name == "format_list" && type == TypeString) {
