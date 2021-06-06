@@ -167,8 +167,6 @@ private:
     std::vector<int> m_video_indexes;
     int m_video_stream;
     int64_t m_frames;
-    int m_last_search_pos;
-    int m_last_decoded_pos;
     bool m_offset_time;
     bool m_codec_cap_delay;
     bool m_read_frame;
@@ -187,15 +185,13 @@ private:
         m_stride          = 0;
         m_rgb_buffer.clear();
         m_video_indexes.clear();
-        m_video_stream     = -1;
-        m_frames           = 0;
-        m_last_search_pos  = 0;
-        m_last_decoded_pos = 0;
-        m_offset_time      = true;
-        m_read_frame       = false;
-        m_codec_cap_delay  = false;
-        m_subimage         = 0;
-        m_start_time       = 0;
+        m_video_stream    = -1;
+        m_frames          = 0;
+        m_offset_time     = true;
+        m_read_frame      = false;
+        m_codec_cap_delay = false;
+        m_subimage        = 0;
+        m_start_time      = 0;
     }
 };
 
@@ -352,7 +348,6 @@ FFmpegInput::open(const std::string& name, ImageSpec& spec)
     m_frames     = stream->nb_frames;
     m_start_time = stream->start_time;
     if (!m_frames) {
-        seek(0);
         AVPacket pkt;
         av_init_packet(&pkt);
         av_read_frame(m_format_context, &pkt);
@@ -588,6 +583,7 @@ FFmpegInput::read_native_scanline(int subimage, int miplevel, int y, int /*z*/,
     lock_guard lock(*this);
     if (!seek_subimage(subimage, miplevel))
         return false;
+    }
     if (!m_read_frame) {
         read_frame(m_subimage);
     }
@@ -623,12 +619,11 @@ FFmpegInput::close(void)
 void
 FFmpegInput::read_frame(int frame)
 {
-    if (m_last_decoded_pos + 1 != frame) {
-        seek(frame);
-    }
     AVPacket pkt;
-    int finished = 0;
-    int ret      = 0;
+    int finished      = 0;
+    int ret           = 0;
+    int counted_frame = 0;
+    seek(0);
     while ((ret = av_read_frame(m_format_context, &pkt)) == 0
            || m_codec_cap_delay) {
         if (ret == AVERROR_EOF) {
@@ -641,20 +636,7 @@ FFmpegInput::read_frame(int frame)
             }
 
             finished = receive_frame(m_codec_context, m_frame, &pkt);
-
-            double pts = 0;
-            if (static_cast<int64_t>(m_frame->pkt_pts)
-                != int64_t(AV_NOPTS_VALUE)) {
-                pts = av_q2d(
-                          m_format_context->streams[m_video_stream]->time_base)
-                      * m_frame->pkt_pts;
-            }
-
-            int current_frame = int((pts - m_start_time) * fps() + 0.5f);  //???
-            //current_frame =   m_frame->display_picture_number;
-            m_last_search_pos = current_frame;
-
-            if (current_frame == frame && finished) {
+            if (counted_frame == frame && finished) {
                 avpicture_fill(reinterpret_cast<AVPicture*>(m_rgb_frame),
                                &m_rgb_buffer[0], m_dst_pix_format,
                                m_codec_context->width, m_codec_context->height);
@@ -662,10 +644,10 @@ FFmpegInput::read_frame(int frame)
                           static_cast<uint8_t const* const*>(m_frame->data),
                           m_frame->linesize, 0, m_codec_context->height,
                           m_rgb_frame->data, m_rgb_frame->linesize);
-                m_last_decoded_pos = current_frame;
                 av_free_packet(&pkt);
                 break;
             }
+            ++counted_frame;
         }
         av_free_packet(&pkt);
     }
@@ -700,8 +682,9 @@ FFmpegInput::seek(int frame)
     int64_t offset = time_stamp(frame);
     int flags      = AVSEEK_FLAG_BACKWARD;
     avcodec_flush_buffers(m_codec_context);
-    av_seek_frame(m_format_context, -1, offset, flags);
-    return true;
+    if (av_seek_frame(m_format_context, -1, offset, flags) >= 0)
+        return true;
+    return false;
 }
 
 
