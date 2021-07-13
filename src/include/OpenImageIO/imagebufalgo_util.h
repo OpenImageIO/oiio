@@ -49,7 +49,7 @@ namespace ImageBufAlgo {
 ///     ROI roi = get_roi (R.spec());
 ///     parallel_image (bind(my_image_op,ref(R), cref(A),3.14,_1), roi);
 inline void
-parallel_image (ROI roi, parallel_image_options opt,
+parallel_image (ROI roi, parallel_options opt,
                 std::function<void(ROI)> f)
 {
     opt.resolve ();
@@ -95,18 +95,18 @@ parallel_image (ROI roi, parallel_image_options opt,
 inline void
 parallel_image (ROI roi, std::function<void(ROI)> f)
 {
-    parallel_image (roi, parallel_image_options(), f);
+    parallel_image (roi, parallel_options(), f);
 }
 
 
 
 // DEPRECATED(1.8) -- eventually enable the OIIO_DEPRECATION
 template <class Func>
-// OIIO_DEPRECATED("switch to new parallel_image (1.8)")
+OIIO_DEPRECATED("switch to new parallel_image (1.8)")
 void
 parallel_image (Func f, ROI roi, int nthreads=0, SplitDir splitdir=Split_Y)
 {
-    parallel_image (roi, parallel_image_options (nthreads, splitdir), f);
+    parallel_image (roi, parallel_options(nthreads, splitdir), f);
 }
 
 

@@ -1128,8 +1128,9 @@ Image comparison and statistics
   Examples::
 
     ImageBuf A ("a.exr");
-    ImageBufAlgo::PixelStats stats;
-    ImageBufAlgo::computePixelStats (stats, A);
+    auto stats = ImageBufAlgo::computePixelStats(A);
+    if (stats.min.size() == 0)
+        return; // empty vectors means we could not get the stats
     for (int c = 0;  c < A.nchannels();  ++c) {
         std::cout << "Channel " << c << ":\n";
         std::cout << "   min = " << stats.min[c] << "\n";
@@ -1160,8 +1161,7 @@ Image comparison and statistics
 
     ImageBuf A ("a.exr");
     ImageBuf B ("b.exr");
-    ImageBufAlgo::CompareResults comp;
-    ImageBufAlgo::compare (A, B, 1.0f/255.0f, 0.0f, comp);
+    auto comp = ImageBufAlgo::compare(A, B, 1.0f/255.0f, 0.0f);
     if (comp.nwarn == 0 && comp.nfail == 0) {
         std::cout << "Images match within tolerance\n";
     } else {

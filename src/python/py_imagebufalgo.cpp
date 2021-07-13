@@ -1401,7 +1401,8 @@ IBA_computePixelStats(const ImageBuf& src, ImageBufAlgo::PixelStats& stats,
                       ROI roi, int nthreads)
 {
     py::gil_scoped_release gil;
-    return ImageBufAlgo::computePixelStats(stats, src, roi, nthreads);
+    stats = ImageBufAlgo::computePixelStats(src, roi, nthreads);
+    return stats.min.size() != 0;
 }
 
 
@@ -1421,8 +1422,8 @@ IBA_compare(const ImageBuf& A, const ImageBuf& B, float failthresh,
             int nthreads)
 {
     py::gil_scoped_release gil;
-    return ImageBufAlgo::compare(A, B, failthresh, warnthresh, result, roi,
-                                 nthreads);
+    result = ImageBufAlgo::compare(A, B, failthresh, warnthresh, roi, nthreads);
+    return result.error;
 }
 
 
@@ -1620,8 +1621,8 @@ IBA_make_kernel(ImageBuf& dst, const std::string& name, float width,
                 float height, float depth, bool normalize)
 {
     py::gil_scoped_release gil;
-    return ImageBufAlgo::make_kernel(dst, name, width, height, depth,
-                                     normalize);
+    dst = ImageBufAlgo::make_kernel(name, width, height, depth, normalize);
+    return !dst.has_error();
 }
 
 ImageBuf
@@ -2323,7 +2324,8 @@ IBA_capture_image(ImageBuf& dst, int cameranum,
                   TypeDesc::BASETYPE convert = TypeDesc::UNKNOWN)
 {
     py::gil_scoped_release gil;
-    return ImageBufAlgo::capture_image(dst, cameranum, convert);
+    dst = ImageBufAlgo::capture_image(cameranum, convert);
+    return !dst.has_error();
 }
 
 ImageBuf
@@ -2982,7 +2984,6 @@ declare_imagebufalgo(py::module& m)
                     "bins"_a = 256, "min"_a = 0.0f, "max"_a = 1.0f,
                     "ignore_empty"_a = false, "roi"_a = ROI::All(),
                     "nthreads"_a = 0)
-        // histogram_draw,
 
         .def_static("make_texture", &IBA_make_texture_filename, "mode"_a,
                     "filename"_a, "outputfilename"_a, "config"_a = ImageSpec())

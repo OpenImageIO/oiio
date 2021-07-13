@@ -168,7 +168,6 @@ static void
 print_stats(const std::string& filename, const ImageSpec& originalspec,
             int subimage = 0, int miplevel = 0, bool indentmip = false)
 {
-    PixelStats stats;
     const char* indent = indentmip ? "      " : "    ";
 
     ImageBuf input;
@@ -177,7 +176,8 @@ print_stats(const std::string& filename, const ImageSpec& originalspec,
         return;
     }
 
-    if (!computePixelStats(stats, input)) {
+    PixelStats stats = computePixelStats(input);
+    if (!stats.min.size()) {
         printf("%sStats: (unable to compute)\n", indent);
         if (input.has_error())
             std::cerr << "Error: " << input.geterror() << "\n";

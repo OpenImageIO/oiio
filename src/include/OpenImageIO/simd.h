@@ -890,7 +890,9 @@ public:
     typedef vbool4 vbool_t;   ///< bool type of the same length
     typedef vfloat4 vfloat_t; ///< float type of the same length
     typedef vint4 vint_t;     ///< int type of the same length
+    OIIO_DEPRECATED("use vbool_t (1.8)")
     typedef vbool4 bool_t;   // old name (deprecated 1.8)
+    OIIO_DEPRECATED("use vfloat_t (1.8)")
     typedef vfloat4 float_t; // old name (deprecated 1.8)
 
     /// Default constructor (contents undefined)
@@ -1033,7 +1035,7 @@ public:
     void gather (const value_t *baseptr, const vint_t& vindex);
     /// Gather elements defined by the mask, leave others unchanged.
     template<int scale=4>
-    void gather_mask (const bool_t& mask, const value_t *baseptr, const vint_t& vindex);
+    void gather_mask (const vbool_t& mask, const value_t *baseptr, const vint_t& vindex);
     template<int scale=4>
     void gather_mask (int mask, const value_t *baseptr, const vint_t& vindex);
 
@@ -1042,7 +1044,7 @@ public:
     void scatter (value_t *baseptr, const vint_t& vindex) const;
     /// Scatter elements defined by the mask
     template<int scale=4>
-    void scatter_mask (const bool_t& mask, value_t *baseptr, const vint_t& vindex) const;
+    void scatter_mask (const vbool_t& mask, value_t *baseptr, const vint_t& vindex) const;
     template<int scale=4>
     void scatter_mask (int mask, value_t *baseptr, const vint_t& vindex) const;
 
@@ -1177,7 +1179,9 @@ public:
     typedef vbool8 vbool_t;   ///< bool type of the same length
     typedef vfloat8 vfloat_t; ///< float type of the same length
     typedef vint8 vint_t;     ///< int type of the same length
+    OIIO_DEPRECATED("use vbool_t (1.8)")
     typedef vbool8 bool_t;   // old name (deprecated 1.8)
+    OIIO_DEPRECATED("use vfloat_t (1.8)")
     typedef vfloat8 float_t; // old name (deprecated 1.8)
 
     /// Default constructor (contents undefined)
@@ -1329,7 +1333,7 @@ public:
     void gather (const value_t *baseptr, const vint_t& vindex);
     /// Gather elements defined by the mask, leave others unchanged.
     template<int scale=4>
-    void gather_mask (const bool_t& mask, const value_t *baseptr, const vint_t& vindex);
+    void gather_mask (const vbool_t& mask, const value_t *baseptr, const vint_t& vindex);
     template<int scale=4>
     void gather_mask (int mask, const value_t *baseptr, const vint_t& vindex);
 
@@ -1338,7 +1342,7 @@ public:
     void scatter (value_t *baseptr, const vint_t& vindex) const;
     /// Scatter elements defined by the mask
     template<int scale=4>
-    void scatter_mask (const bool_t& mask, value_t *baseptr, const vint_t& vindex) const;
+    void scatter_mask (const vbool_t& mask, value_t *baseptr, const vint_t& vindex) const;
     template<int scale=4>
     void scatter_mask (int mask, value_t *baseptr, const vint_t& vindex) const;
 
@@ -1473,7 +1477,9 @@ public:
     typedef vbool16 vbool_t;   ///< bool type of the same length
     typedef vfloat16 vfloat_t; ///< float type of the same length
     typedef vint16 vint_t;     ///< int type of the same length
+    OIIO_DEPRECATED("use vbool_t (1.8)")
     typedef vbool16 bool_t;   // old name (deprecated 1.8)
+    OIIO_DEPRECATED("use vfloat_t (1.8)")
     typedef vfloat16 float_t; // old name (deprecated 1.8)
 
     /// Default constructor (contents undefined)
@@ -1627,7 +1633,7 @@ public:
     void gather (const value_t *baseptr, const vint_t& vindex);
     /// Gather elements defined by the mask, leave others unchanged.
     template<int scale=4>
-    void gather_mask (const bool_t& mask, const value_t *baseptr, const vint_t& vindex);
+    void gather_mask (const vbool_t& mask, const value_t *baseptr, const vint_t& vindex);
     template<int scale=4>
     void gather_mask (int mask, const value_t *baseptr, const vint_t& vindex) {
         gather_mask<scale> (vbool_t(mask), baseptr, vindex);
@@ -1638,7 +1644,7 @@ public:
     void scatter (value_t *baseptr, const vint_t& vindex) const;
     /// Scatter elements defined by the mask
     template<int scale=4>
-    void scatter_mask (const bool_t& mask, value_t *baseptr, const vint_t& vindex) const;
+    void scatter_mask (const vbool_t& mask, value_t *baseptr, const vint_t& vindex) const;
     template<int scale=4>
     void scatter_mask (int mask, value_t *baseptr, const vint_t& vindex) const {
         scatter_mask<scale> (vbool_t(mask), baseptr, vindex);
@@ -1782,7 +1788,9 @@ public:
     typedef vfloat4 vfloat_t; ///< SIMD int type
     typedef vint4 vint_t;     ///< SIMD int type
     typedef vbool4 vbool_t;   ///< SIMD bool type
+    OIIO_DEPRECATED("use vbool_t (1.8)")
     typedef vint4 int_t;      // old name (deprecated 1.8)
+    OIIO_DEPRECATED("use vfloat_t (1.8)")
     typedef vbool4 bool_t;    // old name (deprecated 1.8)
 
     /// Default constructor (contents undefined)
@@ -1943,7 +1951,7 @@ public:
     void gather (const value_t *baseptr, const vint_t& vindex);
     /// Gather elements defined by the mask, leave others unchanged.
     template<int scale=4>
-    void gather_mask (const bool_t& mask, const value_t *baseptr, const vint_t& vindex);
+    void gather_mask (const vbool_t& mask, const value_t *baseptr, const vint_t& vindex);
     template<int scale=4>
     void gather_mask (int mask, const value_t *baseptr, const vint_t& vindex);
 
@@ -1952,7 +1960,7 @@ public:
     void scatter (value_t *baseptr, const vint_t& vindex) const;
     /// Scatter elements defined by the mask
     template<int scale=4>
-    void scatter_mask (const bool_t& mask, value_t *baseptr, const vint_t& vindex) const;
+    void scatter_mask (const vbool_t& mask, value_t *baseptr, const vint_t& vindex) const;
     template<int scale=4>
     void scatter_mask (int mask, value_t *baseptr, const vint_t& vindex) const;
 
@@ -2072,6 +2080,7 @@ vfloat4 sign (const vfloat4& a);   ///< 1.0 when value >= 0, -1 when negative
 vfloat4 ceil (const vfloat4& a);
 vfloat4 floor (const vfloat4& a);
 vint4 ifloor (const vfloat4& a);    ///< (int)floor
+OIIO_DEPRECATED("use ifloor (1.8)")
 inline vint4 floori (const vfloat4& a) { return ifloor(a); }  // DEPRECATED(1.8) alias
 
 /// Per-element round to nearest integer.
@@ -2426,7 +2435,9 @@ public:
     typedef vfloat8 vfloat_t; ///< SIMD int type
     typedef vint8 vint_t;     ///< SIMD int type
     typedef vbool8 vbool_t;   ///< SIMD bool type
+    OIIO_DEPRECATED("use vint_t (1.8)")
     typedef vint8 int_t;      // old name (deprecated 1.8)
+    OIIO_DEPRECATED("use vbool_t (1.8)")
     typedef vbool8 bool_t;    // old name (deprecated 1.8)
 
     /// Default constructor (contents undefined)
@@ -2580,7 +2591,7 @@ public:
     void gather (const value_t *baseptr, const vint_t& vindex);
     template<int scale=4>
     // Fastest way to fill with all 1 bits is to cmp any value to itself.
-    void gather_mask (const bool_t& mask, const value_t *baseptr, const vint_t& vindex);
+    void gather_mask (const vbool_t& mask, const value_t *baseptr, const vint_t& vindex);
     template<int scale=4>
     void gather_mask (int mask, const value_t *baseptr, const vint_t& vindex);
 
@@ -2589,7 +2600,7 @@ public:
     void scatter (value_t *baseptr, const vint_t& vindex) const;
     /// Scatter elements defined by the mask
     template<int scale=4>
-    void scatter_mask (const bool_t& mask, value_t *baseptr, const vint_t& vindex) const;
+    void scatter_mask (const vbool_t& mask, value_t *baseptr, const vint_t& vindex) const;
     template<int scale=4>
     void scatter_mask (int mask, value_t *baseptr, const vint_t& vindex) const;
 
@@ -2744,7 +2755,9 @@ public:
     typedef vfloat16 vfloat_t; ///< SIMD int type
     typedef vint16 vint_t;     ///< SIMD int type
     typedef vbool16 vbool_t;   ///< SIMD bool type
+    OIIO_DEPRECATED("use vint_t (1.8)")
     typedef vint16 int_t;      // old name (deprecated 1.8)
+    OIIO_DEPRECATED("use vbool_t (1.8)")
     typedef vbool16 bool_t;    // old name (deprecated 1.8)
 
     /// Default constructor (contents undefined)
@@ -2905,7 +2918,7 @@ public:
     void gather (const value_t *baseptr, const vint_t& vindex);
     /// Gather elements defined by the mask, leave others unchanged.
     template<int scale=4>
-    void gather_mask (const bool_t& mask, const value_t *baseptr, const vint_t& vindex);
+    void gather_mask (const vbool_t& mask, const value_t *baseptr, const vint_t& vindex);
     template<int scale=4>
     void gather_mask (int mask, const value_t *baseptr, const vint_t& vindex) {
         gather_mask<scale> (vbool_t(mask), baseptr, vindex);
@@ -2916,7 +2929,7 @@ public:
     void scatter (value_t *baseptr, const vint_t& vindex) const;
     /// Scatter elements defined by the mask
     template<int scale=4>
-    void scatter_mask (const bool_t& mask, value_t *baseptr, const vint_t& vindex) const;
+    void scatter_mask (const vbool_t& mask, value_t *baseptr, const vint_t& vindex) const;
     template<int scale=4>
     void scatter_mask (int mask, value_t *baseptr, const vint_t& vindex) const {
         scatter_mask<scale> (vbool_t(mask), baseptr, vindex);
@@ -3015,6 +3028,7 @@ vfloat16 sign (const vfloat16& a);   ///< 1.0 when value >= 0, -1 when negative
 vfloat16 ceil (const vfloat16& a);
 vfloat16 floor (const vfloat16& a);
 vint16 ifloor (const vfloat16& a);    ///< (int)floor
+OIIO_DEPRECATED("use ifloor (1.8)")
 inline vint16 floori (const vfloat16& a) { return ifloor(a); }  // DEPRECATED(1.8) alias
 
 /// Per-element round to nearest integer.
@@ -4253,7 +4267,7 @@ vint4::gather (const value_t *baseptr, const vint_t& vindex)
 
 template<int scale>
 OIIO_FORCEINLINE void
-vint4::gather_mask (const bool_t& mask, const value_t *baseptr, const vint_t& vindex)
+vint4::gather_mask (const vbool_t& mask, const value_t *baseptr, const vint_t& vindex)
 {
 #if OIIO_SIMD_AVX >= 2
     m_simd = _mm_mask_i32gather_epi32 (m_simd, baseptr, vindex, _mm_cvtps_epi32(mask), scale);
@@ -4276,7 +4290,7 @@ vint4::scatter (value_t *baseptr, const vint_t& vindex) const
 
 template<int scale>
 OIIO_FORCEINLINE void
-vint4::scatter_mask (const bool_t& mask, value_t *baseptr,
+vint4::scatter_mask (const vbool_t& mask, value_t *baseptr,
                      const vint_t& vindex) const
 {
 #if 0 && OIIO_SIMD_AVX >= 512 && OIIO_AVX512VL_ENABLED
@@ -4695,6 +4709,7 @@ OIIO_FORCEINLINE vint4 bitcast_to_int (const vbool4& x)
 }
 
 // Old names: (DEPRECATED 1.8)
+OIIO_DEPRECATED("use bitcast_to_int() (1.8)")
 inline vint4 bitcast_to_int4 (const vbool4& x) { return bitcast_to_int(x); }
 
 
@@ -5109,7 +5124,7 @@ vint8::gather (const value_t *baseptr, const vint_t& vindex)
 
 template<int scale>
 OIIO_FORCEINLINE void
-vint8::gather_mask (const bool_t& mask, const value_t *baseptr, const vint_t& vindex)
+vint8::gather_mask (const vbool_t& mask, const value_t *baseptr, const vint_t& vindex)
 {
 #if OIIO_SIMD_AVX >= 2
     m_simd = _mm256_mask_i32gather_epi32 (m_simd, baseptr, vindex, _mm256_cvtps_epi32(mask), scale);
@@ -5131,7 +5146,7 @@ vint8::scatter (value_t *baseptr, const vint_t& vindex) const
 
 template<int scale>
 OIIO_FORCEINLINE void
-vint8::scatter_mask (const bool_t& mask, value_t *baseptr,
+vint8::scatter_mask (const vbool_t& mask, value_t *baseptr,
                      const vint_t& vindex) const
 {
 #if OIIO_SIMD_AVX >= 512 && OIIO_AVX512VL_ENABLED
@@ -5879,7 +5894,7 @@ vint16::gather (const value_t *baseptr, const vint_t& vindex) {
 
 template<int scale>
 OIIO_FORCEINLINE void
-vint16::gather_mask (const bool_t& mask, const value_t *baseptr, const vint_t& vindex) {
+vint16::gather_mask (const vbool_t& mask, const value_t *baseptr, const vint_t& vindex) {
 #if OIIO_SIMD_AVX >= 512
     m_simd = _mm512_mask_i32gather_epi32 (m_simd, mask, vindex, baseptr, scale);
 #else
@@ -5901,7 +5916,7 @@ vint16::scatter (value_t *baseptr, const vint_t& vindex) const {
 
 template<int scale>
 OIIO_FORCEINLINE void
-vint16::scatter_mask (const bool_t& mask, value_t *baseptr,
+vint16::scatter_mask (const vbool_t& mask, value_t *baseptr,
                       const vint_t& vindex) const {
 #if OIIO_SIMD_AVX >= 512
     _mm512_mask_i32scatter_epi32 (baseptr, mask, vindex, m_simd, scale);
@@ -6853,7 +6868,7 @@ vfloat4::gather (const value_t *baseptr, const vint_t& vindex)
 
 template<int scale>
 OIIO_FORCEINLINE void
-vfloat4::gather_mask (const bool_t& mask, const value_t *baseptr, const vint_t& vindex)
+vfloat4::gather_mask (const vbool_t& mask, const value_t *baseptr, const vint_t& vindex)
 {
 #if OIIO_SIMD_AVX >= 2
     m_simd = _mm_mask_i32gather_ps (m_simd, baseptr, vindex, mask, scale);
@@ -6876,7 +6891,7 @@ vfloat4::scatter (value_t *baseptr, const vint_t& vindex) const
 
 template<int scale>
 OIIO_FORCEINLINE void
-vfloat4::scatter_mask (const bool_t& mask, value_t *baseptr,
+vfloat4::scatter_mask (const vbool_t& mask, value_t *baseptr,
                        const vint_t& vindex) const
 {
 #if 0 && OIIO_SIMD_AVX >= 512 && OIIO_AVX512VL_ENABLED
@@ -8712,7 +8727,7 @@ vfloat8::gather (const value_t *baseptr, const vint_t& vindex)
 
 template<int scale>
 OIIO_FORCEINLINE void
-vfloat8::gather_mask (const bool_t& mask, const value_t *baseptr, const vint_t& vindex)
+vfloat8::gather_mask (const vbool_t& mask, const value_t *baseptr, const vint_t& vindex)
 {
 #if OIIO_SIMD_AVX >= 2
     m_simd = _mm256_mask_i32gather_ps (m_simd, baseptr, vindex, mask, scale);
@@ -8734,7 +8749,7 @@ vfloat8::scatter (value_t *baseptr, const vint_t& vindex) const
 
 template<int scale>
 OIIO_FORCEINLINE void
-vfloat8::scatter_mask (const bool_t& mask, value_t *baseptr,
+vfloat8::scatter_mask (const vbool_t& mask, value_t *baseptr,
                        const vint_t& vindex) const
 {
 #if OIIO_SIMD_AVX >= 512 && OIIO_AVX512VL_ENABLED
@@ -9567,7 +9582,7 @@ vfloat16::gather (const value_t *baseptr, const vint_t& vindex)
 
 template<int scale>
 OIIO_FORCEINLINE void
-vfloat16::gather_mask (const bool_t& mask, const value_t *baseptr, const vint_t& vindex)
+vfloat16::gather_mask (const vbool_t& mask, const value_t *baseptr, const vint_t& vindex)
 {
 #if OIIO_SIMD_AVX >= 512
     m_simd = _mm512_mask_i32gather_ps (m_simd, mask, vindex, baseptr, scale);
@@ -9591,7 +9606,7 @@ vfloat16::scatter (value_t *baseptr, const vint_t& vindex) const
 
 template<int scale>
 OIIO_FORCEINLINE void
-vfloat16::scatter_mask (const bool_t& mask, value_t *baseptr,
+vfloat16::scatter_mask (const vbool_t& mask, value_t *baseptr,
                         const vint_t& vindex) const
 {
 #if OIIO_SIMD_AVX >= 512

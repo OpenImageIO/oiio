@@ -85,7 +85,7 @@ time_read_image()
     for (ustring filename : input_filename) {
         auto in = ImageInput::open(filename.c_str());
         OIIO_ASSERT(in);
-        in->read_image(conversion, &buffer[0]);
+        in->read_image(0, 0, 0, in->spec().nchannels, conversion, &buffer[0]);
         in->close();
     }
 }
@@ -125,7 +125,7 @@ time_read_64_scanlines_at_a_time()
             pixelsize = spec.pixel_bytes(true);  // UNKNOWN -> native
         imagesize_t scanlinesize = spec.width * pixelsize;
         for (int y = 0; y < spec.height; y += 64) {
-            in->read_scanlines(y + spec.y,
+            in->read_scanlines(0, 0, y + spec.y,
                                std::min(y + spec.y + 64, spec.y + spec.height),
                                0, conversion, &buffer[scanlinesize * y]);
         }

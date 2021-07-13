@@ -106,8 +106,8 @@ OiioTool::do_action_diff(ImageRec& ir0, ImageRec& ir1, Oiiotool& ot,
                 yee_failures = ImageBufAlgo::compare_Yee(img0, img1, cr);
                 break;
             default:
-                ImageBufAlgo::compare(img0, img1, ot.diff_failthresh,
-                                      ot.diff_warnthresh, cr);
+                cr = ImageBufAlgo::compare(img0, img1, ot.diff_failthresh,
+                                           ot.diff_warnthresh);
                 break;
             }
 

@@ -104,7 +104,8 @@ checked_read(ImageInput* in, string_view filename,
     }
     data.resize(in->spec().image_pixels() * in->spec().nchannels
                 * sizeof(float));
-    CHECKED(in, read_image(TypeFloat, data.data()));
+    CHECKED(in,
+            read_image(0, 0, 0, in->spec().nchannels, TypeFloat, data.data()));
     CHECKED(in, close());
     return true;
 }
@@ -358,7 +359,7 @@ test_read_tricky_sizes()
     // Read in, make sure it's right, several different ways
     {
         auto imgin = ImageInput::open(srcfilename);
-        imgin->read_image(TypeUInt8, buf, 4 /* xstride */);
+        imgin->read_image(0, 0, 0, 4, TypeUInt8, buf, 4 /* xstride */);
         OIIO_CHECK_EQUAL(int(buf[0][0][0]), 128);
         OIIO_CHECK_EQUAL(int(buf[0][0][1]), 0);
         OIIO_CHECK_EQUAL(int(buf[0][0][2]), 0);
@@ -390,7 +391,7 @@ test_read_tricky_sizes()
     {
         memset(buf, 0, 4 * 4 * 4);
         auto imgin = ImageInput::open(srcfilename);
-        imgin->read_image(TypeUInt8, buf, 4 /* xstride */);
+        imgin->read_image(0, 0, 0, 4, TypeUInt8, buf, 4 /* xstride */);
         OIIO_CHECK_EQUAL(int(buf[0][0][0]), 128);
         OIIO_CHECK_EQUAL(int(buf[0][0][1]), 0);
         OIIO_CHECK_EQUAL(int(buf[0][0][2]), 0);

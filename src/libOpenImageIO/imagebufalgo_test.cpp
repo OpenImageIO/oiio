@@ -384,8 +384,7 @@ test_add()
     // Test addition of image and constant color
     ImageBuf D(spec);
     ImageBufAlgo::add(D, A, Bval);
-    ImageBufAlgo::CompareResults comp;
-    ImageBufAlgo::compare(R, D, 1e-6f, 1e-6f, comp);
+    auto comp = ImageBufAlgo::compare(R, D, 1e-6f, 1e-6f);
     OIIO_CHECK_EQUAL(comp.maxerror, 0.0f);
 }
 
@@ -418,8 +417,7 @@ test_sub()
     // Test subtraction of image and constant color
     ImageBuf D(spec);
     ImageBufAlgo::sub(D, A, Bval);
-    ImageBufAlgo::CompareResults comp;
-    ImageBufAlgo::compare(R, D, 1e-6f, 1e-6f, comp);
+    auto comp = ImageBufAlgo::compare(R, D, 1e-6f, 1e-6f);
     OIIO_CHECK_EQUAL(comp.maxerror, 0.0f);
 }
 
@@ -452,8 +450,7 @@ test_mul()
     // Test multiplication of image and constant color
     ImageBuf D(spec);
     ImageBufAlgo::mul(D, A, Bval);
-    ImageBufAlgo::CompareResults comp;
-    ImageBufAlgo::compare(R, D, 1e-6f, 1e-6f, comp);
+    auto comp = ImageBufAlgo::compare(R, D, 1e-6f, 1e-6f);
     OIIO_CHECK_EQUAL(comp.maxerror, 0.0f);
 }
 
@@ -490,8 +487,7 @@ test_mad()
     // Test multiplication of image and constant color
     ImageBuf D(spec);
     ImageBufAlgo::mad(D, A, Bval, Cval);
-    ImageBufAlgo::CompareResults comp;
-    ImageBufAlgo::compare(R, D, 1e-6f, 1e-6f, comp);
+    auto comp = ImageBufAlgo::compare(R, D, 1e-6f, 1e-6f);
     OIIO_CHECK_EQUAL(comp.maxerror, 0.0f);
 }
 
@@ -571,8 +567,7 @@ test_compare()
     // 0.06, 0.07, 0.08, 0.09, 0, 0, ...}.
     const float failthresh = 0.05;
     const float warnthresh = 0.025;
-    ImageBufAlgo::CompareResults comp;
-    ImageBufAlgo::compare(A, B, failthresh, warnthresh, comp);
+    auto comp = ImageBufAlgo::compare(A, B, failthresh, warnthresh);
     // We expect 5 pixels to exceed the fail threshold, 7 pixels to
     // exceed the warn threshold, the maximum difference to be 0.09,
     // and the maximally different pixel to be (9,0).
@@ -699,8 +694,7 @@ test_computePixelStats()
     img.setpixel(1, 0, white);
     img.setpixel(0, 1, black);
     img.setpixel(1, 1, white);
-    ImageBufAlgo::PixelStats stats;
-    ImageBufAlgo::computePixelStats(stats, img);
+    auto stats = ImageBufAlgo::computePixelStats(img);
     for (int c = 0; c < 3; ++c) {
         OIIO_CHECK_EQUAL(stats.min[c], 0.0f);
         OIIO_CHECK_EQUAL(stats.max[c], 1.0f);
@@ -785,8 +779,7 @@ test_maketx_from_imagebuf()
     // Read it back and compare it
     ImageBuf B(pgname);
     B.read();
-    ImageBufAlgo::CompareResults comparison;
-    ImageBufAlgo::compare(A, B, 0, 0, comparison);
+    auto comparison = ImageBufAlgo::compare(A, B, 0, 0);
     OIIO_CHECK_EQUAL(comparison.nwarn, 0);
     OIIO_CHECK_EQUAL(comparison.nfail, 0);
     remove(pgname);  // clean up

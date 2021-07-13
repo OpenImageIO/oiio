@@ -280,6 +280,7 @@ public:
     std::string configname() const;
 
     // DEPRECATED(1.9) -- no longer necessary, because it's a shared ptr
+    OIIO_DEPRECATED("no longer necessary (1.9)")
     static void deleteColorProcessor(const ColorProcessorHandle& /*processor*/)
     {
     }

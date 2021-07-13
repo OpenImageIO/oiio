@@ -549,8 +549,8 @@ ImageBufAlgo::unsharp_mask(ImageBuf& dst, const ImageBuf& src,
     if (kernel == "median") {
         median_filter(Blurry, src, ceilf(width), 0, roi, nthreads);
     } else {
-        ImageBuf K;
-        if (!make_kernel(K, kernel, width, width)) {
+        ImageBuf K = make_kernel(kernel, width, width);
+        if (K.has_error()) {
             dst.errorfmt("{}", K.geterror());
             return false;
         }
@@ -609,8 +609,8 @@ ImageBufAlgo::laplacian(ImageBuf& dst, const ImageBuf& src, ROI roi,
                  IBAprep_REQUIRE_SAME_NCHANNELS | IBAprep_NO_SUPPORT_VOLUME))
         return false;
 
-    ImageBuf K;
-    if (!make_kernel(K, "laplacian", 3, 3)) {
+    ImageBuf K = make_kernel("laplacian", 3, 3);
+    if (K.has_error()) {
         dst.errorfmt("{}", K.geterror());
         return false;
     }

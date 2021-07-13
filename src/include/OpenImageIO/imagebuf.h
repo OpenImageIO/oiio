@@ -511,6 +511,7 @@ public:
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     // DEPRECATED(1.9): old version did not have the data type
+    OIIO_DEPRECATED("use other write() that takes the dtype argument (1.9)")
     bool write(string_view filename, string_view fileformat,
                ProgressCallback progress_callback = nullptr,
                void* progress_callback_data       = nullptr) const
@@ -724,9 +725,12 @@ public:
     void interppixel_NDC(float s, float t, float* pixel,
                          WrapMode wrap = WrapBlack) const;
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
     // DEPRECATED (1.5) synonym for interppixel_NDC.
+    OIIO_DEPRECATED("use interppixel_NDC (1.5)")
     void interppixel_NDC_full(float s, float t, float* pixel,
                               WrapMode wrap = WrapBlack) const;
+#endif
 
     /// Bicubic interpolation at pixel coordinates (x,y).
     void interppixel_bicubic(float x, float y, float* pixel,

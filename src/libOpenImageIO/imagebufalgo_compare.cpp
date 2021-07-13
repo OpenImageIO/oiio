@@ -916,7 +916,7 @@ ImageBufAlgo::histogram(const ImageBuf& src, int channel, int bins, float min,
                         float max, bool ignore_empty, ROI roi, int nthreads)
 {
     pvt::LoggedTimer logtimer("IBA::histogram");
-    std::vector<imagesize_t> h(bins);
+    std::vector<imagesize_t> h;
 
     // Sanity checks
     if (src.nchannels() == 0) {
@@ -941,6 +941,7 @@ ImageBufAlgo::histogram(const ImageBuf& src, int channel, int bins, float min,
     if (!roi.defined())
         roi = get_roi(src.spec());
 
+    h.resize(bins);
     bool ok = true;
     OIIO_DISPATCH_TYPES(ok, "histogram", histogram_impl, src.spec().format, src,
                         channel, h, bins, min, max, ignore_empty, roi,
