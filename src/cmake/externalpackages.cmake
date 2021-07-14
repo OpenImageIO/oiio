@@ -36,13 +36,20 @@ if (MSVC)
     # Disable automatic linking using pragma comment(lib,...) of boost libraries upon including of a header
     add_definitions (-DBOOST_ALL_NO_LIB=1)
 endif ()
-if (LINKSTATIC)
-    set (Boost_USE_STATIC_LIBS ON)
-else ()
-    if (MSVC)
+
+# If the build system hasn't been specifically told how to link Boost, link it the same way as other
+# OIIO dependencies:
+if (NOT DEFINED Boost_USE_STATIC_LIBS)
+    set (Boost_USE_STATIC_LIBS "${LINKSTATIC}")
+endif ()
+
+if (MSVC)
+    # Not linking Boost as static libraries: either an explicit setting or LINKSTATIC is FALSE:
+    if (NOT Boost_USE_STATIC_LIBS)
         add_definitions (-DBOOST_ALL_DYN_LINK=1)
     endif ()
 endif ()
+
 if (BOOST_CUSTOM)
     set (Boost_FOUND true)
     # N.B. For a custom version, the caller had better set up the variables
