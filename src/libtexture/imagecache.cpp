@@ -2868,6 +2868,33 @@ ImageCacheImpl::imagespec(ImageCacheFile* file,
 
 
 
+bool
+ImageCacheImpl::get_thumbnail(ustring filename, ImageBuf& thumb, int subimage)
+{
+    ImageCachePerThreadInfo* thread_info = get_perthread_info();
+    ImageCacheFile* file = find_file(filename, thread_info, nullptr);
+    if (!file) {
+        error("Image file \"{}\" not found", filename);
+        return false;
+    }
+    return get_thumbnail(file, thread_info, thumb, subimage);
+}
+
+
+
+bool
+ImageCacheImpl::get_thumbnail(ImageCacheFile* file,
+                              ImageCachePerThreadInfo* thread_info,
+                              ImageBuf& thumb, int subimage)
+{
+    std::shared_ptr<ImageInput> inp = file->open(thread_info);
+    if (!inp)
+        return false;  // indicates a broken file
+    return inp->get_thumbnail(thumb, subimage);
+}
+
+
+
 int
 ImageCacheImpl::subimage_from_name(ImageCacheFile* file, ustring subimagename)
 {

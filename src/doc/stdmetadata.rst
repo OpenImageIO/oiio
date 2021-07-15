@@ -273,6 +273,29 @@ The following metadata items are specific to photos or captured images.
     The f/stop of the camera when it captured the image.
 
 
+Thumbnails / postage stamps / preview images
+============================================
+
+Some image file formats allow for storing a `thumbnail` -- a lower-resolution
+image suitable for an icon or other small preview. These are retrievable
+separately via `ImageInput::get_thumbnail()`, `ImageBuf::thumbnail()`, or
+`ImageCache::get_thumbnail()`. In addition, if a thumbnail is available,
+the `ImageSpec` should also contain the following metadata:
+
+
+.. option:: "thumbnail_width" : int
+
+    The thumbnail width, in pixels.
+
+.. option:: "thumbnail_height" : int
+
+    The thumbnail height, in pixels.
+
+.. option:: "thumbnail_nchannels" : int
+
+    The number of color channels in the thumbnail image.
+
+
 
 Texture Information
 ===================

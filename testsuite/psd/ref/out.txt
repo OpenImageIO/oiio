@@ -11,7 +11,6 @@ Reading ../../../../../oiio-images/psd_123.psd
     ResolutionUnit: 2 (inches)
     Software: "Adobe Photoshop CS5.1 Windows"
     thumbnail_height: 78
-    thumbnail_image: 249, 255, 255, 251, 255, 255, 252, 255, 255, 254, 255, 255, 255, 254, 255, 255, ... [37440 x uint8]
     thumbnail_nchannels: 3
     thumbnail_width: 160
     XResolution: 72
@@ -140,7 +139,6 @@ Reading ../../../../../oiio-images/psd_123_nomaxcompat.psd
     ResolutionUnit: 2 (inches)
     Software: "Adobe Photoshop CS5.1 Windows"
     thumbnail_height: 78
-    thumbnail_image: 249, 255, 255, 251, 255, 255, 252, 255, 255, 254, 255, 255, 255, 254, 255, 255, ... [37440 x uint8]
     thumbnail_nchannels: 3
     thumbnail_width: 160
     XResolution: 72
@@ -275,7 +273,6 @@ Reading ../../../../../oiio-images/psd_bitmap.psd
     ResolutionUnit: 2 (inches)
     Software: "Adobe Photoshop CS5.1 Windows"
     thumbnail_height: 120
-    thumbnail_image: 90, 90, 90, 255, 255, 255, 255, 255, 255, 251, 251, 251, 250, 250, 250, 255, ... [57600 x uint8]
     thumbnail_nchannels: 3
     thumbnail_width: 160
     XResolution: 180
@@ -345,7 +342,6 @@ Reading ../../../../../oiio-images/psd_indexed_trans.psd
     ResolutionUnit: 2 (inches)
     Software: "Adobe Photoshop CS5.1 Windows"
     thumbnail_height: 120
-    thumbnail_image: 166, 170, 173, 203, 207, 210, 225, 229, 232, 228, 232, 235, 232, 236, 239, 230, ... [57600 x uint8]
     thumbnail_nchannels: 3
     thumbnail_width: 160
     XResolution: 180
@@ -417,7 +413,6 @@ Reading ../../../../../oiio-images/psd_rgb_8.psd
     ResolutionUnit: 2 (inches)
     Software: "Adobe Photoshop CS5.1 Windows"
     thumbnail_height: 120
-    thumbnail_image: 219, 223, 226, 221, 225, 228, 225, 229, 232, 229, 233, 236, 232, 236, 239, 235, ... [57600 x uint8]
     thumbnail_nchannels: 3
     thumbnail_width: 160
     XResolution: 180
@@ -489,7 +484,6 @@ Reading ../../../../../oiio-images/psd_rgb_16.psd
     ResolutionUnit: 2 (inches)
     Software: "Adobe Photoshop CS5.1 Windows"
     thumbnail_height: 120
-    thumbnail_image: 219, 223, 226, 221, 225, 228, 225, 229, 232, 229, 233, 236, 232, 236, 239, 235, ... [57600 x uint8]
     thumbnail_nchannels: 3
     thumbnail_width: 160
     XResolution: 180
@@ -561,7 +555,6 @@ Reading ../../../../../oiio-images/psd_rgb_32.psd
     ResolutionUnit: 2 (inches)
     Software: "Adobe Photoshop CS5.1 Windows"
     thumbnail_height: 120
-    thumbnail_image: 217, 225, 227, 221, 226, 229, 224, 229, 232, 228, 233, 236, 231, 236, 239, 233, ... [57600 x uint8]
     thumbnail_nchannels: 3
     thumbnail_width: 160
     XResolution: 180
@@ -629,7 +622,6 @@ Reading ../../../../../oiio-images/psd_rgba_8.psd
     ResolutionUnit: 2 (inches)
     Software: "Adobe Photoshop CS5.1 Windows"
     thumbnail_height: 120
-    thumbnail_image: 220, 224, 227, 222, 226, 229, 225, 229, 232, 229, 233, 236, 232, 236, 239, 234, ... [57600 x uint8]
     thumbnail_nchannels: 3
     thumbnail_width: 160
     XResolution: 72

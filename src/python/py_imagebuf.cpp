@@ -296,6 +296,14 @@ declare_imagebuf(py::module& m)
              py::return_value_policy::reference_internal)
         .def("specmod", &ImageBuf::specmod,
              py::return_value_policy::reference_internal)
+        .def_property_readonly("has_thumbnail",
+                               [](const ImageBuf& self) {
+                                   return self.has_thumbnail();
+                               })
+        .def("clear_thumbnail", &ImageBuf::clear_thumbnail)
+        .def("set_thumbnail", &ImageBuf::set_thumbnail, "thumb"_a)
+        .def("thumbnail",
+             [](const ImageBuf& self) { return *self.thumbnail(); })
         .def_property_readonly("name",
                                [](const ImageBuf& self) {
                                    return PY_STR(self.name());

@@ -246,6 +246,10 @@ declare_imageoutput(py::module& m)
         .def("write_deep_tiles", &ImageOutput_write_deep_tiles, "xbegin"_a,
              "xend"_a, "ybegin"_a, "yend"_a, "zbegin"_a, "zend"_a, "deepdata"_a)
         .def("write_deep_image", &ImageOutput_write_deep_image)
+        .def("set_thumbnail",
+             [](ImageOutput& self, const ImageBuf& thumb) {
+                 return self.set_thumbnail(thumb);
+             })
         .def("copy_image", [](ImageOutput& self,
                               ImageInput& in) { return self.copy_image(&in); })
         .def_property_readonly("has_error", &ImageOutput::has_error)

@@ -40,6 +40,7 @@
 OIIO_NAMESPACE_BEGIN
 
 class DeepData;
+class ImageBuf;
 
 
 /// Type we use for stride lengths between pixels, scanlines, or image
@@ -943,6 +944,9 @@ public:
     /// - `"exif"` :
     ///       Can this format store Exif camera data?
     ///
+    /// - `"ioproxy"` :
+    ///       Does this format reader support reading from an `IOProxy`?
+    ///
     /// - `"iptc"` :
     ///       Can this format store IPTC data?
     ///
@@ -950,8 +954,9 @@ public:
     ///       Can this format create images without reading from a disk
     ///       file?
     ///
-    /// - `"ioproxy"` :
-    ///       Does this format reader support reading from an `IOProxy`?
+    /// - `"thumbnail"` :
+    ///       Does this format reader support retrieving a reduced
+    ///       resolution copy of the image via the `thumbnail()` method?
     ///
     /// This list of queries may be extended in future releases. Since this
     /// can be done simply by recognizing new query strings, and does not
@@ -1045,6 +1050,25 @@ public:
     /// having requested a nonexistent subimage) are indicated by returning
     /// an ImageSpec with `format==TypeUnknown`.
     virtual ImageSpec spec_dimensions (int subimage, int miplevel=0);
+
+    /// Retrieve a reduced-resolution ("thumbnail") version of the given
+    /// subimage. It is guaranteed to be thread-safe.
+    ///
+    /// @param thumb
+    ///         A reference to an `ImageBuf` which will be overwritten with
+    ///         the thumbnail image.
+    /// @param subimage
+    ///         The index of the subimage in the file whose thumbnail is to
+    ///         be retrieved.
+    /// @returns
+    ///         `true` upon success, `false` if no thumbnail was available,
+    ///         or if this file format (or reader) does not support
+    ///         thumbnails.
+    ///
+    /// @note This method was added to OpenImageIO 2.3.
+    virtual bool get_thumbnail(ImageBuf& thumb, int subimage) {
+        return false;
+    }
 
     /// Close an open ImageInput. The call to close() is not strictly
     /// necessary if the ImageInput is destroyed immediately afterwards,
@@ -1849,6 +1873,17 @@ public:
     ///       Is this a purely procedural output that doesn't write an
     ///       actual file?
     ///
+    /// - `"thumbnail"` :
+    ///       Does this format writer support adding a  reduced resolution
+    ///       copy of the image via the `thumbnail()` method?
+    ///
+    /// - `"thumbnail_after_write"` :
+    ///       Does this format writer support calling `thumbnail()` after
+    ///       the scanlines or tiles have been specified? (Supporting
+    ///       `"thumbnail"` but not `"thumbnail_after_write"` means that any
+    ///       thumbnail must be supplied immediately after `open()`, prior
+    ///       to any of the `write_*()` calls.)
+    ///
     /// This list of queries may be extended in future releases. Since this
     /// can be done simply by recognizing new query strings, and does not
     /// require any new API entry points, addition of support for new
@@ -2167,6 +2202,20 @@ public:
     /// @param  deepdata    A `DeepData` object with the data for the image.
     /// @returns            `true` upon success, or `false` upon failure.
     virtual bool write_deep_image (const DeepData &deepdata);
+
+    /// Specify a reduced-resolution ("thumbnail") version of the image.
+    /// Note that many image formats may require the thumbnail to be
+    /// specified prior to writing the pixels.
+    ///
+    /// @param thumb
+    ///         A reference to an `ImageBuf` containing the thumbnail image.
+    /// @returns
+    ///         `true` upon success, `false` if it was not possible to write
+    ///         the thumbnail, or if this file format (or writer) does not
+    ///         support thumbnails.
+    ///
+    /// @note This method was added to OpenImageIO 2.3.
+    virtual bool set_thumbnail(const ImageBuf& thumb) { return false; }
 
     /// @}
 

@@ -1147,6 +1147,13 @@ the Python versions allocate and return an array holding the pixel values
     explicit subimage/miplevel.
 
 
+.. py:method:: ImageOutput.get_thumbnail(subimage: int = 0) -> ImageBuf
+
+    Retrieve an ImageBuf containing reduced-resolution("thumbnail") version
+    of the image. If no thumbnail could be retrieved, an empty ImageBuf
+    will be returned.
+
+
 .. py:method:: ImageInput.geterror (clear = True)
 
     Retrieves the error message from the latest failed operation on an
@@ -1431,8 +1438,15 @@ ImageOutput class APIs. The Python APIs are very similar.
     Write a collection of scanlines, tiles, or an entire image of "deep"
     pixel data. The begin/end coordinates are all integer values, and
     `deepdata` should be a DeepData.
-    
-    
+
+
+.. py:method:: ImageOutput.set_thumbnail(thumb : ImageBuf)
+
+    Specify a reduced-resolution ("thumbnail") version of the image, as an
+    ImageBuf. Note that many image formats may require the thumbnail to be
+    specified prior to writing the pixels. Return `True` for success, or
+    `False` if a thumbnail could not be set.
+
 .. py:method:: ImageOutput.copy_image (imageinput)
 
     Copy the current image of the open input to the open output. (The reason
@@ -1727,11 +1741,28 @@ awaiting a call to `reset()` or `copy()` before it is useful.
         buf.write ("file.tif")
 
 
-.. py:method:: ImageBuf.name
+.. py:attribute:: ImageBuf.has_thumbnail
+
+    Contains `True` if the ImageBuf contains thumbnail data, otherwise
+    `False`.
+
+.. py:method:: ImageBuf.clear_thumbnail()
+
+    Remove any associated thumbnail from this buffer.
+
+.. py:method:: ImageBuf.set_thumbnail(thumb: ImageBuf)
+
+    Set the thumbnai associated with this buffer to `thumb`.
+
+.. py:method:: ImageBuf.thumbnail() -> ImageBuf
+
+    Return an ImageBuf holding any thumbnail associated with this buffer.
+
+.. py:attribute:: ImageBuf.name
 
     The file name of the image (as a string).
 
-.. py:method::  ImageBuf.file_format_name
+.. py:attribute::  ImageBuf.file_format_name
 
     The file format of the image (as a string).
 

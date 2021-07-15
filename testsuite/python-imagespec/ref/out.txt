@@ -113,7 +113,7 @@ extra_attribs size is 9
 99.5
 
 seralize(xml):
-<ImageSpec version="24">
+<ImageSpec version="25">
 <x>1</x>
 <y>2</y>
 <z>3</z>

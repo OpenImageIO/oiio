@@ -13,6 +13,7 @@
 
 #include <OpenImageIO/argparse.h>
 #include <OpenImageIO/filesystem.h>
+#include <OpenImageIO/imagebuf.h>
 #include <OpenImageIO/imagecache.h>
 #include <OpenImageIO/imageio.h>
 #include <OpenImageIO/sysutil.h>
@@ -433,6 +434,15 @@ convert_file(const std::string& in_filename, const std::string& out_filename)
                           << "\n";
                 ok = false;
                 break;
+            }
+
+            // Copy thumbnail, if there is one.
+            if (miplevel == 0 && in->supports("thumbnail")
+                && out->supports("thumbnail")) {
+                ImageBuf thumb;
+                in->get_thumbnail(thumb, subimage);
+                if (thumb.initialized())
+                    out->set_thumbnail(thumb);
             }
 
             if (in->spec().nchannels != out->spec().nchannels)

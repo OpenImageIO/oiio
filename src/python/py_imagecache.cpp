@@ -114,6 +114,8 @@ declare_imagecache(py::module& m)
         // .def("get_image_info", &ImageCacheWrap::get_image_info)
         // .def("get_imagespec", &ImageCacheWrap::get_imagespec,
         //      "subimage"_a=0),
+        // .def("get_thumbnail", &ImageCacheWrap::get_thumbnail,
+        //      "subimage"_a=0)
         .def("get_pixels", &ImageCacheWrap::get_pixels)
         // .def("get_tile", &ImageCacheWrap::get_tile)
         // .def("release_tile", &ImageCacheWrap::release_tile)

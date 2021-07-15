@@ -375,9 +375,9 @@ private:
     UdimLookupMap m_udim_lookup;              ///< Used for decoding udim tiles
                                               // protected by mutex elsewhere!
 
-    /// Thread-safe retrieve a shared pointer to the ImageInput. The one
-    /// returned is safe to use as long as the caller is holding the
-    /// shared_ptr.
+    // Thread-safe retrieve a shared pointer to the ImageInput (which may
+    // not currently be open). The one returned is safe to use as long as
+    // the caller is holding the shared_ptr.
     std::shared_ptr<ImageInput>
     get_imageinput(ImageCachePerThreadInfo* thread_info);
 
@@ -834,6 +834,11 @@ public:
     virtual const ImageSpec*
     imagespec(ImageCacheFile* file, ImageCachePerThreadInfo* thread_info = NULL,
               int subimage = 0, int miplevel = 0, bool native = false);
+
+    virtual bool get_thumbnail(ustring filename, ImageBuf& thumbnail,
+                               int subimage = 0);
+    virtual bool get_thumbnail(ImageHandle* file, Perthread* thread_info,
+                               ImageBuf& thumbnail, int subimage = 0);
 
     // Retrieve a rectangle of raw unfiltered pixels.
     virtual bool get_pixels(ustring filename, int subimage, int miplevel,

@@ -9,6 +9,8 @@
 #include <OpenImageIO/dassert.h>
 #include <OpenImageIO/filesystem.h>
 #include <OpenImageIO/fmath.h>
+#include <OpenImageIO/imagebuf.h>
+#include <OpenImageIO/imagebufalgo.h>
 #include <OpenImageIO/imageio.h>
 #include <OpenImageIO/strutil.h>
 #include <OpenImageIO/typedesc.h>
@@ -27,7 +29,8 @@ public:
     virtual const char* format_name(void) const override { return "targa"; }
     virtual int supports(string_view feature) const override
     {
-        return (feature == "alpha");
+        return (feature == "alpha" || feature == "thumbnail"
+                || feature == "thumbnail_after_write");
     }
     virtual bool open(const std::string& name, const ImageSpec& spec,
                       OpenMode mode = Create) override;
@@ -37,6 +40,7 @@ public:
     virtual bool write_tile(int x, int y, int z, TypeDesc format,
                             const void* data, stride_t xstride,
                             stride_t ystride, stride_t zstride) override;
+    virtual bool set_thumbnail(const ImageBuf& thumb) override;
 
 private:
     std::string m_filename;  ///< Stash the filename
@@ -48,6 +52,7 @@ private:
     int m_idlen;  ///< Length of the TGA ID block
     unsigned int m_dither;
     std::vector<unsigned char> m_tilebuffer;
+    ImageBuf m_thumb;
 
     // Initialize private members to pre-opened state
     void init(void)
@@ -55,6 +60,7 @@ private:
         m_file          = NULL;
         m_convert_alpha = true;
         m_gamma         = 1.0;
+        m_thumb.reset();
     }
 
     // Helper function to write the TGA 2.0 data fields, called by close()
@@ -300,17 +306,31 @@ TGAOutput::write_tga20_data_fields()
 
         // write out the thumbnail, if there is one
         uint32_t ofs_thumb = 0;
-        unsigned char tw   = m_spec.get_int_attribute("thumbnail_width", 0);
-        unsigned char th   = m_spec.get_int_attribute("thumbnail_width", 0);
-        int tc             = m_spec.get_int_attribute("thumbnail_nchannels", 0);
-        if (tw && th && tc == m_spec.nchannels) {
-            ParamValue* p = m_spec.find_attribute("thumbnail_image");
-            if (p) {
-                ofs_thumb = (uint32_t)ftell(m_file);
-                // dump thumbnail size
-                if (!fwrite(&tw) || !fwrite(&th)
-                    || !fwrite(p->data(), p->datasize())) {
-                    return false;
+        if (m_thumb.initialized()) {
+            unsigned char tw = m_thumb.spec().width;
+            unsigned char th = m_thumb.spec().height;
+            int tc           = m_thumb.spec().nchannels;
+            OIIO_DASSERT(tw && th && tc == m_spec.nchannels);
+            ofs_thumb = (uint32_t)ftell(m_file);
+            // dump thumbnail size
+            if (!fwrite(&tw) || !fwrite(&th)
+                || !fwrite(m_thumb.localpixels(), m_thumb.spec().image_bytes()))
+                return false;
+        } else {
+            // Old API -- honor it for a while
+            // DEPRECATED(2.3)
+            unsigned char tw = m_spec.get_int_attribute("thumbnail_width", 0);
+            unsigned char th = m_spec.get_int_attribute("thumbnail_width", 0);
+            int tc = m_spec.get_int_attribute("thumbnail_nchannels", 0);
+            if (tw && th && tc == m_spec.nchannels) {
+                ParamValue* p = m_spec.find_attribute("thumbnail_image");
+                if (p) {
+                    ofs_thumb = (uint32_t)ftell(m_file);
+                    // dump thumbnail size
+                    if (!fwrite(&tw) || !fwrite(&th)
+                        || !fwrite(p->data(), p->datasize())) {
+                        return false;
+                    }
                 }
             }
         }
@@ -717,6 +737,38 @@ TGAOutput::write_tile(int x, int y, int z, TypeDesc format, const void* data,
     // Emulate tiles by buffering the whole image
     return copy_tile_to_image_buffer(x, y, z, format, data, xstride, ystride,
                                      zstride, &m_tilebuffer[0]);
+}
+
+
+
+bool
+TGAOutput::set_thumbnail(const ImageBuf& thumb)
+{
+    if (!thumb.initialized() || thumb.spec().image_pixels() < 1
+        || thumb.nchannels() != m_spec.nchannels) {
+        // Zero size thumbnail or channels don't match
+        return false;
+    }
+    // TARGA has a limitation of 256 res for thumbnail dimensions, and
+    // must be UINT8.
+    if (thumb.spec().width >= 256 || thumb.spec().height >= 256) {
+        ROI roi(0, 256, 0, 256, 0, 1, 0, thumb.nchannels());
+        float ratio = float(thumb.spec().width) / float(thumb.spec().height);
+        if (ratio >= 1.0f) {
+            roi.yend = (int)roundf(256.0f / ratio);
+        } else {
+            roi.xend = (int)roundf(256.0f * ratio);
+        }
+        m_thumb = ImageBufAlgo::resize(thumb, "", 0.0f, roi, this->threads());
+        if (thumb.pixeltype() != TypeUInt8)
+            m_thumb = ImageBufAlgo::copy(m_thumb, TypeUInt8);
+    } else {
+        if (thumb.pixeltype() == TypeUInt8)
+            m_thumb = thumb;
+        else
+            m_thumb = ImageBufAlgo::copy(thumb, TypeUInt8);
+    }
+    return true;
 }
 
 

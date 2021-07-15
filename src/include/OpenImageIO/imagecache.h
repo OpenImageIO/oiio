@@ -719,6 +719,29 @@ public:
                                         Perthread *thread_info,
                                         int subimage=0, int miplevel=0,
                                         bool native=false) = 0;
+
+    /// Copy into `thumbnail` any associated thumbnail associated with this
+    /// image (for the first subimage by default, or as set by `subimage`).
+    ///
+    /// @param  filename
+    ///             The name of the image.
+    /// @param  thumb
+    ///             ImageBuf into which will be copied the thumbnail, if it
+    ///             exists. If no thumbnail can be retrieved, `thumb` will
+    ///             be reset to an uninitialized (empty) ImageBuf.
+    /// @param  subimage
+    ///             The subimage to query.
+    /// @returns
+    ///             `true` upon success, `false` upon failure failure (such
+    ///             as being unable to find, open, or read the file, or if
+    ///             it does not contain a thumbnail).
+    virtual bool get_thumbnail (ustring filename, ImageBuf& thumbnail,
+                                int subimage=0) = 0;
+    /// A more efficient variety of `get_thumbnail()` for cases where you
+    /// can use an `ImageHandle*` to specify the image and optionally have a
+    /// `Perthread*` for the calling thread.
+    virtual bool get_thumbnail (ImageHandle *file, Perthread *thread_info,
+                                ImageBuf& thumbnail, int subimage=0) = 0;
     /// @}
 
     /// @{

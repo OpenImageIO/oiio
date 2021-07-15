@@ -9,7 +9,6 @@ Reading ../../../../../oiio-images/targa/CBW8.TGA
     ImageDescription: "Sample 8 bit run length compressed black and white image"
     Software: "TGAEdit 2.0"
     thumbnail_height: 64
-    thumbnail_image: 76, 76, 76, 76, 149, 149, 149, 149, 178, 178, 178, 178, 0, 0, 0, 0, ... [4096 x uint8]
     thumbnail_nchannels: 1
     thumbnail_width: 64
     oiio:BitsPerSample: 8
@@ -27,7 +26,6 @@ Reading ../../../../../oiio-images/targa/CCM8.TGA
     ImageDescription: "Sample 8 bit run length compressed color mapped image"
     Software: "TGAEdit 2.0"
     thumbnail_height: 64
-    thumbnail_image: 255, 0, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0, 0, 255, 0, 0, ... [12288 x uint8]
     thumbnail_nchannels: 3
     thumbnail_width: 64
     oiio:BitsPerSample: 2
@@ -45,7 +43,6 @@ Reading ../../../../../oiio-images/targa/CTC16.TGA
     ImageDescription: "Sample 16 bit run length compressed true color image"
     Software: "TGAEdit 2.0"
     thumbnail_height: 64
-    thumbnail_image: 255, 0, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0, 0, 255, 0, 0, ... [12288 x uint8]
     thumbnail_nchannels: 3
     thumbnail_width: 64
     oiio:BitsPerSample: 5
@@ -64,7 +61,6 @@ Reading ../../../../../oiio-images/targa/CTC24.TGA
     ImageDescription: "Sample 24 bit run length compressed true color image"
     Software: "TGAEdit 2.0"
     thumbnail_height: 64
-    thumbnail_image: 255, 0, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0, 0, 255, 0, 0, ... [12288 x uint8]
     thumbnail_nchannels: 3
     thumbnail_width: 64
     oiio:BitsPerSample: 8
@@ -82,7 +78,6 @@ Reading ../../../../../oiio-images/targa/CTC32.TGA
     ImageDescription: "Sample 32 bit run length compressed true color image"
     Software: "TGAEdit 2.0"
     thumbnail_height: 64
-    thumbnail_image: 255, 0, 0, 0, 255, 0, 0, 0, 255, 0, 0, 0, 255, 0, 0, 0, ... [16384 x uint8]
     thumbnail_nchannels: 4
     thumbnail_width: 64
     oiio:BitsPerSample: 8
@@ -100,7 +95,6 @@ Reading ../../../../../oiio-images/targa/UBW8.TGA
     ImageDescription: "Sample 8 bit uncompressed black and white image"
     Software: "TGAEdit 1.30"
     thumbnail_height: 64
-    thumbnail_image: 76, 76, 76, 76, 149, 149, 149, 149, 178, 178, 178, 178, 0, 0, 0, 0, ... [4096 x uint8]
     thumbnail_nchannels: 1
     thumbnail_width: 64
     oiio:BitsPerSample: 8
@@ -117,7 +111,6 @@ Reading ../../../../../oiio-images/targa/UCM8.TGA
     ImageDescription: "Sample 8 bit uncompressed color mapped image"
     Software: "TGAEdit 1.40"
     thumbnail_height: 64
-    thumbnail_image: 255, 0, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0, 0, 255, 0, 0, ... [12288 x uint8]
     thumbnail_nchannels: 3
     thumbnail_width: 64
     oiio:BitsPerSample: 2
@@ -134,7 +127,6 @@ Reading ../../../../../oiio-images/targa/UTC16.TGA
     ImageDescription: "Sample 16 bit uncompressed true color image"
     Software: "TGAEdit 1.30"
     thumbnail_height: 64
-    thumbnail_image: 255, 0, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0, 0, 255, 0, 0, ... [12288 x uint8]
     thumbnail_nchannels: 3
     thumbnail_width: 64
     oiio:BitsPerSample: 5
@@ -152,7 +144,6 @@ Reading ../../../../../oiio-images/targa/UTC24.TGA
     ImageDescription: "Sample 24 bit uncompressed true color image"
     Software: "TGAEdit 1.40"
     thumbnail_height: 64
-    thumbnail_image: 255, 0, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0, 0, 255, 0, 0, ... [12288 x uint8]
     thumbnail_nchannels: 3
     thumbnail_width: 64
     oiio:BitsPerSample: 8
@@ -169,7 +160,6 @@ Reading ../../../../../oiio-images/targa/UTC32.TGA
     ImageDescription: "Sample 32 bit uncompressed true color image"
     Software: "TGAEdit 1.40"
     thumbnail_height: 64
-    thumbnail_image: 255, 0, 0, 0, 255, 0, 0, 0, 255, 0, 0, 0, 255, 0, 0, 0, ... [16384 x uint8]
     thumbnail_nchannels: 4
     thumbnail_width: 64
     oiio:BitsPerSample: 8
@@ -184,4 +174,24 @@ Reading ../../../../../oiio-images/targa/round_grill.tga
     Software: "COREL 0.0"
     oiio:BitsPerSample: 8
 Comparing "../../../../../oiio-images/targa/round_grill.tga" and "round_grill.tga"
+PASS
+Comparing "CBW8.TGA.tif" and "ref/CBW8.TGA.tif"
+PASS
+Comparing "CCM8.TGA.tif" and "ref/CCM8.TGA.tif"
+PASS
+Comparing "CTC16.TGA.tif" and "ref/CTC16.TGA.tif"
+PASS
+Comparing "CTC24.TGA.tif" and "ref/CTC24.TGA.tif"
+PASS
+Comparing "CTC32.TGA.tif" and "ref/CTC32.TGA.tif"
+PASS
+Comparing "UBW8.TGA.tif" and "ref/UBW8.TGA.tif"
+PASS
+Comparing "UCM8.TGA.tif" and "ref/UCM8.TGA.tif"
+PASS
+Comparing "UTC16.TGA.tif" and "ref/UTC16.TGA.tif"
+PASS
+Comparing "UTC24.TGA.tif" and "ref/UTC24.TGA.tif"
+PASS
+Comparing "UTC32.TGA.tif" and "ref/UTC32.TGA.tif"
 PASS

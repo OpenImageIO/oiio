@@ -361,6 +361,14 @@ declare_imageinput(py::module& m)
             "chbegin"_a, "chend"_a)
         .def("read_native_deep_image", &ImageInput_read_native_deep_image,
              "subimage"_a = 0, "miplevel"_a = 0)
+        .def(
+            "get_thumbnail",
+            [](ImageInput& self, int subimage) {
+                ImageBuf buf;
+                self.get_thumbnail(buf, subimage);
+                return buf;
+            },
+            "subimage"_a = 0)
         .def_property_readonly("has_error", &ImageInput::has_error)
         .def(
             "geterror",

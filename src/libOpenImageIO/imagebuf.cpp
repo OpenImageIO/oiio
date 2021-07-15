@@ -259,6 +259,11 @@ public:
                        && m_zstride == m_ystride * m_spec.height;
     }
 
+    bool has_thumbnail(DoLock do_lock = DoLock(true)) const;
+    void clear_thumbnail(DoLock do_lock = DoLock(true));
+    void set_thumbnail(const ImageBuf& thumb, DoLock do_lock = DoLock(true));
+    std::shared_ptr<ImageBuf> thumbnail(DoLock do_lock = DoLock(true)) const;
+
 private:
     ImageBuf::IBStorage m_storage;  ///< Pixel storage class
     ustring m_name;                 ///< Filename of the image
@@ -297,6 +302,13 @@ private:
     Filesystem::IOProxy* m_rioproxy = nullptr;
     Filesystem::IOProxy* m_wioproxy = nullptr;
     mutable std::string m_err;  ///< Last error message
+    bool m_has_thumbnail = false;
+    std::shared_ptr<ImageBuf> m_thumbnail;
+    // Note: m_thumbnail is a null ptr if we have no idea about any
+    // thumbnail, or if this ImageBuf didn't come from a file. It's a
+    // pointer to an uninitialied ImageBuf if the image we read from didn't
+    // have a thumbnail image and we know that for sure. Of, of course, it's
+    // a pointer to an initialized IB if we really do have the thumbnail.
 
     // Private reset m_pixels to new allocation of new size, copy if
     // data is not nullptr. Return nullptr if an allocation of that size
@@ -725,6 +737,7 @@ ImageBufImpl::clear()
     m_rioproxy          = nullptr;
     m_wioproxy          = nullptr;
     m_configspec.reset();
+    m_thumbnail.reset();
 }
 
 
@@ -947,6 +960,15 @@ ImageBufImpl::init_spec(string_view filename, int subimage, int miplevel,
     m_blackpixel.resize(round_to_multiple(m_xstride, OIIO_SIMD_MAX_SIZE_BYTES),
                         0);
     // ^^^ NB make it big enough for SIMD
+
+    // Go ahead and read any thumbnail that exists. Is that bad?
+    if (m_spec["thumbnail_width"].get<int>()
+        && m_spec["thumbnail_height"].get<int>()) {
+        m_thumbnail.reset(new ImageBuf);
+        m_imagecache->get_thumbnail(m_name, *m_thumbnail, subimage);
+        m_has_thumbnail = true;
+    }
+
     // Subtlety: m_nativespec will have the true formats of the file, but
     // we rig m_spec to reflect what it will look like in the cache.
     // This may make m_spec appear to change if there's a subsequent read()
@@ -1232,6 +1254,11 @@ ImageBuf::write(ImageOutput* out, ProgressCallback progress_callback,
     }
     bool ok = true;
     ok &= m_impl->validate_pixels();
+    if (out->supports("thumbnail") && has_thumbnail()) {
+        auto thumb = thumbnail();
+        Strutil::print("IB::write: has thumbnail ROI {}\n", thumb->roi());
+        out->set_thumbnail(*thumb);
+    }
     const ImageSpec& bufspec(m_impl->m_spec);
     const ImageSpec& outspec(out->spec());
     TypeDesc bufformat = spec().format;
@@ -1507,6 +1534,90 @@ const ImageSpec&
 ImageBuf::nativespec() const
 {
     return m_impl->nativespec();
+}
+
+
+
+bool
+ImageBufImpl::has_thumbnail(DoLock do_lock) const
+{
+    validate_spec(do_lock);
+    return m_has_thumbnail;
+}
+
+
+
+void
+ImageBufImpl::clear_thumbnail(DoLock do_lock)
+{
+    lock_t lock(m_mutex, std::defer_lock_t());
+    if (do_lock)
+        lock.lock();
+    validate_spec(DoLock(false) /* we already hold the lock */);
+    m_thumbnail.reset();
+    m_spec.erase_attribute("thumbnail_width");
+    m_spec.erase_attribute("thumbnail_height");
+    m_spec.erase_attribute("thumbnail_nchannels");
+    m_spec.erase_attribute("thumbnail_image");
+    m_has_thumbnail = false;
+}
+
+
+
+void
+ImageBufImpl::set_thumbnail(const ImageBuf& thumb, DoLock do_lock)
+{
+    lock_t lock(m_mutex, std::defer_lock_t());
+    if (do_lock)
+        lock.lock();
+    clear_thumbnail(DoLock(false) /* we already hold the lock */);
+    if (thumb.initialized()) {
+        m_thumbnail.reset(new ImageBuf(thumb));
+    }
+}
+
+
+
+std::shared_ptr<ImageBuf>
+ImageBufImpl::thumbnail(DoLock do_lock) const
+{
+    lock_t lock(m_mutex, std::defer_lock_t());
+    if (do_lock)
+        lock.lock();
+    validate_spec(DoLock(false) /* we already hold the lock */);
+    return m_thumbnail;
+}
+
+
+
+bool
+ImageBuf::has_thumbnail() const
+{
+    return m_impl->has_thumbnail();
+}
+
+
+
+void
+ImageBuf::set_thumbnail(const ImageBuf& thumb)
+{
+    m_impl->set_thumbnail(thumb);
+}
+
+
+
+void
+ImageBuf::clear_thumbnail()
+{
+    m_impl->clear_thumbnail();
+}
+
+
+
+std::shared_ptr<ImageBuf>
+ImageBuf::thumbnail() const
+{
+    return m_impl->thumbnail();
 }
 
 

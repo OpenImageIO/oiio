@@ -369,7 +369,7 @@ ROI OIIO_API text_size (string_view text, int fontsize=16,
 
 /// Generic channel shuffling: return (or store in `dst`) a copy of `src`,
 /// but with channels in the order `channelorder[0..nchannels-1]` (or set to
-/// a constant value, designated by `channelorder[0] = -1` and having the
+/// a constant value, designated by `channelorder[i] = -1` and having the
 /// fill value in `channelvalues[i]`. In-place operation is allowed (i.e.,
 /// `dst` and `src` the same image, but an extra copy will occur).
 ///

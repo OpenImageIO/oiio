@@ -1744,8 +1744,8 @@ http://www.dca.fee.unicamp.br/~martino/disciplinas/ea978/tgaffs.pdf
 If the TGA file contains a thumbnail, its dimensions will be stored in the
 attributes ``"thumbnail_width"``, ``"thumbnail_height"``, and
 ``"thumbnail_nchannels"``, and the thumbnail pixels themselves will be
-stored in ``"thumbnail_image"`` (as an array of UINT8 values, whose length
-is the total number of channel samples in the thumbnail).
+retrievable via `ImageInput::get_thumbnail()` or `ImageBuf::thumbnail()` or
+`ImageCache::get_thumbnail()`.
 
 **Limitations**
 

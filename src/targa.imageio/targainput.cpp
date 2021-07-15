@@ -10,6 +10,7 @@
 #include <OpenImageIO/dassert.h>
 #include <OpenImageIO/filesystem.h>
 #include <OpenImageIO/fmath.h>
+#include <OpenImageIO/imagebuf.h>
 #include <OpenImageIO/imageio.h>
 #include <OpenImageIO/typedesc.h>
 
@@ -25,20 +26,27 @@ public:
     TGAInput() { init(); }
     virtual ~TGAInput() { close(); }
     virtual const char* format_name(void) const override { return "targa"; }
+    virtual int supports(string_view feature) const override
+    {
+        return (feature == "thumbnail");
+    }
     virtual bool open(const std::string& name, ImageSpec& newspec) override;
     virtual bool open(const std::string& name, ImageSpec& newspec,
                       const ImageSpec& config) override;
     virtual bool close() override;
     virtual bool read_native_scanline(int subimage, int miplevel, int y, int z,
                                       void* data) override;
+    virtual bool get_thumbnail(ImageBuf& thumb, int subimage) override;
 
 private:
     std::string m_filename;            ///< Stash the filename
     FILE* m_file;                      ///< Open image handle
     tga_header m_tga;                  ///< Targa header
     tga_footer m_foot;                 ///< Targa 2.0 footer
-    unsigned int m_ofs_colcorr_tbl;    ///< Offset to colour correction table
     tga_alpha_type m_alpha_type;       ///< Alpha type
+    int64_t m_ofs_thumb       = 0;     ///< Offset of thumbnail info
+    int64_t m_ofs_palette     = 0;     ///< Offset of palette
+    int64_t m_ofs_colcorr_tbl = 0;     ///< Offset to colour correction table
     bool m_keep_unassociated_alpha;    ///< Do not convert unassociated alpha
     std::vector<unsigned char> m_buf;  ///< Buffer the image pixels
 
@@ -48,6 +56,8 @@ private:
     {
         m_file = NULL;
         m_buf.clear();
+        m_ofs_thumb               = 0;
+        m_ofs_palette             = 0;
         m_ofs_colcorr_tbl         = 0;
         m_alpha_type              = TGA_ALPHA_NONE;
         m_keep_unassociated_alpha = false;
@@ -224,10 +234,12 @@ TGAInput::open(const std::string& name, ImageSpec& newspec)
         m_spec.attribute("targa:ImageID", id);
     }
 
-    int64_t ofs = Filesystem::ftell(m_file);
+    int64_t ofs   = Filesystem::ftell(m_file);
+    m_ofs_palette = ofs;
+
     // now try and see if it's a TGA 2.0 image
     // TGA 2.0 files are identified by a nifty "TRUEVISION-XFILE.\0" signature
-    fseek(m_file, -26, SEEK_END);
+    Filesystem::fseek(m_file, -26, SEEK_END);
     if (fread(&m_foot.ofs_ext, sizeof(m_foot.ofs_ext), 1)
         && fread(&m_foot.ofs_dev, sizeof(m_foot.ofs_dev), 1)
         && fread(&m_foot.signature, sizeof(m_foot.signature), 1)
@@ -382,7 +394,7 @@ TGAInput::open(const std::string& name, ImageSpec& newspec)
                 return false;
             if (bigendian())
                 swap_endian(&buf.l);
-            int64_t ofs_thumb = buf.l;
+            m_ofs_thumb = buf.l;
 
             // offset to scan-line table
             if (!fread(&buf.l, 4, 1))
@@ -398,64 +410,21 @@ TGAInput::open(const std::string& name, ImageSpec& newspec)
             if (m_alpha_type)
                 m_spec.attribute("tga:alpha_type", m_alpha_type);
 
-            // now load the thumbnail
-            if (ofs_thumb) {
-                Filesystem::fseek(m_file, ofs_thumb, SEEK_SET);
+            // Check for presence of a thumbnail and set the metadata that
+            // says its dimensions, but don't read and decode it unless
+            // thumbnail() is called.
+            if (m_ofs_thumb > 0) {
+                Filesystem::fseek(m_file, m_ofs_thumb, SEEK_SET);
                 // Read the thumbnail dimensions -- sometimes it's 0x0 to
                 // indicate no thumbnail.
-                if (!fread(&buf.c, 2, 1))
-                    return false;
-            }
-            if (ofs_thumb && buf.c[0] > 0 && buf.c[1] > 0) {
-                // most of this code is a dupe of readimg(); according to the
-                // spec, the thumbnail is in the same format as the main image
-                // but uncompressed
-                m_spec.attribute("thumbnail_width", (int)buf.c[0]);
-                m_spec.attribute("thumbnail_height", (int)buf.c[1]);
-                m_spec.attribute("thumbnail_nchannels", m_spec.nchannels);
-
-                // load image data
-                // reuse the image buffer
-                m_buf.resize(buf.c[0] * buf.c[1] * m_spec.nchannels);
-                int bytespp    = (m_tga.bpp == 15) ? 2 : (m_tga.bpp / 8);
-                int palbytespp = (m_tga.cmap_size == 15)
-                                     ? 2
-                                     : (m_tga.cmap_size / 8);
-                int alphabits  = m_tga.attr & 0x0F;
-                if (alphabits == 0 && m_tga.bpp == 32)
-                    alphabits = 8;
-                // read palette, if there is any
-                std::unique_ptr<unsigned char[]> palette;
-                if (m_tga.cmap_type) {
-                    fseek(m_file, ofs, SEEK_SET);
-                    palette.reset(
-                        new unsigned char[palbytespp * m_tga.cmap_length]);
-                    if (!fread(palette.get(), palbytespp, m_tga.cmap_length))
-                        return false;
-                    fseek(m_file, ofs_thumb + 2, SEEK_SET);
+                unsigned char res[2];
+                if (fread(&res, 2, 1) && res[0] > 0 && res[1] > 0) {
+                    m_spec.attribute("thumbnail_width", (int)res[0]);
+                    m_spec.attribute("thumbnail_height", (int)res[1]);
+                    m_spec.attribute("thumbnail_nchannels", m_spec.nchannels);
                 }
-                unsigned char pixel[4];
-                unsigned char in[4];
-                for (int64_t y = buf.c[1] - 1; y >= 0; y--) {
-                    for (int64_t x = 0; x < buf.c[0]; x++) {
-                        if (!fread(in, bytespp, 1))
-                            return false;
-                        decode_pixel(in, pixel, palette.get(), bytespp,
-                                     palbytespp);
-                        memcpy(&m_buf[y * buf.c[0] * m_spec.nchannels
-                                      + x * m_spec.nchannels],
-                               pixel, m_spec.nchannels);
-                    }
-                }
-                //std::cerr << "[tga] buffer size: " << m_buf.size() << "\n";
-                // finally, add the thumbnail to attributes
-                m_spec.attribute("thumbnail_image",
-                                 TypeDesc(TypeDesc::UINT8, m_buf.size()),
-                                 m_buf.data());
-                m_buf.clear();
             }
         }
-
         // FIXME: provide access to the developer area; according to Larry,
         // it's probably safe to ignore it altogether until someone complains
         // that it's missing :)
@@ -465,7 +434,8 @@ TGAInput::open(const std::string& name, ImageSpec& newspec)
         if (m_keep_unassociated_alpha)
             m_spec.attribute("oiio:UnassociatedAlpha", 1);
 
-    fseek(m_file, ofs, SEEK_SET);
+    // Reposition back to where the palette starts
+    Filesystem::fseek(m_file, ofs, SEEK_SET);
 
     newspec = spec();
     return true;
@@ -481,6 +451,64 @@ TGAInput::open(const std::string& name, ImageSpec& newspec,
     if (config.get_int_attribute("oiio:UnassociatedAlpha", 0) == 1)
         m_keep_unassociated_alpha = true;
     return open(name, newspec);
+}
+
+
+
+bool
+TGAInput::get_thumbnail(ImageBuf& thumb, int subimage)
+{
+    if (m_ofs_thumb <= 0)
+        return false;  // no thumbnail info
+
+    lock_guard lock(*this);
+    bool result         = false;
+    int64_t save_offset = Filesystem::ftell(m_file);
+
+    Filesystem::fseek(m_file, m_ofs_thumb, SEEK_SET);
+
+    // Read the thumbnail dimensions -- sometimes it's 0x0 to indicate no
+    // thumbnail.
+    unsigned char res[2];
+    if (fread(&res, 2, 1) && res[0] > 0 && res[1] > 0) {
+        // Most of this code is a dupe of readimg(); according to the spec,
+        // the thumbnail is in the same format as the main image but
+        // uncompressed.
+        ImageSpec thumbspec(res[0], res[1], m_spec.nchannels, TypeUInt8);
+        thumbspec.attribute("oiio:ColorSpace", "sRGB");
+        thumb.reset(thumbspec);
+        int bytespp    = (m_tga.bpp == 15) ? 2 : (m_tga.bpp / 8);
+        int palbytespp = (m_tga.cmap_size == 15) ? 2 : (m_tga.cmap_size / 8);
+        int alphabits  = m_tga.attr & 0x0F;
+        if (alphabits == 0 && m_tga.bpp == 32)
+            alphabits = 8;
+        // read palette, if there is any
+        std::unique_ptr<unsigned char[]> palette;
+        if (m_tga.cmap_type) {
+            Filesystem::fseek(m_file, m_ofs_palette, SEEK_SET);
+            palette.reset(new unsigned char[palbytespp * m_tga.cmap_length]);
+            if (!fread(palette.get(), palbytespp, m_tga.cmap_length))
+                return false;
+            Filesystem::fseek(m_file, m_ofs_thumb + 2, SEEK_SET);
+        }
+        // load pixel data
+        unsigned char pixel[4];
+        unsigned char in[4];
+        for (int64_t y = thumbspec.height - 1; y >= 0; y--) {
+            char* img = (char*)thumb.pixeladdr(0, y);
+            for (int64_t x = 0; x < thumbspec.width;
+                 x++, img += m_spec.nchannels) {
+                if (!fread(in, bytespp, 1))
+                    return false;
+                decode_pixel(in, pixel, palette.get(), bytespp, palbytespp);
+                memcpy(img, pixel, m_spec.nchannels);
+            }
+        }
+        result = true;
+    }
+
+    Filesystem::fseek(m_file, save_offset, SEEK_SET);
+    return result;
 }
 
 

@@ -850,6 +850,23 @@ public:
     /// channels).
     const ImageSpec& nativespec() const;
 
+    /// Does this ImageBuf have an associated thumbnail?
+    bool has_thumbnail() const;
+
+    /// Return a shared pointer to an ImageBuf containing a thumbnail of the
+    /// image (if it existed in the file), which may be empty if there is no
+    /// thumbnail.
+    std::shared_ptr<ImageBuf> thumbnail() const;
+
+    /// Reset the thumbnail image associated with this ImageBuf to `thumb`.
+    /// This call will invalidate any references previously returned by
+    /// `thumbnail()`.
+    void set_thumbnail(const ImageBuf& thumb);
+
+    /// Clear any thumbnail associated with this ImageBuf. This call will
+    /// invalidate any references previously returned by `thumbnail()`.
+    void clear_thumbnail();
+
     /// Returns the name of the buffer (name of the file, for an ImageBuf
     /// read from disk).
     string_view name(void) const;

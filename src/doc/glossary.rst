@@ -80,6 +80,12 @@ Glossary
     file. These are called *subimages* in OpenImageIO. Note that in OpenEXR,
     these are called :term:`multi-part` files.
 
+  Thumbnail
+
+    A small, lower-resolution preview image that is stored in an image file,
+    in addition to the main image that the file represents. Not all image
+    file formats support thumbnails.
+
   Tile
 
     A rectangular region of pixels of an image.  A rectangular tile is more

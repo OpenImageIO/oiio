@@ -17,6 +17,8 @@
 #include <vector>
 
 #include <OpenImageIO/fmath.h>
+#include <OpenImageIO/imagebuf.h>
+#include <OpenImageIO/imagebufalgo.h>
 #include <OpenImageIO/tiffutils.h>
 
 #include "jpeg_memory_src.h"
@@ -34,7 +36,8 @@ public:
     virtual const char* format_name(void) const override { return "psd"; }
     virtual int supports(string_view feature) const override
     {
-        return (feature == "exif" || feature == "iptc");
+        return (feature == "exif" || feature == "iptc"
+                || feature == "thumbnail");
     }
     virtual bool open(const std::string& name, ImageSpec& newspec) override;
     virtual bool open(const std::string& name, ImageSpec& newspec,
@@ -44,6 +47,11 @@ public:
     virtual bool seek_subimage(int subimage, int miplevel) override;
     virtual bool read_native_scanline(int subimage, int miplevel, int y, int z,
                                       void* data) override;
+    virtual bool get_thumbnail(ImageBuf& thumb, int subimage) override
+    {
+        thumb = m_thumbnail;
+        return m_thumbnail.initialized();
+    }
 
 private:
     enum ColorMode {
@@ -213,6 +221,7 @@ private:
     std::vector<Layer> m_layers;
     GlobalMaskInfo m_global_mask_info;
     ImageDataSection m_image_data;
+    ImageBuf m_thumbnail;
 
     //Reset to initial state
     void init();
@@ -850,6 +859,7 @@ PSDInput::init()
     m_background_color[1]     = 1.0;
     m_background_color[2]     = 1.0;
     m_background_color[3]     = 1.0;
+    m_thumbnail.clear();
 }
 
 
@@ -1306,10 +1316,9 @@ PSDInput::load_resource_thumbnail(uint32_t length, bool isBGR)
     jpeg_memory_src(&cinfo, (unsigned char*)&jpeg_data[0], jpeg_length);
     jpeg_read_header(&cinfo, TRUE);
     jpeg_start_decompress(&cinfo);
-    stride                       = cinfo.output_width * cinfo.output_components;
-    unsigned int thumbnail_bytes = cinfo.output_width * cinfo.output_height
-                                   * cinfo.output_components;
-    std::string thumbnail_image(thumbnail_bytes, '\0');
+    stride = cinfo.output_width * cinfo.output_components;
+    ImageSpec thumbspec(cinfo.output_width, cinfo.output_height, 3, TypeUInt8);
+    m_thumbnail.reset(thumbspec);
     // jpeg_destroy_decompress will deallocate this
     JSAMPLE** buffer = (*cinfo.mem->alloc_sarray)((j_common_ptr)&cinfo,
                                                   JPOOL_IMAGE, stride, 1);
@@ -1320,8 +1329,9 @@ PSDInput::load_resource_thumbnail(uint32_t length, bool isBGR)
             errorf("[Image Resource] [JPEG Thumbnail] libjpeg error");
             return false;
         }
-        std::memcpy(&thumbnail_image[(cinfo.output_scanline - 1) * stride],
-                    (char*)buffer[0], stride);
+        m_thumbnail.get_pixels(ROI(0, width, cinfo.output_scanline,
+                                   cinfo.output_scanline + 1, 0, 1, 0, 3),
+                               TypeUInt8, buffer[0]);
     }
     jpeg_finish_decompress(&cinfo);
     jpeg_destroy_decompress(&cinfo);
@@ -1330,13 +1340,8 @@ PSDInput::load_resource_thumbnail(uint32_t length, bool isBGR)
     composite_attribute("thumbnail_width", (int)width);
     composite_attribute("thumbnail_height", (int)height);
     composite_attribute("thumbnail_nchannels", 3);
-    if (isBGR) {
-        for (unsigned int i = 0; i < thumbnail_bytes - 2; i += 3)
-            std::swap(thumbnail_image[i], thumbnail_image[i + 2]);
-    }
-    composite_attribute("thumbnail_image",
-                        TypeDesc(TypeDesc::UINT8, thumbnail_image.size()),
-                        &thumbnail_image[0]);
+    if (isBGR)
+        m_thumbnail = ImageBufAlgo::channels(m_thumbnail, 3, { 2, 1, 0 });
     return true;
 }
 

@@ -398,11 +398,10 @@ tips, and rules of thumb that we recommend for image file support.
   ImageSpec.
 * "Palette" images should be automatically converted by the reader to RGB.
 * If the file supports thumbnail images in its header, the reader should
-  store the thumbnail dimensions in attributes ``"thumbnail_width"``,
+  provide an ``ImageInput::get_thumbnail()`` method, as well as store the
+  thumbnail dimensions in the ImageSpec as attributes ``"thumbnail_width"``,
   ``"thumbnail_height"``, and ``"thumbnail_nchannels"`` (all of which should
-  be `int`), and the thumbnail pixels themselves in ``"thumbnail_image"``
-  as an array of channel values (the array length is the total number of
-  channel samples in the thumbnail).
+  be `int`).
 
 **Writers**
 

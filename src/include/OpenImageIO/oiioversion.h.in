@@ -133,8 +133,9 @@ namespace @PROJ_NAME@ = @PROJ_NAMESPACE_V@;
 ///     (OIIO 2.2).
 /// Version 24 Added a PIMPL pointers to ImageInput and ImageOutput and
 ///     removed some unnecessary fields that were exposed.
+/// Version 25 added the thumbnail retrieval and set. (OIIO 2.3)
 
-#define OIIO_PLUGIN_VERSION 24
+#define OIIO_PLUGIN_VERSION 25
 
 #define OIIO_PLUGIN_NAMESPACE_BEGIN OIIO_NAMESPACE_BEGIN
 #define OIIO_PLUGIN_NAMESPACE_END OIIO_NAMESPACE_END

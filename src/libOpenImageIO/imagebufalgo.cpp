@@ -112,6 +112,9 @@ ImageBufAlgo::IBAprep(ROI& roi, ImageBuf* dst, const ImageBuf* A,
         // to fully read it into allocated memory so that we're able
         // to write to it subsequently.
         dst->make_writable(true);
+        // Whatever we're about to do to the image, it is almost certain
+        // to make any thumbnail wrong, so just clear it.
+        dst->clear_thumbnail();
 
         // Merge source metadata into destination if requested.
         if (prepflags & IBAprep_MERGE_METADATA) {
