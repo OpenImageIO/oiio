@@ -34,14 +34,14 @@ using namespace ImageBufAlgo;
 
 
 static std::string
-compute_sha1(Oiiotool& ot, ImageInput* input)
+compute_sha1(Oiiotool& ot, ImageInput* input, int subimage)
 {
     SHA1 sha;
     const ImageSpec& spec(input->spec());
     if (spec.deep) {
         // Special handling of deep data
         DeepData dd;
-        if (!input->read_native_deep_image(dd)) {
+        if (!input->read_native_deep_image(subimage, 0, dd)) {
             std::string err = input->geterror();
             if (err.empty())
                 err = "could not read image";
@@ -576,7 +576,7 @@ print_info_subimage(std::ostream& out, Oiiotool& ot, int current_subimage,
         && (opt.metamatch.empty() || std::regex_search("sha-1", field_re))) {
         // Before sha-1, be sure to point back to the highest-res MIP level
         ImageSpec tmpspec;
-        std::string sha = compute_sha1(ot, input);
+        std::string sha = compute_sha1(ot, input, current_subimage);
         if (serformat == ImageSpec::SerialText)
             lines.insert(lines.begin() + 1, format("    SHA-1: {}", sha));
         else if (serformat == ImageSpec::SerialText)

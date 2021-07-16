@@ -260,8 +260,7 @@ main(int argc, char* argv[])
 
             // Compare the two images.
             //
-            ImageBufAlgo::CompareResults cr;
-            ImageBufAlgo::compare(img0, img1, failthresh, warnthresh, cr);
+            auto cr = ImageBufAlgo::compare(img0, img1, failthresh, warnthresh);
 
             int yee_failures = 0;
             if (perceptual && !img0.deep()) {

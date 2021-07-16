@@ -1244,22 +1244,19 @@ Oiiotool::express_parse_atom(const string_view expr, string_view& s,
                 std::string ext      = Filesystem::extension(img->name());
                 result = filename.substr(0, filename.size() - ext.size());
             } else if (metadata == "MINCOLOR") {
-                ImageBufAlgo::PixelStats pixstat;
-                ImageBufAlgo::computePixelStats(pixstat, (*img)(0, 0));
+                auto pixstat = ImageBufAlgo::computePixelStats((*img)(0, 0));
                 std::stringstream out;
                 for (size_t i = 0; i < pixstat.min.size(); ++i)
                     out << (i ? "," : "") << pixstat.min[i];
                 result = out.str();
             } else if (metadata == "MAXCOLOR") {
-                ImageBufAlgo::PixelStats pixstat;
-                ImageBufAlgo::computePixelStats(pixstat, (*img)(0, 0));
+                auto pixstat = ImageBufAlgo::computePixelStats((*img)(0, 0));
                 std::stringstream out;
                 for (size_t i = 0; i < pixstat.max.size(); ++i)
                     out << (i ? "," : "") << pixstat.max[i];
                 result = out.str();
             } else if (metadata == "AVGCOLOR") {
-                ImageBufAlgo::PixelStats pixstat;
-                ImageBufAlgo::computePixelStats(pixstat, (*img)(0, 0));
+                auto pixstat = ImageBufAlgo::computePixelStats((*img)(0, 0));
                 std::stringstream out;
                 for (size_t i = 0; i < pixstat.avg.size(); ++i)
                     out << (i ? "," : "") << pixstat.avg[i];
@@ -3267,7 +3264,8 @@ OIIOTOOL_OP(kernel, 0, [](OiiotoolOp& op, span<ImageBuf*> img) {
     float h = 1.0f;
     if (sscanf(kernelsize.c_str(), "%fx%f", &w, &h) != 2)
         ot.errorf(op.opname(), "Unknown size %s", kernelsize);
-    return ImageBufAlgo::make_kernel(*img[0], kernelname, w, h);
+    *img[0] = ImageBufAlgo::make_kernel(kernelname, w, h);
+    return !img[0]->has_error();
 });
 
 
@@ -3282,9 +3280,8 @@ action_capture(int argc, const char* argv[])
     auto options        = ot.extract_options(command);
     int camera          = options.get_int("camera");
 
-    ImageBuf ib;
-    bool ok = ImageBufAlgo::capture_image(ib, camera /*, TypeDesc::FLOAT*/);
-    if (!ok) {
+    ImageBuf ib = ImageBufAlgo::capture_image(camera /*, TypeDesc::FLOAT*/);
+    if (ib.has_error()) {
         ot.error(command, ib.geterror());
         return 0;
     }
@@ -3810,8 +3807,8 @@ OIIOTOOL_OP(blur, 1, [](OiiotoolOp& op, span<ImageBuf*> img) {
     float h             = 1.0f;
     if (sscanf(op.args(1).c_str(), "%fx%f", &w, &h) != 2)
         ot.errorf(op.opname(), "Unknown size %s", op.args(1));
-    ImageBuf Kernel;
-    if (!ImageBufAlgo::make_kernel(Kernel, kernopt, w, h)) {
+    ImageBuf Kernel = ImageBufAlgo::make_kernel(kernopt, w, h);
+    if (Kernel.has_error()) {
         ot.error(op.opname(), Kernel.geterror());
         return false;
     }

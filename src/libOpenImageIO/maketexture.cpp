@@ -222,7 +222,7 @@ resize_block_(ImageBuf& dst, const ImageBuf& src, ROI roi, bool envlatlmode)
         for (int x = x0; x < x1; ++x, ++d) {
             float s = (x + 0.5f) * xscale + xoffset;
             if (src_is_crop)
-                src.interppixel_NDC_full(s, t, pel);
+                src.interppixel_NDC(s, t, pel);
             else
                 interppixel_NDC_clamped<SRCTYPE>(src, s, t, pel, envlatlmode);
             for (int c = 0; c < nchannels; ++c)
@@ -1197,7 +1197,7 @@ make_texture_impl(ImageBufAlgo::MakeTextureMode mode, const ImageBuf* input,
     bool compute_stats = (constant_color_detect || opaque_detect
                           || compute_average_color);
     if (compute_stats) {
-        ImageBufAlgo::computePixelStats(pixel_stats, *src);
+        pixel_stats = ImageBufAlgo::computePixelStats(*src);
     }
     double stat_pixelstatstime = alltime.lap();
     STATUS("pixelstats", stat_pixelstatstime);

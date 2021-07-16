@@ -161,6 +161,8 @@ tiff_dir_data (const TIFFDirEntry &td, cspan<uint8_t> data);
 /// start with a TIFF directory header.
 OIIO_API bool decode_exif (cspan<uint8_t> exif, ImageSpec &spec);
 OIIO_API bool decode_exif (string_view exif, ImageSpec &spec);
+
+OIIO_DEPRECATED("use version that takes a cspan<> (1.8)")
 OIIO_API bool decode_exif (const void *exif, int length, ImageSpec &spec); // DEPRECATED (1.8)
 
 /// Construct an Exif data block from the ImageSpec, appending the Exif

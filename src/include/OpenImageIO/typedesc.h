@@ -345,6 +345,7 @@ struct OIIO_UTIL_API TypeDesc {
     // that incurred some performance penalty and inability to optimize.
     // Please instead use the out-of-class constexpr versions below.  We
     // will eventually remove these.
+#ifndef OIIO_DOXYGEN
     static const TypeDesc TypeFloat;
     static const TypeDesc TypeColor;
     static const TypeDesc TypeString;
@@ -360,6 +361,7 @@ struct OIIO_UTIL_API TypeDesc {
     static const TypeDesc TypeKeyCode;
     static const TypeDesc TypeFloat4;
     static const TypeDesc TypeRational;
+#endif
 };
 
 

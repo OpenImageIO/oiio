@@ -39,8 +39,7 @@ public:
     GaussianPyramid(ImageBuf& image)
     {
         level[0].swap(image);  // swallow the source as the top level
-        ImageBuf kernel;
-        ImageBufAlgo::make_kernel(kernel, "gaussian", 5, 5);
+        ImageBuf kernel = ImageBufAlgo::make_kernel("gaussian", 5, 5);
         for (int i = 1; i < PYRAMID_MAX_LEVELS; ++i)
             ImageBufAlgo::convolve(level[i], level[i - 1], kernel);
     }

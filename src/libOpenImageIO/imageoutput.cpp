@@ -574,7 +574,8 @@ ImageOutput::copy_image(ImageInput* in)
     bool native = supports("channelformats") && inspec.channelformats.size();
     TypeDesc format = native ? TypeDesc::UNKNOWN : inspec.format;
     std::unique_ptr<char[]> pixels(new char[inspec.image_bytes(native)]);
-    bool ok = in->read_image(format, &pixels[0]);
+    bool ok = in->read_image(in->current_subimage(), in->current_miplevel(), 0,
+                             inspec.nchannels, format, &pixels[0]);
     if (ok)
         ok = write_image(format, &pixels[0]);
     else

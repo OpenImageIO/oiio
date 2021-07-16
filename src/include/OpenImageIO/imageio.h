@@ -1211,6 +1211,7 @@ public:
                                  stride_t xstride=AutoStride,
                                  stride_t ystride=AutoStride);
 
+#ifndef OIIO_DOXYGEN
     // DEPRECATED versions of read_scanlines (pre-1.9 OIIO). These will
     // eventually be removed. Try to replace these calls with ones to the
     // new variety of read_scanlines that takes an explicit subimage and
@@ -1224,6 +1225,7 @@ public:
                          TypeDesc format, void *data,
                          stride_t xstride=AutoStride,
                          stride_t ystride=AutoStride);
+#endif
 
     /// Read the tile whose upper-left origin is (x,y,z) into `data[]`,
     /// converting if necessary from the native data format of the file into
@@ -1314,6 +1316,7 @@ public:
                              stride_t xstride=AutoStride, stride_t ystride=AutoStride,
                              stride_t zstride=AutoStride);
 
+#ifndef OIIO_DOXYGEN
     // DEPRECATED versions of read_tiles (pre-1.9 OIIO). These will
     // eventually be removed. Try to replace these calls with ones to the
     // new variety of read_tiles that takes an explicit subimage and
@@ -1326,6 +1329,7 @@ public:
                      int zbegin, int zend, int chbegin, int chend,
                      TypeDesc format, void *data, stride_t xstride=AutoStride,
                      stride_t ystride=AutoStride, stride_t zstride=AutoStride);
+#endif
 
     /// Read the entire image of `spec.width x spec.height x spec.depth`
     /// pixels into a buffer with the given strides and in the desired
@@ -1370,6 +1374,7 @@ public:
                              ProgressCallback progress_callback=NULL,
                              void *progress_callback_data=NULL);
 
+#ifndef OIIO_DOXYGEN
     // DEPRECATED versions of read_image (pre-1.9 OIIO). These will
     // eventually be removed. Try to replace these calls with ones to the
     // new variety of read_image that takes an explicit subimage and
@@ -1390,6 +1395,7 @@ public:
     bool read_image (float *data) {
         return read_image (TypeDesc::FLOAT, data);
     }
+#endif
 
     /// Read deep scanlines containing pixels (*,y,z), for all y in the
     /// range [ybegin,yend) into `deepdata`. This will fail if it is not a
@@ -1449,6 +1455,7 @@ public:
     virtual bool read_native_deep_image (int subimage, int miplevel,
                                          DeepData &deepdata);
 
+#ifndef OIIO_DOXYGEN
     // DEPRECATED(1.9), Now just used for back compatibility:
     bool read_native_deep_scanlines (int ybegin, int yend, int z,
                              int chbegin, int chend, DeepData &deepdata) {
@@ -1467,6 +1474,7 @@ public:
         return read_native_deep_image (current_subimage(), current_miplevel(),
                                        deepdata);
     }
+#endif
 
     /// @}
 
@@ -1668,6 +1676,7 @@ private:
 
     void append_error(string_view message) const; // add to error message
     // Deprecated:
+    OIIO_DEPRECATED("Deprecated")
     static unique_ptr create (const std::string& filename, bool do_open,
                               const std::string& plugin_searchpath);
 };

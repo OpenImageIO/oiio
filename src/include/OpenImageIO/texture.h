@@ -316,13 +316,13 @@ private:
 
 
 
-/// DEPRECATED(1.8)
-/// Encapsulate all the options needed for texture lookups.  Making
-/// these options all separate parameters to the texture API routines is
-/// very ugly and also a big pain whenever we think of new options to
-/// add.  So instead we collect all those little options into one
-/// structure that can just be passed by reference to the texture API
-/// routines.
+// DEPRECATED(1.8)
+// Encapsulate all the options needed for texture lookups.  Making
+// these options all separate parameters to the texture API routines is
+// very ugly and also a big pain whenever we think of new options to
+// add.  So instead we collect all those little options into one
+// structure that can just be passed by reference to the texture API
+// routines.
 class OIIO_API TextureOptions {
 public:
     /// Wrap mode describes what happens when texture coordinates describe
@@ -1113,8 +1113,10 @@ public:
                           float *dresultds=nullptr,
                           float *dresultdt=nullptr) = 0;
 
+#ifndef OIIO_DOXYGEN
     // Old multi-point API call.
     // DEPRECATED (1.8)
+    OIIO_DEPRECATED("no longer support this multi-point call (1.8)")
     virtual bool texture (ustring filename, TextureOptions &options,
                           Runflag *runflags, int beginactive, int endactive,
                           VaryingRef<float> s, VaryingRef<float> t,
@@ -1122,6 +1124,7 @@ public:
                           VaryingRef<float> dsdy, VaryingRef<float> dtdy,
                           int nchannels, float *result,
                           float *dresultds=nullptr, float *dresultdt=nullptr) = 0;
+    OIIO_DEPRECATED("no longer support this multi-point call (1.8)")
     virtual bool texture (TextureHandle *texture_handle,
                           Perthread *thread_info, TextureOptions &options,
                           Runflag *runflags, int beginactive, int endactive,
@@ -1130,6 +1133,7 @@ public:
                           VaryingRef<float> dsdy, VaryingRef<float> dtdy,
                           int nchannels, float *result,
                           float *dresultds=nullptr, float *dresultdt=nullptr) = 0;
+#endif
 
     /// Perform filtered 3D volumetric texture lookups on a batch of
     /// positions from the same texture, all at once. The "point-like"
@@ -1197,8 +1201,10 @@ public:
                             float *dresultds=nullptr, float *dresultdt=nullptr,
                             float *dresultdr=nullptr) = 0;
 
+#ifndef OIIO_DOXYGEN
     // Retrieve a 3D texture lookup at many points at once.
     // DEPRECATED(1.8)
+    OIIO_DEPRECATED("no longer support this multi-point call (1.8)")
     virtual bool texture3d (ustring filename, TextureOptions &options,
                             Runflag *runflags, int beginactive, int endactive,
                             VaryingRef<Imath::V3f> P,
@@ -1208,6 +1214,7 @@ public:
                             int nchannels, float *result,
                             float *dresultds=nullptr, float *dresultdt=nullptr,
                             float *dresultdr=nullptr) = 0;
+    OIIO_DEPRECATED("no longer support this multi-point call (1.8)")
     virtual bool texture3d (TextureHandle *texture_handle,
                             Perthread *thread_info, TextureOptions &options,
                             Runflag *runflags, int beginactive, int endactive,
@@ -1218,6 +1225,7 @@ public:
                             int nchannels, float *result,
                             float *dresultds=nullptr, float *dresultdt=nullptr,
                             float *dresultdr=nullptr) = 0;
+#endif
 
     /// Perform filtered directional environment map lookups on a batch of
     /// directions from the same texture, all at once. The "point-like"
@@ -1280,9 +1288,11 @@ public:
                               int nchannels, float *result,
                               float *dresultds=nullptr, float *dresultdt=nullptr) = 0;
 
+#ifndef OIIO_DOXYGEN
     // Retrieve an environment map lookup for direction R, for many
     // points at once.
     // DEPRECATED(1.8)
+    OIIO_DEPRECATED("no longer support this multi-point call (1.8)")
     virtual bool environment (ustring filename, TextureOptions &options,
                               Runflag *runflags, int beginactive, int endactive,
                               VaryingRef<Imath::V3f> R,
@@ -1290,6 +1300,7 @@ public:
                               VaryingRef<Imath::V3f> dRdy,
                               int nchannels, float *result,
                               float *dresultds=nullptr, float *dresultdt=nullptr) = 0;
+    OIIO_DEPRECATED("no longer support this multi-point call (1.8)")
     virtual bool environment (TextureHandle *texture_handle,
                               Perthread *thread_info, TextureOptions &options,
                               Runflag *runflags, int beginactive, int endactive,
@@ -1298,6 +1309,7 @@ public:
                               VaryingRef<Imath::V3f> dRdy,
                               int nchannels, float *result,
                               float *dresultds=nullptr, float *dresultdt=nullptr) = 0;
+#endif
 
     // Batched shadow lookups
     virtual bool shadow (ustring filename,
@@ -1309,8 +1321,10 @@ public:
                          const float *P, const float *dPdx, const float *dPdy,
                          float *result, float *dresultds=nullptr, float *dresultdt=nullptr) = 0;
 
+#ifndef OIIO_DOXYGEN
     // Retrieve a shadow lookup for position P at many points at once.
     // DEPRECATED(1.8)
+    OIIO_DEPRECATED("no longer support this multi-point call (1.8)")
     virtual bool shadow (ustring filename, TextureOptions &options,
                          Runflag *runflags, int beginactive, int endactive,
                          VaryingRef<Imath::V3f> P,
@@ -1318,6 +1332,7 @@ public:
                          VaryingRef<Imath::V3f> dPdy,
                          float *result,
                          float *dresultds=nullptr, float *dresultdt=nullptr) = 0;
+    OIIO_DEPRECATED("no longer support this multi-point call (1.8)")
     virtual bool shadow (TextureHandle *texture_handle, Perthread *thread_info,
                          TextureOptions &options,
                          Runflag *runflags, int beginactive, int endactive,
@@ -1326,6 +1341,7 @@ public:
                          VaryingRef<Imath::V3f> dPdy,
                          float *result,
                          float *dresultds=nullptr, float *dresultdt=nullptr) = 0;
+#endif
 
     /// @}
 

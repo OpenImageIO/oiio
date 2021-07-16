@@ -190,6 +190,7 @@ private:
 namespace ImageBufAlgo {
 
 // old name (DEPRECATED 1.9)
+OIIO_DEPRECATED("use parallel_options (1.9)")
 typedef parallel_options parallel_image_options;
 
 
@@ -1126,6 +1127,7 @@ PixelStats OIIO_API computePixelStats (const ImageBuf &src,
 // DEPRECATED(1.9): with C++11 move semantics, there's no reason why
 // stats needs to be passed as a parameter instead of returned.
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+OIIO_DEPRECATED("use version that returns PixelStats (1.9)")
 bool OIIO_API computePixelStats (PixelStats &stats, const ImageBuf &src,
                                  ROI roi={}, int nthreads=0);
 #endif
@@ -1178,6 +1180,7 @@ int OIIO_API compare_Yee (const ImageBuf &A, const ImageBuf &B,
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 // DEPRECATED(1.9): with C++11 move semantics, there's no reason why
 // result needs to be passed as a parameter instead of returned.
+OIIO_DEPRECATED("use version that returns CompareResults (1.9)")
 bool OIIO_API compare (const ImageBuf &A, const ImageBuf &B,
                        float failthresh, float warnthresh,
                        CompareResults &result, ROI roi={}, int nthreads=0);
@@ -1322,12 +1325,14 @@ std::vector<imagesize_t> histogram (const ImageBuf &src, int channel=0,
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 /// DEPRECATED(1.9)
+OIIO_DEPRECATED("use version that returns vector (1.9)")
 bool OIIO_API histogram (const ImageBuf &src, int channel,
                          std::vector<imagesize_t> &histogram, int bins=256,
                          float min=0, float max=1, imagesize_t *submin=nullptr,
                          imagesize_t *supermax=nullptr, ROI roi={});
 
 // DEPRECATED(1.9): never liked this.
+OIIO_DEPRECATED("this useless function is going away (1.9)")
 bool OIIO_API histogram_draw (ImageBuf &dst,
                               const std::vector<imagesize_t> &histogram);
 #endif
@@ -1357,6 +1362,7 @@ ImageBuf OIIO_API make_kernel (string_view name, float width, float height,
                                float depth = 1.0f, bool normalize = true);
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 // DEPRECATED(1.9):
+OIIO_DEPRECATED("use version that returns ImageBuf (1.9)")
 inline bool make_kernel (ImageBuf &dst, string_view name,
                          float width, float height, float depth = 1.0f,
                          bool normalize = true) {
@@ -2137,6 +2143,7 @@ ImageBuf OIIO_API capture_image (int cameranum = 0,
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 // DEPRECATED(1.9):
+OIIO_DEPRECATED("use version that returns ImageBuf (1.9)")
 inline bool capture_image (ImageBuf &dst, int cameranum = 0,
                            TypeDesc convert=TypeUnknown) {
     dst = capture_image (cameranum, convert);
@@ -2155,7 +2162,8 @@ inline bool capture_image (ImageBuf &dst, int cameranum = 0,
 ImageBuf OIIO_API from_IplImage (const IplImage *ipl,
                                  TypeDesc convert=TypeUnknown);
 // DEPRECATED(1.9):
-inline bool from_IplImage (ImageBuf &dst, const IplImage *ipl,
+OIIO_DEPRECATED("use from_OpenCV (1.9)")
+bool OIIO_API from_IplImage (ImageBuf &dst, const IplImage *ipl,
                            TypeDesc convert=TypeUnknown) {
     dst = from_IplImage (ipl, convert);
     return ! dst.has_error();
@@ -2163,6 +2171,7 @@ inline bool from_IplImage (ImageBuf &dst, const IplImage *ipl,
 
 // DEPRECATED(2.0). The OpenCV 1.x era IplImage-based functions should be
 // avoided, giving preference to from_OpenCV.
+OIIO_DEPRECATED("use from_OpenCV (2.9)")
 OIIO_API IplImage* to_IplImage (const ImageBuf &src);
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
