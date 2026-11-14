@@ -28,6 +28,7 @@ gastest.o
 /*.jxl
 /*.tx
 /*.log
+/*.ktx2
 
 # AI coding tool directories — generated locally by .agents/setup-agent
 .claude/

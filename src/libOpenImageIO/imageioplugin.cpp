@@ -285,6 +285,7 @@ PLUGENTRY(iff);
 PLUGENTRY(jpeg);
 PLUGENTRY(jpeg2000);
 PLUGENTRY(jpegxl);
+PLUGENTRY(ktx);
 PLUGENTRY(null);
 PLUGENTRY(openexr);
 PLUGENTRY(openvdb);
@@ -390,6 +391,9 @@ catalog_builtin_plugins()
 #endif
 #if defined(USE_JXL)
     DECLAREPLUG (jpegxl);
+#endif
+#if !defined(DISABLE_KTX)
+    DECLAREPLUG (ktx);
 #endif
 #if !defined(DISABLE_NULL)
     DECLAREPLUG (null);

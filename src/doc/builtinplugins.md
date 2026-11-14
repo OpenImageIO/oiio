@@ -1464,6 +1464,432 @@ control aspects of the writing itself:
        unreadable in exif readers.)
 ````
 
+(sec-bundledplugins-ktx)=
+
+## KTX
+
+KTX (Khronos Texture) is an efficient, lightweight container format for reliably
+distributing GPU textures to diverse platforms and applications. The official
+KTX2 container format specification and other helpful info may be found at:
+<https://github.khronos.org/KTX-Specification/ktxspec.v2.html>
+
+There are two main versions of KTX: KTX1 which was deprecated and KTX2 which is
+the currently adopted standard. OpenImageIO only supports reading and writing
+KTX2 files with the file extension {file}`.ktx2`. If you have a KTX1 file
+(file extension {file}`.ktx` or {file}`.ktx1`), you are advised to use the CLI
+provided by KTX Tools to losslessly convert it into a KTX2 file.
+
+A KTX2 file can contain a 2D texture, a 3D texture (volume texture), a cubemap
+texture, any of said textures with mipmaps, or an array of any of said textures
+with or without mipmaps. KTX2 files use the file extension {file}`.ktx2`.
+
+Although OpenImageIO supports writing KTX2 files, users are encouraged to use
+the official CLI tools provided by KTX-Software to generate KTX2 files. This is
+due to the high number of parameters that can be configured to generate a KTX2
+file (think of the many different compression schemes and their options) which
+can be cumbersome to set when using OpenImageIO. OpenImageIO supports
+said parameters via setting KTX-specific attributes that share similar parameter
+names to those used by libktx.
+
+KTX2 is comparable, to some degree, with DDS formats when storing
+ready-to-upload BC1-BC7 GPU block-compressed texture data or plain uncompressed
+pixels. GPU block-compressed formats stay compressed in video memory and are
+decoded by the GPU on the fly while sampling. This has the drawback that each
+GPU format only works on hardware that supports it (e.g., for BCn, usually only
+on desktop devices). KTX has additional support for latent codecs that can be
+transcoded on the fly to the most compatible and supported GPU format. KTX2 also
+has the additional benefit of supporting ASTC block-compressed formats which
+offer a great deal of flexibility (i.e., multiple configurations that affect
+quality metric vs. bitrate). KTX2 also provides supports for rate distortion
+optimization (RDO) which can significantly reduce file size with slightly
+noticeable quality loss.
+
+Since OpenImageIO also supports DDS files, one might be tempted to do
+conversions to KTX2 using oiiotool CLI. This is not the ideal approach. Instead,
+use the lossless DDS-to-KTX2 CLI conversion tool provided by KTX Tools.
+
+KTX2 plugin support is mainly provided through the official libktx library.
+OpenImageIO does not do any encoding/deconding by its own and simply delegates 
+all operations to libktx. libktx requires, however, a significant amount of
+parameters to configure the different formats/codecs KTX2 container supports.
+Consequently, the libktx attributes exposed by OpenImageIO follow the parameters
+of libktx v5.0.0. In case of any mismatch, users are encouraged to refer to the
+original parameters in libktx.
+
+Although this KTX2 plugin provides support for both input and output, users are
+discouraged from reading KTX2 inputs and re-writing them as that might
+significantly worsen the quality even if no changes were introduced. This does
+not hold true in case the input KTX2 container uses a lossless compression
+format but that is rarely the case with KTX2 files.
+
+It is important to note that KTX2 specification does not force the mention of
+which parameters were used to, say, generate a UASTC format. This plugin relies
+on the heuristic that KTX2 files are most likely created via the official KTX2
+tools CLI which saves the non-default parameters in the metadata entry
+`KTXScWriterParams`. That being said, as stated above, knowledge of the
+parameters is only needed to regenerate a given KTX2 input which is not the 
+intended use-case of this plugin within OpenImageIO.
+
+**Attributes**
+
+```{eval-rst}
+.. list-table::
+   :widths: 30 10 65
+   :header-rows: 1
+
+   * - ImageSpec Attribute
+     - Type
+     - Meaning
+   * - ``oiio:ColorSpace``
+     - string
+     - Color space (see Section :ref:`sec-metadata-color`). KTX2 supports a wide
+       range of color spaces.
+   * - ``oiio:subimages``
+     - int
+     - Number of layers in a KTX2 array texture. Only set if input KTX2 texture
+       is an array texture.
+   * - ``oiio:miplevels``
+     - int
+     - Number of mip levels for the input KTX2 texture. Only set if the texture
+       contains mip levels (i.e., number of miplevels > 1).
+   * - ``textureformat``
+     - string
+     - Texture format/kind. Can be one of the following values:
+       ``"Plain Texture"``, ``"Volume Texture"``, or ``"CubeFace Environment"``.
+       This attribute by itself does not convey whether the texture is an array
+       texture and/or whether it is 1D (1D, 2D and 2D array textures are all
+       ``"Plain Texture"``'s). For the writer, this has to be set for cubemaps
+       or volumes with a single slice.
+   * - ``compression``
+     - string
+     - Super-compression scheme (i.e., additional layer of lossless compression
+       on top of either uncompressed, GPU-block-compressed, or
+       Basis-Universal-encoded texture). This is not to be confused with
+       ``ktx:codec`` which describes the Basis Universal codec or GPU
+       block-compression scheme. For the writer, it is highly recommended to set
+       this if RDO is applied. Can be one of the following values:
+            ``"zstd"`` ``"zip"``
+       BasisLZ is ignored because it is set by default when ETC1S codec is used.
+       ``"zip"`` refers to KTX's ``zlib`` super-compression scheme.
+       For ``"zstd"`` and ``"zip"`` the compression level
+       may be optionally appended to the compression name after a colon, like
+       this: ``"zstd:10"`` or ``"zip:1"``. The compression level range for
+       ``"zstd"`` is [1,22] (``1`` being potentially the fastest but the lowest
+       compression). Defaults to ``22``. The compression level range for
+       ``"zip"`` (i.e., ``ZLIB``) is [1,9] (likewise, ``1`` being potentially
+       the fastest but the lowest compression). Defaults to ``9``. If the writer
+       receives a request for a compression type it does not recognize or is not
+       supported, it will use ``"zstd"`` by default (i.e., ``"zstd"`` with
+       highest compression level).
+   * - ``ktx:codec``
+     - string
+     - Basis Universal codec or GPU-block compression scheme. Can be one of the
+       following values:
+            ``"astc"`` ``"uastc"`` ``"uastc-ldr"`` ``"uastc-ldr-4x4"``
+            ``"etc1s"`` ``"uastc-hdr"`` ``"uastc-hdr-4x4"`` ``"uastc-hdr-6x6"``
+       Both ``"uastc"`` and ``"uastc-ldr"`` are aliases for ``"uastc-ldr-4x4"``.
+       Similarly, ``"uastc-hdr"`` is an alias for ``"uastc-hdr-4x4"``.
+   * - ``ktx:1d``
+     - int (bool)
+     - Only set to ``true`` if the input KTX2 texture is 1D.
+   * - ``ktx:generate_mipmaps``
+     - int (bool)
+     - Whether to generate mipmaps when texture is uploaded to 3D graphics GPU
+       API. This is not to be confused with runtime mipmap generation which is
+       expected to be done by the user via OpenImageIO API. For the writer, if
+       this is set to ``true`` then the ktxoutput instance cannot be opened with
+       ``AppendMIPLevel`` mode. If not set, defaults to ``false``.
+   * - ``ktx:normalized``
+     - int (bool)
+     - Whether the Vulkan Format is/should be normalized if possible (UNORM or
+       SNORM based on the ImageSpec type). For the writer, this attribute is
+       ignored if the colorspace is SRGB or the ImageSpec type does not have a
+       corresponding UNORM/SNORM VkFormat output (e.g., UINT64). Defaults to
+       ``true`` if not set.
+   * - *other*
+     -
+     - All other arbitrary metadata read from the input KTX2 file are stored.
+       Particularly, if the input KTX2 file is created via the official KTX
+       Tools CLI, the metadata entry `KTXwriterScParams` is parsed and the
+       codec/compression parameters are stored as attributes. These attributes
+       are described in detail in the subsection
+       `Configuration settings for KTX output`.
+```
+
+**Configuration settings for KTX input**
+
+When opening a KTX ImageInput with a *configuration* (see
+Section {ref}`sec-input with-config`), the following special configuration
+attributes are supported:
+
+```{eval-rst}
+.. list-table::
+   :widths: 30 10 65
+   :header-rows: 1
+
+   * - Input Configuration Attribute
+     - Type
+     - Meaning
+   * - ``oiio:ioproxy``
+     - ptr
+     - Pointer to a ``Filesystem::IOProxy`` that will handle the I/O, for
+       example by reading from memory rather than the file system.
+```
+
+**Configuration settings for KTX output**
+
+OpenImageIO's KTX2 plugin exposes a high number of parameters that are forwarded
+to libktx to configure the different compression formats/codecs. When opening a
+KTX2 ImageOutput, the following special configuration attributes are exposed:
+
+```{eval-rst}
+.. list-table::
+   :widths: 30 10 65
+   :header-rows: 1
+
+   * - Output Configuration Attribute
+     - Type
+     - Meaning
+   * - ``ktx:tf``
+     - string
+     - Force the created texture to have the specified transfer function,
+       ignoring the transfer function of the currently set color space. Case
+       insensitive. Can be one of the following values:
+            ``"none"`` ``"linear"`` ``"srgb"`` ``"srgb_eotf"`` ``"scrgb"``
+            ``"scrgb_eotf"`` ``"itu"`` ``"itu_oetf"`` ``"bt601"``
+            ``"bt601_oetf"`` ``"bt709"`` ``"bt709_oetf"`` ``"bt2020"``
+            ``"bt2020_oetf"`` ``"smpte170m"`` ``"smpte170m_oetf"``
+            ``"smpte170m_eotf"`` ``"ntsc"`` ``"ntsc_eotf"`` ``"slog"``
+            ``"slog_oetf"`` ``"slog2"`` ``"slog2_oetf"`` ``"bt1886"``
+            ``"bt1886_eotf"`` ``"hlg_oetf"`` ``"hlg_eotf"`` ``"pq_oetf"``
+            ``"pg_eotf"`` ``"dcip3"`` ``"dcip3_eotf"`` ``"pal_oetf"``
+            ``"pal625_eotf"`` ``"st240"`` ``"st240_oetf"`` ``"st240_eotf"``
+            ``"acescc"`` ``"acescc_oetf"`` ``"acescct"`` ``"acescct_oetf"``
+            ``"abobergb"`` ``"adobergb_eotf"``
+       This is just an assignment and does not perform any conversions.
+   * - ``ktx:primaries``
+     - string
+     - Force the created texture to have the specified color primaries, ignoring
+       the color primaries of the currently set color space. Can be one of the
+       following values:
+            ``"none"`` ``"bt709"`` ``"srgb"`` ``"bt601_ebu"`` ``"bt601_smpte"``
+            ``"bt2020"`` ``"ciexyz"`` ``"aces"`` ``"acescc"`` ``"ntsc1953"``
+            ``"pal525"`` ``"displayp3"`` ``"adobergb"``
+       If the output KTX2 file is intended to be used within glTF then either
+       this MUST be set to ``"none"`` or ``oiio:ColorSpace`` to ``"data"``.
+       This attribute replicates the functionality of KTX Tools'
+       "--assign-primaries" CLI option (i.e., this is just an assignment and
+       does not perform any conversions).
+   * - ``ktx:normalmap``
+     - int (bool)
+     - Only valid for linear textures with two or more components. If the input
+       texture has three or four linear components it is assumed to be a three
+       component linear normal map storing unit length normals as
+       (R=X, G=Y, B=Z). A fourth component will be ignored. The map will be
+       converted to a two component X+Y normal map stored as (RGB=X, A=Y) prior
+       to encoding.
+       Defaults to false.
+   * - ``ktx:no_sse``
+     - int (bool)
+     - Forbid use of the SSE instruction set. Ignored if CPU does not support
+       SSE. SSE can only be disabled for the basis-lz and uastc encoders.
+       Ignored for other encoders.
+       Defaults to false.
+   * - ``ktx:pre_swizzle``
+     - int (bool)
+     - If the texture has `KTXswizzle` metadata, apply it before compressing.
+       Swizzling, like `rabb` may yield drastically different error metrics if
+       done after supercompression. Usable for both ETC1S and UASTC.
+       Defaults to false.
+   * - ``ktx:input_swizzle``
+     - char[4]
+     - A swizzle to apply before encoding. It must match the regular expression
+       `/^[rgba01]{4}$/`. Should not be specified if ``ktx:pre_swizzle`` is set.
+       Defaults to no swizzle (i.e., zero'ed array).
+   * - ``ktx:uastc_flags``
+     - uint
+     - A set of ``ktx_pack_uastc_flag_bits`` controlling UASTC encoding. The
+       least significant 4 bit are the most important and determine the quality
+       level for both UASTC-LDR and UASTC-HDR.
+       Defaults to 0 (maps to libktx' KTX_PACK_UASTC_LEVEL_FASTEST).
+   * - ``ktx:uastc_rdo``
+     - int (bool)
+     - Whether to enable Rate Distortion Optimization (RDO) post-processing.
+       If this is set to true, then you are advised to set
+       ``ktx::super_compression_scheme`` to actually benefit from RDO size
+       reduction otherwise there is no point in using RDO without applying a
+       DEFLATE-based lossless compression.
+       Defaults to false.
+   * - ``ktx:uastc_rdo_quality_scalar``
+     - float
+     - UASTC RDO quality scalar (lambda). Lower values yield higher
+       quality/larger LZ compressed files, higher values yield lower
+       quality/smaller LZ compressed files. A good range to try is [.2,4].
+       Full range is [.001,50.0]. Only used if ``ktx::uastc_rdo`` is set to
+       true. Ignored otherwise.
+       Defaults to 1.0.
+   * - ``ktx:uastc_rdo_dict_size``
+     - uint
+     - UASTC RDO dictionary size in bytes. Lower values=faster, but give less
+       compression. Range is [64,65536]. Only used if ``ktx::uastc_rdo`` is set
+       to true. Ignored otherwise.
+       Defaults to 4096.
+   * - ``ktx:uastc_rdo_max_smooth_block_error_scale``
+     - float
+     - UASTC RDO max smooth block error scale. Range is [1,300]. 1.0 is
+       disabled. Larger values suppress more artifacts (and allocate more bits)
+       on smooth blocks. Only used if ``ktx::uastc_rdo`` is set to true. Ignored
+       otherwise.
+       Defaults to 10.0 
+   * - ``ktx:uastc_rdo_max_smooth_block_std_dev``
+     - float
+     - UASTC RDO max smooth block standard deviation. Range is [.01,65536.0].
+       Larger values expand the range of blocks considered smooth. Only used if
+       ``ktx::uastc_rdo`` is set to true. Ignored otherwise.
+       Defaults to 18.0.
+   * - ``ktx:uastc_rdo_dont_favor_simpler_modes``
+     - int (bool)
+     - Do not favor simpler UASTC modes in RDO mode. Only used if
+       ``ktx::uastc_rdo`` is set to true. Ignored otherwise.
+       Defaults to false.
+   * - ``ktx:uastc_rdo_no_multithreading``
+     - int (bool)
+     - Disable RDO multithreading (slightly higher compression, deterministic).
+       Only used if ``ktx::uastc_rdo`` is set to true. Ignored otherwise.
+       Defaults to false.
+   * - ``ktx:uastc_hdr_level``
+     - uint
+     - Sets the UASTC HDR 4x4 compressor's level. Valid range is [0,4].
+       Higher values means slower execution but higher quality. Only valid if
+       ``compression`` is set to ``UASTC-LDR-4x4`` or any of its aliases.
+       Ignored otherwise.
+       Defaults to 1.
+   * - ``ktx:uastc_hdr_quality``
+     - uint
+     - Sets the UASTC HDR 4x4 compressor's level. Valid range is [0,4].
+       higher=slower but higher quality. Level 0=fastest/lowest quality,
+       3=highest practical setting, 4=exhaustive. Only used if ``compression``
+       is set to ``UASTC-HDR-4x4`` or any of its aliases. Ignored otherwise. 
+       Defaults to 1.
+   * - ``ktx:uastc_hdr_uber_mode``
+     - int (bool)
+     - Allow the UASTC HDR 4x4 encoder to try varying the CEM 11 selectors more
+       for slightly higher quality (slower). This may negatively impact BC6H
+       quality, however. Only used if ``compression`` is set to
+       ``UASTC-HDR-4x4`` or any of its aliases. Ignored otherwise.
+       Defaults to false.
+   * - ``ktx:uastc_hdr_ultra_quant``
+     - int (bool)
+     - Try to find better quantized CEM 7/11 endpoint values (slower). Only used
+       if ``compression`` is set to ``UASTC-HDR-4x4`` or any of its aliases.
+       Ignored otherwise.
+       Defaults to false.
+   * - ``ktx:uastc_hdr_favor_astc``
+     - int (bool)
+     - By default the UASTC HDR 4x4 encoder tries to strike a
+       balance or even slightly favor BC6H quality. If this option is specified,
+       ASTC HDR 4x4 quality is favored instead. Only used if ``compression`` is
+       set to ``UASTC-HDR-4x4`` or any of its aliases. Ignored otherwise.
+       Defaults to false.
+   * - ``ktx:uastc_hdr_lambda``
+     - float
+     - UASTC HDR 6x6i specific option: Enables rate distortion optimization
+       (RDO). The higher this value, the lower the quality, but the smaller the
+       file size. Try 100-20000, or higher values on some images. Only used if
+       ``compression`` is set to ``UASTC-HDR-6x6`` or any of its aliases.
+       Ignored otherwise.
+       Defaults to 0.
+   * - ``ktx:uastc_hdr_level``
+     - uint
+     - UASTC HDR 6x6i specific option: Controls the 6x6 HDR intermediate mode
+       encoder performance vs. max quality tradeoff. X may range from [0,12].
+       Only used if ``compression`` is set to ``UASTC-HDR-6x6`` or any of its
+       aliases. Ignored otherwise.
+       Defaults to 2.
+   * - ``ktx:etc1s_compression_level``
+     - uint
+     - ETC1S compression effort level. Range is [0,6]. Higher values are much
+       slower, but give slightly higher quality. Higher levels are intended
+       for video. Note this is NOT the same as the ETC1S quality level, and most
+       users shouldn't change this. Only used if ``compression`` is set to
+       ``ETC1S``. Ignored otherwise.
+       Defaults to 2.
+   * - ``ktx:etc1s_quality_level``
+     - uint
+     - Compression quality. Range is [1,255]. Lower gives better
+       compression/lower quality/faster. Higher gives less compression
+       /higher quality/slower. This automatically determines values for
+       ``ktx:etc1s_max_endpoints``, ``ktx:etc1s_max_selectors``,
+       ``ktx:etc1s_endpoint_rdo_threshold`` and
+       ``ktx:etc1s_selector_rdo_threshold`` for the target quality level.
+       Setting these parameters overrides the values determined by
+       ``ktx:etc1s_quality_level``.
+       Defaults to 128 if neither ``ktx:etc1s_max_endpoints`` nor
+       ``ktx:etc1s_max_selectors`` have been set. Only used if ``compression``
+       is set to ``ETC1S``. Ignored otherwise.
+   * - ``ktx:etc1s_max_endpoints``
+     - uint
+     - Manually set the max number of color endpoint clusters. Range is
+       [1,16128]. If this is set, ``ktx:etc1s_max_selectors`` must also be set,
+       otherwise the value will be ignored. Only used if ``compression`` is set
+       to ``ETC1S``. Ignored otherwise.
+       Defaults to 0.
+   * - ``ktx:etc1s_endpoint_rdo_threshold``
+     - float
+     - Set endpoint RDO quality threshold. Lower is higher
+       quality but less quality per output bit (try [1.0,3.0]. This will
+       override the value chosen by @c qualityLevel. Only used if
+       ``compression`` is set to ``ETC1S``. Ignored otherwise.
+       Defaults to 1.25.
+   * - ``ktx:etc1s_max_selectors``
+     - uint
+     - Manually set the max number of color selector clusters. Range is
+       [1,16128]. If this is set, ``ktx:etc1s_max_endpoints`` must also be set,
+       otherwise the value will be ignored. Only used if ``compression`` is set
+       to ``ETC1S``. Ignored otherwise.
+       Defaults to 0.
+   * - ``ktx:etc1s_selector_rdo_threshold``
+     - float
+     - Set selector RDO quality threshold. Lower is higher quality but less
+       quality per output bit (try [1.0,3.0]). This will override the value
+       chosen by ``ktx:etc1s_quality_level``. Only used if ``compression`` is set
+       to ``ETC1S``. Ignored otherwise.
+       Defaults to 1.5.
+   * - ``ktx:etc1s_no_endpoint_rdo``
+     - int (bool)
+     - Disable endpoint rate distortion optimizations. Slightly faster, less
+       noisy output, but lower quality per output bit. Only used if
+       ``compression`` is set to ``ETC1S``. Ignored otherwise.
+       Defaults to false.
+   * - ``ktx:etc1s_no_selector_rdo``
+     - int (bool)
+     - Disable selector rate distortion optimizations. Slightly faster, less
+       noisy output, but lower quality per output bit. Only used if
+       ``compression`` is set to ``ETC1S``. Ignored otherwise.
+       Defaults to false.
+   * - ``ktx:astc_block_dimensions``
+     - string
+     - ASTC block dimensions. Can be set to any of the following values:
+            ``"4x4"`` ``"5x4"`` ``"5x5"`` ``"6x5"`` ``"6x6"`` ``"8x5"``
+            ``"8x6"`` ``"10x5"`` ``"10x6"`` ``"8x8"`` ``"10x8"`` ``"10x10"``
+            ``"12x10"`` ``"12x12"`` ``"3x3x3"`` ``"4x3x3"`` ``"4x4x3"``
+            ``"4x4x4"`` ``"5x4x4"`` ``"5x5x4"`` ``"5x5x5"`` ``"6x5x5"``
+            ``"6x6x5"`` ``"6x6x6"``
+       Defaults to ``"4x4"``.
+   * - ``ktx:astc_quality_level``
+     - uint
+     - ASTC quality level. Range is [0, 100]. 0 is fastest/lowest compression.
+       100 is slowest/highest compression.
+       Defaults to 60 (i.e., medium quality).
+   * - ``ktx:perceptual``
+     - int (bool)
+     - Whether the codec should optimize for perceptual error, instead of direct
+       RMS error. This aims to improves perceived image quality, but typically
+       lowers the measured PSNR score. Perceptual methods are currently only
+       available for normal maps and RGB color data.
+       Defaults to false.
+```
+
 (sec-bundledplugins-ffmpeg)=
 
 ## Movie formats (using ffmpeg)

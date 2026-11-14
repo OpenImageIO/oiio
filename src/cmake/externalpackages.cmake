@@ -300,6 +300,15 @@ else ()
     get_target_property(FMT_INCLUDE_DIR fmt::fmt-header-only INTERFACE_INCLUDE_DIRECTORIES)
 endif ()
 
+# Note for Ktx plugin developers:
+#   set VERSION_MIN to 0.0.0 if you have a locally-built libktx tracking
+#   main branch of KTX-Software because building non-tagged libktx sets
+#   the version to 0.0.0.
+checked_find_package (Ktx
+    # VERSION_MIN 0.0.0 # If you target main branch of KTX-Software (versionless)
+    VERSION_MIN 5.0.0
+    BUILD_LOCAL missing
+)
 
 ###########################################################################
 

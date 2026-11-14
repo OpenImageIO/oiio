@@ -374,6 +374,9 @@ jobs:
           SKBUILD_BUILD_DIR: "/Users/runner/work/OpenImageIO/OpenImageIO/build"
           CCACHE_DIR: /Users/runner/.ccache
           CCACHE_COMPRESSION: yes
+          # Intel-based MacOS runners don't support AVX2 SIMD which is the
+          # default set by libktx. Explicitly set to SSE4.1 (2nd fastest after AVX2)
+          Ktx_ASTCENC_ISA: "ASTCENC_ISA_SSE41"
 
       - name: ccache-save
         id: ccache-save

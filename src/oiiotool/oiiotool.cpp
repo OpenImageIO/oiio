@@ -6298,8 +6298,11 @@ output_file(Oiiotool& ot, cspan<const char*> argv)
             adjust_output_options(filename, spec, ir->nativespec(s), ot, s,
                                   send, supports_tiles, fileoptions,
                                   (*ir)[s].was_direct_read());
-            // If it's not tiled and MIP-mapped, remove any "textureformat"
-            if (!spec.tile_pixels() || ir->miplevels(s) <= 1)
+            // If it's not tiled and MIP-mapped (except for certain formats that
+            // support non-MIP-mapped textures), remove any "textureformat"
+            if (!spec.tile_pixels()
+                || (string_view(out->format_name()) != "ktx"
+                    && ir->miplevels(s) <= 1))
                 spec.erase_attribute("textureformat");
             subimagespecs[s] = spec;
         }

@@ -1,0 +1,870 @@
+Reading ../oiio-images/ktx2/r8g8b8a8_srgb.ktx2
+../oiio-images/ktx2/r8g8b8a8_srgb.ktx2 :  128 x  128, 4 channel, uint8 ktx
+    SHA-1: 827AAFAEA2C443CE1B6DD30196163B0E01B4B816
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Reading ../oiio-images/ktx2/r8g8b8a8_srgb_mip.ktx2
+../oiio-images/ktx2/r8g8b8a8_srgb_mip.ktx2 :   64 x   64, 4 channel, uint8 ktx
+    MIP-map levels: 64x64 32x32 16x16 8x8 4x4 2x2 1x1
+    SHA-1: 03052CEA1E271CEB85C2A084E44DC23F5BD7345C
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+    oiio:miplevels: 7
+Reading ../oiio-images/ktx2/r8g8b8_srgb_mip.ktx2
+../oiio-images/ktx2/r8g8b8_srgb_mip.ktx2 :   64 x   64, 3 channel, uint8 ktx
+    MIP-map levels: 64x64 32x32 16x16 8x8 4x4 2x2 1x1
+    SHA-1: BE1D5EA24E907A4C4B3FB3C28EAC872A20F5B414
+    channel list: R, G, B
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+    oiio:miplevels: 7
+Reading ../oiio-images/ktx2/r8g8b8a8_srgb_3d_7.ktx2
+../oiio-images/ktx2/r8g8b8a8_srgb_3d_7.ktx2 :   16 x   16 x    7, 4 channel, volume uint8 ktx
+    SHA-1: 24752CDAB141EC8878F8C482C5CAD8B932F386D5
+    channel list: R, G, B, A
+    tile size: 16 x 1 x 1
+    textureformat: "Volume Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Reading ../oiio-images/ktx2/r8g8b8a8_srgb_array_7_mip.ktx2
+../oiio-images/ktx2/r8g8b8a8_srgb_array_7_mip.ktx2 :   16 x   16, 4 channel, uint8 ktx
+    7 subimages: 16x16 [u8,u8,u8,u8], 16x16 [u8,u8,u8,u8], 16x16 [u8,u8,u8,u8], 16x16 [u8,u8,u8,u8], 16x16 [u8,u8,u8,u8], 16x16 [u8,u8,u8,u8], 16x16 [u8,u8,u8,u8]
+ subimage  0:   16 x   16, 4 channel, uint8 ktx
+    MIP-map levels: 16x16 8x8 4x4 2x2 1x1
+    SHA-1: A324F1AFE01140C4D58618875715EE545B9F1ECC
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+    oiio:miplevels: 5
+    oiio:subimages: 7
+ subimage  1:   16 x   16, 4 channel, uint8 ktx
+    MIP-map levels: 16x16 8x8 4x4 2x2 1x1
+    SHA-1: 710B4D8675FE67BFE9E6897E0514EBCB2255385F
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+    oiio:miplevels: 5
+    oiio:subimages: 7
+ subimage  2:   16 x   16, 4 channel, uint8 ktx
+    MIP-map levels: 16x16 8x8 4x4 2x2 1x1
+    SHA-1: CCB0462997F53FCDAFD94FA2E6C862E0D2CA022A
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+    oiio:miplevels: 5
+    oiio:subimages: 7
+ subimage  3:   16 x   16, 4 channel, uint8 ktx
+    MIP-map levels: 16x16 8x8 4x4 2x2 1x1
+    SHA-1: CF06A8313BD1A85F6677F1CA7915C3CFEF954C6E
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+    oiio:miplevels: 5
+    oiio:subimages: 7
+ subimage  4:   16 x   16, 4 channel, uint8 ktx
+    MIP-map levels: 16x16 8x8 4x4 2x2 1x1
+    SHA-1: 54034063DBC1C1BB61CB60EC57E4498678DC2B13
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+    oiio:miplevels: 5
+    oiio:subimages: 7
+ subimage  5:   16 x   16, 4 channel, uint8 ktx
+    MIP-map levels: 16x16 8x8 4x4 2x2 1x1
+    SHA-1: 408D3A129857F4942CA5A8D10CBA2D51C5F01901
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+    oiio:miplevels: 5
+    oiio:subimages: 7
+ subimage  6:   16 x   16, 4 channel, uint8 ktx
+    MIP-map levels: 16x16 8x8 4x4 2x2 1x1
+    SHA-1: 2966B466A5D0AFB2531AEBFEDB7304D560DC3D74
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+    oiio:miplevels: 5
+    oiio:subimages: 7
+Reading ../oiio-images/ktx2/color_grid_zstd_5.ktx2
+../oiio-images/ktx2/color_grid_zstd_5.ktx2 : 1024 x 1024, 4 channel, uint8 ktx
+    SHA-1: 4964D0A088333B6C31CD3BA19A2B8CC1CE879DA8
+    channel list: R, G, B, A
+    compression: "zstd:5"
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Reading ../oiio-images/ktx2/r8g8b8a8_srgb_mip_astc.ktx2
+../oiio-images/ktx2/r8g8b8a8_srgb_mip_astc.ktx2 :   64 x   64, 4 channel, uint8 ktx
+    MIP-map levels: 64x64 32x32 16x16 8x8 4x4 2x2 1x1
+    SHA-1: 03052CEA1E271CEB85C2A084E44DC23F5BD7345C
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    ktx:astc_block_dimensions: "4x4"
+    ktx:codec: "astc"
+    oiio:ColorSpace: "srgb_rec709_scene"
+    oiio:miplevels: 7
+Reading ../oiio-images/ktx2/ktx_app_astc_8x8.ktx2
+../oiio-images/ktx2/ktx_app_astc_8x8.ktx2 : 1024 x 1024, 4 channel, uint8 ktx
+    MIP-map levels: 1024x1024 512x512 256x256 128x128 64x64 32x32 16x16 8x8 4x4 2x2 1x1
+    SHA-1: 1EF0757CD38CA8D9AF19EDF0B961FF7D5C635274
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    ktx:astc_block_dimensions: "8x8"
+    ktx:codec: "astc"
+    oiio:ColorSpace: "srgb_rec709_scene"
+    oiio:miplevels: 11
+Reading ../oiio-images/ktx2/color_grid_uastc_zstd_5.ktx2
+../oiio-images/ktx2/color_grid_uastc_zstd_5.ktx2 : 1024 x 1024, 4 channel, uint8 ktx
+    SHA-1: B631629A3A81C50B2CE264D8CCA4EC4E169DFD6E
+    channel list: R, G, B, A
+    compression: "zstd:5"
+    textureformat: "Plain Texture"
+    ktx:codec: "uastc-ldr-4x4"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Reading ../oiio-images/ktx2/Iron_Bars_001_normal_uastc_zstd_10.ktx2
+../oiio-images/ktx2/Iron_Bars_001_normal_uastc_zstd_10.ktx2 : 1024 x 1024, 4 channel, uint8 ktx
+    MIP-map levels: 1024x1024 512x512 256x256 128x128 64x64 32x32 16x16 8x8 4x4 2x2 1x1
+    SHA-1: D428118F2CD6DE70F04C9BD6D092A5A5DCAB195D
+    channel list: R, G, B, A
+    compression: "zstd:10"
+    textureformat: "Plain Texture"
+    ktx:codec: "uastc-ldr-4x4"
+    ktx:normalmap: 1
+    oiio:ColorSpace: "lin_rec709_scene"
+    oiio:miplevels: 11
+Reading ../oiio-images/ktx2/ktx_document_uastc_rdo_4_zstd_5.ktx2
+../oiio-images/ktx2/ktx_document_uastc_rdo_4_zstd_5.ktx2 : 1024 x 1024, 4 channel, uint8 ktx
+    MIP-map levels: 1024x1024 512x512 256x256 128x128 64x64 32x32 16x16 8x8 4x4 2x2 1x1
+    SHA-1: 8644BD94DE7A340007640D0063DF80FC2B744849
+    channel list: R, G, B, A
+    compression: "zstd:5"
+    textureformat: "Plain Texture"
+    ktx:codec: "uastc-ldr-4x4"
+    ktx:uastc_rdo: 1
+    oiio:ColorSpace: "srgb_rec709_scene"
+    oiio:miplevels: 11
+Reading ../oiio-images/ktx2/cubemap_goldengate_uastc_rdo_4_zstd_5.ktx2
+../oiio-images/ktx2/cubemap_goldengate_uastc_rdo_4_zstd_5.ktx2 : 1024 x 6144, 4 channel, uint8 ktx
+    MIP-map levels: 1024x6144 512x3072 256x1536 128x768 64x384 32x192 16x96 8x48 4x24 2x12 1x6
+    SHA-1: 46F7D003AA78294995170727F8A8E154B5282347
+    channel list: R, G, B, A
+    tile size: 1024 x 1024
+    compression: "zstd:5"
+    textureformat: "CubeFace Environment"
+    ktx:codec: "uastc-ldr-4x4"
+    ktx:CubeMapSides: "+x -x +y -y +z -z"
+    ktx:uastc_rdo: 1
+    oiio:ColorSpace: "srgb_rec709_scene"
+    oiio:miplevels: 11
+Reading ../oiio-images/ktx2/Desk_small_zstd_15.ktx2
+../oiio-images/ktx2/Desk_small_zstd_15.ktx2 :  161 x  218, 3 channel, half ktx
+    SHA-1: 547517CC24207ECC0A73486D5224697E3FC38AB6
+    channel list: R, G, B
+    compression: "zstd:15"
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Reading ../oiio-images/ktx2/Desk_uastc_hdr4x4_zstd_15.ktx2
+../oiio-images/ktx2/Desk_uastc_hdr4x4_zstd_15.ktx2 :  644 x  874, 3 channel, half ktx
+    SHA-1: CEE57F5927C826E80B2DD7343708D2F2B6A396BA
+    channel list: R, G, B
+    compression: "zstd:15"
+    textureformat: "Plain Texture"
+    ktx:codec: "uastc-hdr-4x4"
+    ktx:normalized: 0
+    ktx:uastc_hdr_ultra_quant: 1
+    oiio:ColorSpace: "lin_rec709_scene"
+Reading ../oiio-images/ktx2/Desk_uastc_hdr6x6i.ktx2
+../oiio-images/ktx2/Desk_uastc_hdr6x6i.ktx2 :  644 x  874, 3 channel, half ktx
+    SHA-1: D443FD9862C8E7A3890049BA4387846EA53DE7F9
+    channel list: R, G, B
+    textureformat: "Plain Texture"
+    ktx:codec: "uastc-hdr-6x6"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Reading ../oiio-images/ktx2/Desk_astc_hdr6x6.ktx2
+../oiio-images/ktx2/Desk_astc_hdr6x6.ktx2 :  644 x  874, 4 channel, half ktx
+    SHA-1: 1930E94C0D33036B77F929E1C5E6E6AD5154974F
+    channel list: R, G, B, A
+    compression: "zstd"
+    textureformat: "Plain Texture"
+    ktx:astc_block_dimensions: "6x6"
+    ktx:codec: "astc"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Reading ../oiio-images/ktx2/kodim17_blze.ktx2
+../oiio-images/ktx2/kodim17_blze.ktx2 :  512 x  768, 4 channel, uint8 ktx
+    SHA-1: 4313438D8827BD8CB040EBD28A27A64EC7B62F68
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    ktx:codec: "etc1s"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Reading ../oiio-images/ktx2/r8g8b8a8_srgb_mip_blze.ktx2
+../oiio-images/ktx2/r8g8b8a8_srgb_mip_blze.ktx2 :   64 x   64, 4 channel, uint8 ktx
+    MIP-map levels: 64x64 32x32 16x16 8x8 4x4 2x2 1x1
+    SHA-1: A6350253C75FF2B9E24C35E89381C23EC1A77D29
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    ktx:codec: "etc1s"
+    oiio:ColorSpace: "srgb_rec709_scene"
+    oiio:miplevels: 7
+Reading ../oiio-images/ktx2/color_grid_blze.ktx2
+../oiio-images/ktx2/color_grid_blze.ktx2 : 1024 x 1024, 4 channel, uint8 ktx
+    SHA-1: 8C159DD2A2DC4FF1B2D6B84A0DF4E925A0FCBF46
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    ktx:codec: "etc1s"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Reading ../oiio-images/ktx2/alpha_simple_blze.ktx2
+../oiio-images/ktx2/alpha_simple_blze.ktx2 :    8 x    8, 4 channel, uint8 ktx
+    SHA-1: 23BD7228F104BBA18152E7FDC50825286379F581
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    ktx:codec: "etc1s"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Reading ../oiio-images/ktx2/cubemap_yokohama_blze.ktx2
+../oiio-images/ktx2/cubemap_yokohama_blze.ktx2 : 2048 x 12288, 4 channel, uint8 ktx
+    MIP-map levels: 2048x12288 1024x6144 512x3072 256x1536 128x768 64x384 32x192 16x96 8x48 4x24 2x12 1x6
+    SHA-1: 524C36457DDE6B0EEE54C4B52D4908280FB33DB5
+    channel list: R, G, B, A
+    tile size: 2048 x 2048
+    textureformat: "CubeFace Environment"
+    ktx:codec: "etc1s"
+    ktx:CubeMapSides: "+x -x +y -y +z -z"
+    oiio:ColorSpace: "srgb_rec709_scene"
+    oiio:miplevels: 12
+Reading ../oiio-images/ktx2/FlightHelmet_baseColor_blze.ktx2
+../oiio-images/ktx2/FlightHelmet_baseColor_blze.ktx2 : 2048 x 2048, 4 channel, uint8 ktx
+    SHA-1: FD4B9268979E2925598D7D3FF663293FF3807926
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    ktx:codec: "etc1s"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Reading ../oiio-images/ktx2/Iron_Bars_001_normal_blze.ktx2
+../oiio-images/ktx2/Iron_Bars_001_normal_blze.ktx2 : 1024 x 1024, 4 channel, uint8 ktx
+    MIP-map levels: 1024x1024 512x512 256x256 128x128 64x64 32x32 16x16 8x8 4x4 2x2 1x1
+    SHA-1: 4B447C9281806EBDC73619B0622F7F3CCC317F05
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    ktx:codec: "etc1s"
+    ktx:normalmap: 1
+    oiio:ColorSpace: "lin_rec709_scene"
+    oiio:miplevels: 11
+Reading ../oiio-images/ktx2/ktx_document_blze.ktx2
+../oiio-images/ktx2/ktx_document_blze.ktx2 : 1024 x 1024, 4 channel, uint8 ktx
+    MIP-map levels: 1024x1024 512x512 256x256 128x128 64x64 32x32 16x16 8x8 4x4 2x2 1x1
+    SHA-1: AE251370FDCA642A65531BAC14C939A2EC369DC5
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    ktx:codec: "etc1s"
+    oiio:ColorSpace: "srgb_rec709_scene"
+    oiio:miplevels: 11
+Reading ../oiio-images/ktx2/alpha_complex_straight.ktx2
+../oiio-images/ktx2/alpha_complex_straight.ktx2 :  256 x  256, 4 channel, uint8 ktx
+    SHA-1: 4DC3A14E38526B307226E2DDE083608891EBD27F
+    channel list: R, G, B, A
+    compression: "zstd:10"
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Reading ../oiio-images/ktx2/orient_down_metadata.ktx2
+../oiio-images/ktx2/orient_down_metadata.ktx2 :  128 x  128, 4 channel, uint8 ktx
+    SHA-1: BAA0E4B9FC815F0CCB235CA0E05E4EFE918FB3EC
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Reading ../oiio-images/ktx2/orient_up_metadata.ktx2
+../oiio-images/ktx2/orient_up_metadata.ktx2 :  128 x  128, 4 channel, uint8 ktx
+    SHA-1: A446B2FB2A0D391584A2FE45E9F24BE35D896CAA
+    channel list: R, G, B, A
+    Orientation: 4 (flipped vertically)
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Comparing "checker_original.png" and "checker_default.ktx2"
+PASS
+Reading checker_default.ktx2
+checker_default.ktx2 :   64 x   64, 4 channel, uint8 ktx
+    SHA-1: 5ECD9AA14E69DB4B9DB20262CE412BBDF40F93C6
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Comparing "checker_original.png" and "checker_uastc.ktx2"
+PASS
+Reading checker_uastc.ktx2
+checker_uastc.ktx2   :   64 x   64, 4 channel, uint8 ktx
+    SHA-1: 5ECD9AA14E69DB4B9DB20262CE412BBDF40F93C6
+    channel list: R, G, B, A
+    compression: "zstd"
+    textureformat: "Plain Texture"
+    ktx:codec: "uastc-ldr-4x4"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Comparing "checker_original.png" and "checker_etc1s.ktx2"
+PASS
+Reading checker_etc1s.ktx2
+checker_etc1s.ktx2   :   64 x   64, 4 channel, uint8 ktx
+    SHA-1: 5ECD9AA14E69DB4B9DB20262CE412BBDF40F93C6
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    ktx:codec: "etc1s"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Comparing "checker_original.png" and "checker_astc_6x6.ktx2"
+PASS
+Reading checker_astc_6x6.ktx2
+checker_astc_6x6.ktx2 :   64 x   64, 4 channel, uint8 ktx
+    SHA-1: 5ECD9AA14E69DB4B9DB20262CE412BBDF40F93C6
+    channel list: R, G, B, A
+    compression: "zip"
+    textureformat: "Plain Texture"
+    ktx:astc_block_dimensions: "6x6"
+    ktx:codec: "astc"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Comparing "../oiio-images/ktx2/orient_down_metadata.ktx2" and "orient_up_metadata.png"
+PASS
+Reading ../oiio-images/ktx2/valid_R8_SRGB_2D.ktx2
+../oiio-images/ktx2/valid_R8_SRGB_2D.ktx2 :    8 x    8, 1 channel, uint8 ktx
+    SHA-1: EF5707FBB1C3A95C3D3B34AF56AD936F4ED5356D
+    channel list: Y
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8_SRGB_2D.ktx2" and "generated_valid_R8_SRGB_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8_UINT_2D.ktx2
+../oiio-images/ktx2/valid_R8_UINT_2D.ktx2 :    8 x    8, 1 channel, uint8 ktx
+    SHA-1: EF5707FBB1C3A95C3D3B34AF56AD936F4ED5356D
+    channel list: Y
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8_UINT_2D.ktx2" and "generated_valid_R8_UINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8_SINT_2D.ktx2
+../oiio-images/ktx2/valid_R8_SINT_2D.ktx2 :    8 x    8, 1 channel, int8 ktx
+    SHA-1: EF5707FBB1C3A95C3D3B34AF56AD936F4ED5356D
+    channel list: Y
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8_SINT_2D.ktx2" and "generated_valid_R8_SINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8_UNORM_2D.ktx2
+../oiio-images/ktx2/valid_R8_UNORM_2D.ktx2 :    8 x    8, 1 channel, uint8 ktx
+    SHA-1: EF5707FBB1C3A95C3D3B34AF56AD936F4ED5356D
+    channel list: Y
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8_UNORM_2D.ktx2" and "generated_valid_R8_UNORM_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8_SRGB_2D.ktx2
+../oiio-images/ktx2/valid_R8G8_SRGB_2D.ktx2 :    8 x    8, 2 channel, uint8 ktx
+    SHA-1: 58641E4148D293119BD2ACF92777B0CBCFEB18EB
+    channel list: R, G
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8_SRGB_2D.ktx2" and "generated_valid_R8G8_SRGB_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8_UINT_2D.ktx2
+../oiio-images/ktx2/valid_R8G8_UINT_2D.ktx2 :    8 x    8, 2 channel, uint8 ktx
+    SHA-1: 58641E4148D293119BD2ACF92777B0CBCFEB18EB
+    channel list: R, G
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8_UINT_2D.ktx2" and "generated_valid_R8G8_UINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8_SINT_2D.ktx2
+../oiio-images/ktx2/valid_R8G8_SINT_2D.ktx2 :    8 x    8, 2 channel, int8 ktx
+    SHA-1: 58641E4148D293119BD2ACF92777B0CBCFEB18EB
+    channel list: R, G
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8_SINT_2D.ktx2" and "generated_valid_R8G8_SINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8_UNORM_2D.ktx2
+../oiio-images/ktx2/valid_R8G8_UNORM_2D.ktx2 :    8 x    8, 2 channel, uint8 ktx
+    SHA-1: 58641E4148D293119BD2ACF92777B0CBCFEB18EB
+    channel list: R, G
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8_UNORM_2D.ktx2" and "generated_valid_R8G8_UNORM_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8B8_SRGB_2D.ktx2
+../oiio-images/ktx2/valid_R8G8B8_SRGB_2D.ktx2 :    8 x    8, 3 channel, uint8 ktx
+    SHA-1: 65CB350B75461635FA13B5B7D810F0B0152322D2
+    channel list: R, G, B
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8B8_SRGB_2D.ktx2" and "generated_valid_R8G8B8_SRGB_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8B8_UINT_2D.ktx2
+../oiio-images/ktx2/valid_R8G8B8_UINT_2D.ktx2 :    8 x    8, 3 channel, uint8 ktx
+    SHA-1: 65CB350B75461635FA13B5B7D810F0B0152322D2
+    channel list: R, G, B
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8B8_UINT_2D.ktx2" and "generated_valid_R8G8B8_UINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8B8_SINT_2D.ktx2
+../oiio-images/ktx2/valid_R8G8B8_SINT_2D.ktx2 :    8 x    8, 3 channel, int8 ktx
+    SHA-1: 65CB350B75461635FA13B5B7D810F0B0152322D2
+    channel list: R, G, B
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8B8_SINT_2D.ktx2" and "generated_valid_R8G8B8_SINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8B8_UNORM_2D.ktx2
+../oiio-images/ktx2/valid_R8G8B8_UNORM_2D.ktx2 :    8 x    8, 3 channel, uint8 ktx
+    SHA-1: 65CB350B75461635FA13B5B7D810F0B0152322D2
+    channel list: R, G, B
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8B8_UNORM_2D.ktx2" and "generated_valid_R8G8B8_UNORM_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8B8A8_SRGB_2D.ktx2
+../oiio-images/ktx2/valid_R8G8B8A8_SRGB_2D.ktx2 :    8 x    8, 4 channel, uint8 ktx
+    SHA-1: 55FD49E10D54C4CCDCD04E70FBCB6E8D71DE4EF6
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8B8A8_SRGB_2D.ktx2" and "generated_valid_R8G8B8A8_SRGB_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8B8A8_UINT_2D.ktx2
+../oiio-images/ktx2/valid_R8G8B8A8_UINT_2D.ktx2 :    8 x    8, 4 channel, uint8 ktx
+    SHA-1: 55FD49E10D54C4CCDCD04E70FBCB6E8D71DE4EF6
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8B8A8_UINT_2D.ktx2" and "generated_valid_R8G8B8A8_UINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8B8A8_SINT_2D.ktx2
+../oiio-images/ktx2/valid_R8G8B8A8_SINT_2D.ktx2 :    8 x    8, 4 channel, int8 ktx
+    SHA-1: 55FD49E10D54C4CCDCD04E70FBCB6E8D71DE4EF6
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8B8A8_SINT_2D.ktx2" and "generated_valid_R8G8B8A8_SINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8B8A8_UNORM_2D.ktx2
+../oiio-images/ktx2/valid_R8G8B8A8_UNORM_2D.ktx2 :    8 x    8, 4 channel, uint8 ktx
+    SHA-1: 55FD49E10D54C4CCDCD04E70FBCB6E8D71DE4EF6
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8B8A8_UNORM_2D.ktx2" and "generated_valid_R8G8B8A8_UNORM_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8B8A8_SRGB_CUBE.ktx2
+../oiio-images/ktx2/valid_R8G8B8A8_SRGB_CUBE.ktx2 :    8 x   48, 4 channel, uint8 ktx
+    SHA-1: 808B31CF8EE4751C14688719267AECCD6AC03D1F
+    channel list: R, G, B, A
+    tile size: 8 x 8
+    textureformat: "CubeFace Environment"
+    ktx:CubeMapSides: "+x -x +y -y +z -z"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8B8A8_SRGB_CUBE.ktx2" and "generated_valid_R8G8B8A8_SRGB_CUBE.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8B8A8_SRGB_CUBE_MIP.ktx2
+../oiio-images/ktx2/valid_R8G8B8A8_SRGB_CUBE_MIP.ktx2 :    8 x   48, 4 channel, uint8 ktx
+    MIP-map levels: 8x48 4x24 2x12 1x6
+    SHA-1: 808B31CF8EE4751C14688719267AECCD6AC03D1F
+    channel list: R, G, B, A
+    tile size: 8 x 8
+    textureformat: "CubeFace Environment"
+    ktx:CubeMapSides: "+x -x +y -y +z -z"
+    oiio:ColorSpace: "srgb_rec709_scene"
+    oiio:miplevels: 4
+Comparing "../oiio-images/ktx2/valid_R8G8B8A8_SRGB_CUBE_MIP.ktx2" and "generated_valid_R8G8B8A8_SRGB_CUBE_MIP.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8B8A8_SRGB_3D.ktx2
+../oiio-images/ktx2/valid_R8G8B8A8_SRGB_3D.ktx2 :    8 x    8 x    4, 4 channel, volume uint8 ktx
+    SHA-1: 73429FFCB6F1A23BD91878F088FFA632171A40B4
+    channel list: R, G, B, A
+    tile size: 8 x 1 x 1
+    textureformat: "Volume Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8B8A8_SRGB_3D.ktx2" and "generated_valid_R8G8B8A8_SRGB_3D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8B8A8_SRGB_3D_MIP.ktx2
+../oiio-images/ktx2/valid_R8G8B8A8_SRGB_3D_MIP.ktx2 :    8 x    8 x    4, 4 channel, volume uint8 ktx
+    MIP-map levels: 8x8 4x4 2x2 1x1
+    SHA-1: 73429FFCB6F1A23BD91878F088FFA632171A40B4
+    channel list: R, G, B, A
+    tile size: 8 x 1 x 1
+    textureformat: "Volume Texture"
+    oiio:ColorSpace: "srgb_rec709_scene"
+    oiio:miplevels: 4
+Comparing "../oiio-images/ktx2/valid_R8G8B8A8_SRGB_3D_MIP.ktx2" and "generated_valid_R8G8B8A8_SRGB_3D_MIP.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16_SFLOAT_2D.ktx2
+../oiio-images/ktx2/valid_R16_SFLOAT_2D.ktx2 :    8 x    8, 1 channel, half ktx
+    SHA-1: 58641E4148D293119BD2ACF92777B0CBCFEB18EB
+    channel list: Y
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R16_SFLOAT_2D.ktx2" and "generated_valid_R16_SFLOAT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16_UINT_2D.ktx2
+../oiio-images/ktx2/valid_R16_UINT_2D.ktx2 :    8 x    8, 1 channel, uint16 ktx
+    SHA-1: 58641E4148D293119BD2ACF92777B0CBCFEB18EB
+    channel list: Y
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R16_UINT_2D.ktx2" and "generated_valid_R16_UINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16_SINT_2D.ktx2
+../oiio-images/ktx2/valid_R16_SINT_2D.ktx2 :    8 x    8, 1 channel, int16 ktx
+    SHA-1: 58641E4148D293119BD2ACF92777B0CBCFEB18EB
+    channel list: Y
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R16_SINT_2D.ktx2" and "generated_valid_R16_SINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16_UNORM_2D.ktx2
+../oiio-images/ktx2/valid_R16_UNORM_2D.ktx2 :    8 x    8, 1 channel, uint16 ktx
+    SHA-1: 58641E4148D293119BD2ACF92777B0CBCFEB18EB
+    channel list: Y
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R16_UNORM_2D.ktx2" and "generated_valid_R16_UNORM_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16G16_SFLOAT_2D.ktx2
+../oiio-images/ktx2/valid_R16G16_SFLOAT_2D.ktx2 :    8 x    8, 2 channel, half ktx
+    SHA-1: 55FD49E10D54C4CCDCD04E70FBCB6E8D71DE4EF6
+    channel list: R, G
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R16G16_SFLOAT_2D.ktx2" and "generated_valid_R16G16_SFLOAT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16G16_UINT_2D.ktx2
+../oiio-images/ktx2/valid_R16G16_UINT_2D.ktx2 :    8 x    8, 2 channel, uint16 ktx
+    SHA-1: 55FD49E10D54C4CCDCD04E70FBCB6E8D71DE4EF6
+    channel list: R, G
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R16G16_UINT_2D.ktx2" and "generated_valid_R16G16_UINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16G16_SINT_2D.ktx2
+../oiio-images/ktx2/valid_R16G16_SINT_2D.ktx2 :    8 x    8, 2 channel, int16 ktx
+    SHA-1: 55FD49E10D54C4CCDCD04E70FBCB6E8D71DE4EF6
+    channel list: R, G
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R16G16_SINT_2D.ktx2" and "generated_valid_R16G16_SINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16G16_UNORM_2D.ktx2
+../oiio-images/ktx2/valid_R16G16_UNORM_2D.ktx2 :    8 x    8, 2 channel, uint16 ktx
+    SHA-1: 55FD49E10D54C4CCDCD04E70FBCB6E8D71DE4EF6
+    channel list: R, G
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R16G16_UNORM_2D.ktx2" and "generated_valid_R16G16_UNORM_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16G16B16_SFLOAT_2D.ktx2
+../oiio-images/ktx2/valid_R16G16B16_SFLOAT_2D.ktx2 :    8 x    8, 3 channel, half ktx
+    SHA-1: BC3E3322547411D0D9C4C4542F23F32CD2040745
+    channel list: R, G, B
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R16G16B16_SFLOAT_2D.ktx2" and "generated_valid_R16G16B16_SFLOAT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16G16B16_UINT_2D.ktx2
+../oiio-images/ktx2/valid_R16G16B16_UINT_2D.ktx2 :    8 x    8, 3 channel, uint16 ktx
+    SHA-1: BC3E3322547411D0D9C4C4542F23F32CD2040745
+    channel list: R, G, B
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R16G16B16_UINT_2D.ktx2" and "generated_valid_R16G16B16_UINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16G16B16_SINT_2D.ktx2
+../oiio-images/ktx2/valid_R16G16B16_SINT_2D.ktx2 :    8 x    8, 3 channel, int16 ktx
+    SHA-1: BC3E3322547411D0D9C4C4542F23F32CD2040745
+    channel list: R, G, B
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R16G16B16_SINT_2D.ktx2" and "generated_valid_R16G16B16_SINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16G16B16_UNORM_2D.ktx2
+../oiio-images/ktx2/valid_R16G16B16_UNORM_2D.ktx2 :    8 x    8, 3 channel, uint16 ktx
+    SHA-1: BC3E3322547411D0D9C4C4542F23F32CD2040745
+    channel list: R, G, B
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R16G16B16_UNORM_2D.ktx2" and "generated_valid_R16G16B16_UNORM_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16G16B16A16_SFLOAT_2D.ktx2
+../oiio-images/ktx2/valid_R16G16B16A16_SFLOAT_2D.ktx2 :    8 x    8, 4 channel, half ktx
+    SHA-1: 3DBEB3CA9992329601D81225A7172F99D48C07A7
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R16G16B16A16_SFLOAT_2D.ktx2" and "generated_valid_R16G16B16A16_SFLOAT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16G16B16A16_UINT_2D.ktx2
+../oiio-images/ktx2/valid_R16G16B16A16_UINT_2D.ktx2 :    8 x    8, 4 channel, uint16 ktx
+    SHA-1: 3DBEB3CA9992329601D81225A7172F99D48C07A7
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R16G16B16A16_UINT_2D.ktx2" and "generated_valid_R16G16B16A16_UINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16G16B16A16_SINT_2D.ktx2
+../oiio-images/ktx2/valid_R16G16B16A16_SINT_2D.ktx2 :    8 x    8, 4 channel, int16 ktx
+    SHA-1: 3DBEB3CA9992329601D81225A7172F99D48C07A7
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R16G16B16A16_SINT_2D.ktx2" and "generated_valid_R16G16B16A16_SINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16G16B16A16_UNORM_2D.ktx2
+../oiio-images/ktx2/valid_R16G16B16A16_UNORM_2D.ktx2 :    8 x    8, 4 channel, uint16 ktx
+    SHA-1: 3DBEB3CA9992329601D81225A7172F99D48C07A7
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R16G16B16A16_UNORM_2D.ktx2" and "generated_valid_R16G16B16A16_UNORM_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16G16B16A16_SFLOAT_CUBE.ktx2
+../oiio-images/ktx2/valid_R16G16B16A16_SFLOAT_CUBE.ktx2 :    8 x   48, 4 channel, half ktx
+    SHA-1: A5C5C36902B91E598E78C9A08638278D89999F19
+    channel list: R, G, B, A
+    tile size: 8 x 8
+    textureformat: "CubeFace Environment"
+    ktx:CubeMapSides: "+x -x +y -y +z -z"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R16G16B16A16_SFLOAT_CUBE.ktx2" and "generated_valid_R16G16B16A16_SFLOAT_CUBE.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16G16B16A16_SFLOAT_CUBE_MIP.ktx2
+../oiio-images/ktx2/valid_R16G16B16A16_SFLOAT_CUBE_MIP.ktx2 :    8 x   48, 4 channel, half ktx
+    MIP-map levels: 8x48 4x24 2x12 1x6
+    SHA-1: A5C5C36902B91E598E78C9A08638278D89999F19
+    channel list: R, G, B, A
+    tile size: 8 x 8
+    textureformat: "CubeFace Environment"
+    ktx:CubeMapSides: "+x -x +y -y +z -z"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+    oiio:miplevels: 4
+Comparing "../oiio-images/ktx2/valid_R16G16B16A16_SFLOAT_CUBE_MIP.ktx2" and "generated_valid_R16G16B16A16_SFLOAT_CUBE_MIP.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16G16B16A16_SFLOAT_3D.ktx2
+../oiio-images/ktx2/valid_R16G16B16A16_SFLOAT_3D.ktx2 :    8 x    8 x    4, 4 channel, volume half ktx
+    SHA-1: B38CCD97C685C18A6E2256735C923868928EB5A6
+    channel list: R, G, B, A
+    tile size: 8 x 1 x 1
+    textureformat: "Volume Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R16G16B16A16_SFLOAT_3D.ktx2" and "generated_valid_R16G16B16A16_SFLOAT_3D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R16G16B16A16_SFLOAT_3D_MIP.ktx2
+../oiio-images/ktx2/valid_R16G16B16A16_SFLOAT_3D_MIP.ktx2 :    8 x    8 x    4, 4 channel, volume half ktx
+    MIP-map levels: 8x8 4x4 2x2 1x1
+    SHA-1: B38CCD97C685C18A6E2256735C923868928EB5A6
+    channel list: R, G, B, A
+    tile size: 8 x 1 x 1
+    textureformat: "Volume Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+    oiio:miplevels: 4
+Comparing "../oiio-images/ktx2/valid_R16G16B16A16_SFLOAT_3D_MIP.ktx2" and "generated_valid_R16G16B16A16_SFLOAT_3D_MIP.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R32_SFLOAT_2D.ktx2
+../oiio-images/ktx2/valid_R32_SFLOAT_2D.ktx2 :    8 x    8, 1 channel, float ktx
+    SHA-1: 55FD49E10D54C4CCDCD04E70FBCB6E8D71DE4EF6
+    channel list: Y
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R32_SFLOAT_2D.ktx2" and "generated_valid_R32_SFLOAT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R32_UINT_2D.ktx2
+../oiio-images/ktx2/valid_R32_UINT_2D.ktx2 :    8 x    8, 1 channel, uint ktx
+    SHA-1: 55FD49E10D54C4CCDCD04E70FBCB6E8D71DE4EF6
+    channel list: Y
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R32_UINT_2D.ktx2" and "generated_valid_R32_UINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R32G32_SFLOAT_2D.ktx2
+../oiio-images/ktx2/valid_R32G32_SFLOAT_2D.ktx2 :    8 x    8, 2 channel, float ktx
+    SHA-1: 3DBEB3CA9992329601D81225A7172F99D48C07A7
+    channel list: R, G
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R32G32_SFLOAT_2D.ktx2" and "generated_valid_R32G32_SFLOAT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R32G32_UINT_2D.ktx2
+../oiio-images/ktx2/valid_R32G32_UINT_2D.ktx2 :    8 x    8, 2 channel, uint ktx
+    SHA-1: 3DBEB3CA9992329601D81225A7172F99D48C07A7
+    channel list: R, G
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R32G32_UINT_2D.ktx2" and "generated_valid_R32G32_UINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R32G32B32_SFLOAT_2D.ktx2
+../oiio-images/ktx2/valid_R32G32B32_SFLOAT_2D.ktx2 :    8 x    8, 3 channel, float ktx
+    SHA-1: 98C222061C4FD5FDE9E59E82680B9748B9E61E8A
+    channel list: R, G, B
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R32G32B32_SFLOAT_2D.ktx2" and "generated_valid_R32G32B32_SFLOAT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R32G32B32_UINT_2D.ktx2
+../oiio-images/ktx2/valid_R32G32B32_UINT_2D.ktx2 :    8 x    8, 3 channel, uint ktx
+    SHA-1: 98C222061C4FD5FDE9E59E82680B9748B9E61E8A
+    channel list: R, G, B
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R32G32B32_UINT_2D.ktx2" and "generated_valid_R32G32B32_UINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R32G32B32A32_SFLOAT_2D.ktx2
+../oiio-images/ktx2/valid_R32G32B32A32_SFLOAT_2D.ktx2 :    8 x    8, 4 channel, float ktx
+    SHA-1: A8A344301EFC4E8B2D2BF30FAC343888CFCAB26B
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R32G32B32A32_SFLOAT_2D.ktx2" and "generated_valid_R32G32B32A32_SFLOAT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R32G32B32A32_UINT_2D.ktx2
+../oiio-images/ktx2/valid_R32G32B32A32_UINT_2D.ktx2 :    8 x    8, 4 channel, uint ktx
+    SHA-1: A8A344301EFC4E8B2D2BF30FAC343888CFCAB26B
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R32G32B32A32_UINT_2D.ktx2" and "generated_valid_R32G32B32A32_UINT_2D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R32G32B32A32_SFLOAT_CUBE.ktx2
+../oiio-images/ktx2/valid_R32G32B32A32_SFLOAT_CUBE.ktx2 :    8 x   48, 4 channel, float ktx
+    SHA-1: 1EADD5444326DDABF48CD58F3D0F5489CAC5C419
+    channel list: R, G, B, A
+    tile size: 8 x 8
+    textureformat: "CubeFace Environment"
+    ktx:CubeMapSides: "+x -x +y -y +z -z"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R32G32B32A32_SFLOAT_CUBE.ktx2" and "generated_valid_R32G32B32A32_SFLOAT_CUBE.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R32G32B32A32_SFLOAT_CUBE_MIP.ktx2
+../oiio-images/ktx2/valid_R32G32B32A32_SFLOAT_CUBE_MIP.ktx2 :    8 x   48, 4 channel, float ktx
+    MIP-map levels: 8x48 4x24 2x12 1x6
+    SHA-1: 1EADD5444326DDABF48CD58F3D0F5489CAC5C419
+    channel list: R, G, B, A
+    tile size: 8 x 8
+    textureformat: "CubeFace Environment"
+    ktx:CubeMapSides: "+x -x +y -y +z -z"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+    oiio:miplevels: 4
+Comparing "../oiio-images/ktx2/valid_R32G32B32A32_SFLOAT_CUBE_MIP.ktx2" and "generated_valid_R32G32B32A32_SFLOAT_CUBE_MIP.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R32G32B32A32_SFLOAT_3D.ktx2
+../oiio-images/ktx2/valid_R32G32B32A32_SFLOAT_3D.ktx2 :    8 x    8 x    4, 4 channel, volume float ktx
+    SHA-1: B046AC2B4302C89E178E30CA56A25854E811E69B
+    channel list: R, G, B, A
+    tile size: 8 x 1 x 1
+    textureformat: "Volume Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R32G32B32A32_SFLOAT_3D.ktx2" and "generated_valid_R32G32B32A32_SFLOAT_3D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R32G32B32A32_SFLOAT_3D_MIP.ktx2
+../oiio-images/ktx2/valid_R32G32B32A32_SFLOAT_3D_MIP.ktx2 :    8 x    8 x    4, 4 channel, volume float ktx
+    MIP-map levels: 8x8 4x4 2x2 1x1
+    SHA-1: B046AC2B4302C89E178E30CA56A25854E811E69B
+    channel list: R, G, B, A
+    tile size: 8 x 1 x 1
+    textureformat: "Volume Texture"
+    ktx:normalized: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+    oiio:miplevels: 4
+Comparing "../oiio-images/ktx2/valid_R32G32B32A32_SFLOAT_3D_MIP.ktx2" and "generated_valid_R32G32B32A32_SFLOAT_3D_MIP.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8B8A8_SRGB_1D.ktx2
+../oiio-images/ktx2/valid_R8G8B8A8_SRGB_1D.ktx2 :    8 x    1, 4 channel, uint8 ktx
+    SHA-1: 1BE13675DB2B34763204FE7CC3C29D4885753916
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    ktx:1d: 1
+    oiio:ColorSpace: "srgb_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8B8A8_SRGB_1D.ktx2" and "generated_valid_R8G8B8A8_SRGB_1D.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8B8_UNORM_2D_UASTC_ZLIB_1.ktx2
+../oiio-images/ktx2/valid_R8G8B8_UNORM_2D_UASTC_ZLIB_1.ktx2 :    8 x    8, 4 channel, uint8 ktx
+    SHA-1: 4951AEF135340B1CAC5EED7F519225DAEA6899B2
+    channel list: R, G, B, A
+    compression: "zip:1"
+    textureformat: "Plain Texture"
+    ktx:codec: "uastc-ldr-4x4"
+    ktx:uastc_flags: 0
+    ktx:uastc_hdr_quality: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8B8_UNORM_2D_UASTC_ZLIB_1.ktx2" and "generated_valid_R8G8B8_UNORM_2D_UASTC_ZLIB_1.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8B8_UNORM_2D_UASTC_ZLIB_9.ktx2
+../oiio-images/ktx2/valid_R8G8B8_UNORM_2D_UASTC_ZLIB_9.ktx2 :    8 x    8, 4 channel, uint8 ktx
+    SHA-1: 4951AEF135340B1CAC5EED7F519225DAEA6899B2
+    channel list: R, G, B, A
+    compression: "zip:9"
+    textureformat: "Plain Texture"
+    ktx:codec: "uastc-ldr-4x4"
+    ktx:uastc_flags: 0
+    ktx:uastc_hdr_quality: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8B8_UNORM_2D_UASTC_ZLIB_9.ktx2" and "generated_valid_R8G8B8_UNORM_2D_UASTC_ZLIB_9.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8B8_UNORM_2D_UASTC_ZSTD_1.ktx2
+../oiio-images/ktx2/valid_R8G8B8_UNORM_2D_UASTC_ZSTD_1.ktx2 :    8 x    8, 4 channel, uint8 ktx
+    SHA-1: 4951AEF135340B1CAC5EED7F519225DAEA6899B2
+    channel list: R, G, B, A
+    compression: "zstd:1"
+    textureformat: "Plain Texture"
+    ktx:codec: "uastc-ldr-4x4"
+    ktx:uastc_flags: 0
+    ktx:uastc_hdr_quality: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8B8_UNORM_2D_UASTC_ZSTD_1.ktx2" and "generated_valid_R8G8B8_UNORM_2D_UASTC_ZSTD_1.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8B8_UNORM_2D_UASTC_ZSTD_9.ktx2
+../oiio-images/ktx2/valid_R8G8B8_UNORM_2D_UASTC_ZSTD_9.ktx2 :    8 x    8, 4 channel, uint8 ktx
+    SHA-1: 4951AEF135340B1CAC5EED7F519225DAEA6899B2
+    channel list: R, G, B, A
+    compression: "zstd:9"
+    textureformat: "Plain Texture"
+    ktx:codec: "uastc-ldr-4x4"
+    ktx:uastc_flags: 0
+    ktx:uastc_hdr_quality: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8B8_UNORM_2D_UASTC_ZSTD_9.ktx2" and "generated_valid_R8G8B8_UNORM_2D_UASTC_ZSTD_9.ktx2"
+PASS
+Reading ../oiio-images/ktx2/valid_R8G8B8_UNORM_2D_BLZE.ktx2
+../oiio-images/ktx2/valid_R8G8B8_UNORM_2D_BLZE.ktx2 :    8 x    8, 4 channel, uint8 ktx
+    SHA-1: 22799EAF1D248CD3BB4700B55548B26FE77C3A07
+    channel list: R, G, B, A
+    textureformat: "Plain Texture"
+    ktx:codec: "etc1s"
+    ktx:etc1s_quality_level: 0
+    oiio:ColorSpace: "lin_rec709_scene"
+Comparing "../oiio-images/ktx2/valid_R8G8B8_UNORM_2D_BLZE.ktx2" and "generated_valid_R8G8B8_UNORM_2D_BLZE.ktx2"
+PASS
